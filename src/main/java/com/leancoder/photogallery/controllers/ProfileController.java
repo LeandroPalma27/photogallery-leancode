@@ -48,6 +48,8 @@ public class ProfileController {
         if (usuario!=null && usuario.getUsername().equals(authentication.getName())) {
             model.addAttribute("title", "Update account");
             model.addAttribute("usuario", usuario);
+            model.addAttribute("user", usuario.getUsername());
+            model.addAttribute("nombre", usuario.getNombre());
             return "edit_account";
         }
 
