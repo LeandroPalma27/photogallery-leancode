@@ -43,9 +43,20 @@
                         <a th:href="@{/login}" class="account_sign-log" title="Sign-in" sec:authorize="isAnonymous()">
                             <i class="fa-solid fa-right-to-bracket"></i>
                         </a>
-                        <a th:href="@{/account/} + ${user}" class="userprofile-photo" sec:authorize="isAuthenticated()">
+                        <a th:href="@{/account/} + ${user}" class="userprofile-photo dropdown-toggle" sec:authorize="isAuthenticated()" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                             <img th:src="@{/img/foto-leandro-facebook.jpg}" alt="">
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" th:href="@{/account/} + ${user}">My profile</a></li>
+                            <li>
+                                <a class="dropdown-item" href="">
+                                    <form id="logoutForm" class="form-logout" th:action="@{/logout}" method="post">
+                                        <input name="_csrf" type="hidden" value="63155ace-bc25-48a4-b881-1ad730b9268b" />
+                                        <button onclick="document.getElementById('logoutForm').submit()" class="btn btn-outline">Signout</button>
+                                    </form>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -86,7 +97,6 @@
                                 </form>
                             </a>
                         </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
                 </div>
             </div>

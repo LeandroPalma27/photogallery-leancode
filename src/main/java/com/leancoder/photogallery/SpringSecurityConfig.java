@@ -27,7 +27,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/", "index", "/css/**", "/js/**", "/img/**", "/login/**").permitAll()
         .antMatchers("/account/**").authenticated()
         .and()
-        .formLogin()./* successHandler(successHandler). */loginPage("/login").permitAll();
+        .formLogin()./* successHandler(successHandler). */loginPage("/login").permitAll()
+        .and()
+        .logout().permitAll();
     }
 
     @Autowired // Inyectamos "AuthenticationManagerBuilder"
