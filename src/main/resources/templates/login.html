@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org/">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/0699e3b721.js" crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <title th:text="${title}"></title>
+</head>
+
+<body>
+    <div class="triangle">
+        <div class="logo">
+            <div>
+                <h3>Photogallery</h3>
+            </div>
+        </div>
+        <div class="form">
+            <div class="form-login">
+                <form class="form-signin" method="post" th:action="@{/login}">
+                    <div class="login_title">
+                        <h4>Iniciar sesion</h4>
+                    </div>
+                    <div class="login_input">
+                        <label for="username">Nombre de usuario</label>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Username"
+                            required autofocus>
+                    </div>
+                    <div class="login_input input_password">
+                        <label for="password">Contraseña</label>
+                        <div class="container_input-button">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                            <span class="eye disabled"><i class="fa-solid fa-eye"></i></span>
+                            <span class="eye-slash"><i class="fa-solid fa-eye-slash"></i></span>
+                        </div>
+                    </div>
+                    <input name="_csrf" type="hidden" value="63155ace-bc25-48a4-b881-1ad730b9268b" />
+                    <div class="login_submit">
+                        <button class="" type="submit">Sign in</button>
+                    </div>
+		            <div class="container-error">
+                        <div class="" th:if="${error != null}" th:text="${error}"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="form-create-account">
+                <div>
+                    <span>¿No estas registrado?</span>
+                    <a th:href="@{/signup}">Crea una cuenta</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/view-password.js}"></script>
+</body>
+
+</html>

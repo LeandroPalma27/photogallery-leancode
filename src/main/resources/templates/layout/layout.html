@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/0699e3b721.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <title th:text="${title}"></title>
+</head>
+
+<body>
+    
+    <header th:fragment="header">
+        <nav class="header_navbar">
+            <div class="accordion">
+                <ul class="list-accordion">
+                    <li><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></a></li>
+                    <li><a href="#">All photos</a></li>
+                    <li><a href="#">My photos</a></li>
+                    <li><a href="#">Favorites</a></li>
+                </ul>
+            </div>
+            <div class="navbar_container-responsive">
+                <div class="responsive_accordion">
+                    <div class="accordion_button">
+                        <button class="button_for-active">
+                            <i class="fa-solid fa-bars active"></i>
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="responsive_logo">
+                    <a class="logo" th:href="@{/}">Photogallery</a>
+                </div>
+                <div class="responsive_account">
+                    <div class="account" title="My profile">
+                        <a th:href="@{/login}" class="account_sign-log" title="Sign-in" sec:authorize="isAnonymous()">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                        </a>
+                        <a th:href="@{/account/} + ${user}" class="userprofile-photo" sec:authorize="isAuthenticated()">
+                            <img th:src="@{/img/foto-leandro-facebook.jpg}" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar_container-list">
+                <ul class="list">
+                    <li class="list_logo"><a th:href="@{/}">Photogallery</a></li>
+                    <li class="list_option list_index"><a href="#">All photos</a></li>
+                    <li class="list_option list_my-photos"><a href="#">My photos</a></li>
+                    <li class="list_option list_search"><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+                    <li class="list_option list_favorites"><a href="#">Favorites</a></li>
+                </ul>
+            </div>
+            <div class="navbar_container-sign" sec:authorize="isAnonymous()">
+                <div class="sign_in">
+                    <a th:href="@{/login}" class="">Log in</a>
+                </div>
+                <div class="log_in">
+                    <a th:href="@{/signup}" class="">Register</a>
+                </div>
+            </div>
+            <div class="navbar_container-userprofile" sec:authorize="isAuthenticated()">
+                <div class="dropdown userprofile">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="userprofile-photo">
+                            <img th:src="@{/img/foto-leandro-facebook.jpg}" alt="">
+                        </div>
+                        <div class="userprofile-name">
+                            <span th:text="${nombre}"></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" th:href="@{/account/} + ${user}">My profile</a></li>
+                        <li>
+                            <a class="dropdown-item" href="">
+                                <form class="form-logout" th:action="@{/logout}" method="post">
+                                    <input name="_csrf" type="hidden" value="63155ace-bc25-48a4-b881-1ad730b9268b" />
+                                    <button type="submit" class="btn btn-outline">Signout</button>
+                                </form>
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <footer th:fragment="footer" class="gallery-footer">
+        <div class="footer-info">
+            <div class="container-info">
+                <div class="info">
+                    <div class="title">
+                        <div class="icon"><i class="fa-solid fa-circle-info"></i></div>
+                        <div class="title_title">
+                            <h4>Information</h4>
+                        </div>
+                    </div>
+                    <div class="details info_details-list">
+                        <ul class="details-list">
+                            <li><a href="#">Github</a></li>
+                            <li><a href="#">About me</a></li>
+                            <li><a href="#">Notices</a></li>
+                            <li><a href="#">References</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="info_social-media">
+                    <div class="title">
+                        <div class="icon">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </div>
+                        <div class="title_title">
+                            <h4 class="title-social">Social</h4>
+                        </div>
+                    </div>
+                    <div class="details details-social">
+                        <ul class="social_details-list">
+                            <li>
+                                <a href="#">
+                                    <div class="container_social-icons icon-fb"><span class="social-icons"><i class="fa-brands fa-facebook"></i></span>
+                                    </div>
+                                    <div class="social-fb"><span>Facebook</span></div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="container_social-icons icon-ig">
+                                        <span class="social-icons ig"><i class="fa-brands fa-instagram"></i></span>
+                                    </div>
+                                    <div class="social-ig"><span>Instagram</span></div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="container_social-icons icon-tw"><span class="social-icons tw"><i class="fa-brands fa-twitter"></i></span>
+                                    </div>
+                                    <div class="social-tw"><span>Twitter</span></div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="container_social-icons icon-yt"><span class="social-icons yt"><i class="fa-brands fa-youtube"></i></span>
+                                    </div>
+                                    <div class="social-yt"><span>Youtube</span></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="copyright"><span>Copyright ©2022 All rights reserved.</span></div>
+            <div class="author"><span>This page is created by <a href="#">LeanCoder.</a></span></div>
+        </div>
+        <script th:src="@{/js/accordion.js}"></script>
+    </footer>
+
+</body>

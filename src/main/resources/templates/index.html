@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body class="body-page">
+    <div class="main">
+        <header th:replace="layout/layout :: header"></header>
+        <main>
+            <div class="main_title-presentation">
+                <h3>What people like the most:</h3>
+            </div>
+            <div class="main_content">
+                <div class="content-cards">
+                    <div class="card_photo">
+                        <div class="photo-image">
+                            <div class="for-scale">
+                                <img th:src="@{/img/one.jpeg}" alt="">
+                                <div class="photo-details">
+                                    <a title="Details" href="#"><i class="fa-solid fa-circle-info"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="photo">
+                            <div class="container-description">
+                                <div class="title">
+                                    <span>Example</span>
+                                </div>
+                                <div class="info">
+                                    <div class="info_author">
+                                        <span class="desc">Author: </span>
+                                        <span>Leandro Palma</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container-buttons">
+                                <div class="info_likes">
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                    <span>40</span>
+                                </div>
+                                <div class="buttons">
+                                    <div class="button_download">
+                                        <a title="Download" href="#"><i class="fa-solid fa-circle-arrow-down"></i></a>
+                                    </div>
+                                    <div class="button_add-favorites">
+                                        <a title="Add to favorites" class="favorites" href="#"><i class="fa-solid fa-heart"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div></div>
+            </div>
+        </main>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</body>
+
+</html>
