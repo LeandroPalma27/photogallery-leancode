@@ -9,4 +9,6 @@ public interface IUsuarioService {
 
     public Usuario obtenerUsuarioPorUsername(String username);
 
+    public void eliminarUsuario(Usuario usuario);
+
 }

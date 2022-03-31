@@ -1,5 +1,9 @@
 package com.leancoder.photogallery.controllers;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.leancoder.photogallery.auth.handler.CloseManualSession;
 import com.leancoder.photogallery.models.entity.Usuario;
 import com.leancoder.photogallery.models.service.IUsuarioService;
 
@@ -17,57 +21,63 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@Secured(value={"ROLE_USER", "ROLE_ADMIN"})
+@Secured(value = { "ROLE_USER", "ROLE_ADMIN" })
 @RequestMapping("/account")
-@SessionAttributes({"usuario"})
+@SessionAttributes({ "usuario" })
 public class ProfileController {
 
     @Autowired
     IUsuarioService usuarioService;
 
-    @ModelAttribute("usuario")
-    public Usuario cargarUsuario(Authentication authentication) {
-        return usuarioService.obtenerUsuarioPorUsername(authentication.getName());
-    }
-    
-    @GetMapping({"/", "", "/{username}"})
-    public String Profile(@PathVariable(name="username", required=false) String username, Authentication authentication, Model model) {
-        
+    /*
+     * @ModelAttribute("usuario")
+     * public Usuario cargarUsuario(Authentication authentication) {
+     * return usuarioService.obtenerUsuarioPorUsername(authentication.getName());
+     * }
+     */
+
+    @GetMapping({ "/", "", "/{username}" })
+    public String Profile(@PathVariable(name = "username", required = false) String username,
+            Authentication authentication, Model model) {
+
         var usuario = usuarioService.obtenerUsuarioPorUsername(username);
-        
-        if(usuario != null && usuario.getUsername().equals(authentication.getName()) ) {
-            
+
+        if (usuario != null && usuario.getUsername().equals(authentication.getName())) {
+
             model.addAttribute("title", "Profile");
             model.addAttribute("usuario", usuario);
             model.addAttribute("user", usuario.getUsername());
             model.addAttribute("nombre", usuario.getNombre());
 
             return "profile";
-        } 
-
-        return "redirect:/";
-
-    }
-
-    @GetMapping("/update")
-    public String Edit(/* @PathVariable(name="username") String username,  */@ModelAttribute("usuario") Usuario usu, Authentication authentication, Model model) {
-        
-        var usuario = usuarioService.obtenerUsuarioPorUsername(usu.getUsername());
-        if (usuario!=null && usuario.getUsername().equals(authentication.getName())) {
-            model.addAttribute("title", "Update account");
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("user", usuario.getUsername());
-            model.addAttribute("nombre", usuario.getNombre());
-            System.out.println(usu.getUsername());
-            return "edit_account";
         }
 
         return "redirect:/";
 
     }
 
-    @GetMapping("/delete/{username}")
-    public String Delete(@PathVariable("username") String username, Model model) {
+    @GetMapping("/update")
+    public String Edit(Authentication authentication, Model model) {
+
+        var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
+
+        model.addAttribute("title", "Update account");
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("user", usuario.getUsername());
+        model.addAttribute("nombre", usuario.getNombre());
+        return "edit_account";
+
+    }
+
+    @GetMapping("/delete")
+    public String Delete(HttpServletRequest request, HttpServletResponse response, Authentication authentication, Model model) {
+
+        var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
+        usuarioService.eliminarUsuario(usuario);
+
+        CloseManualSession sesion = new CloseManualSession();
+        sesion.logout(request, response, authentication);
+
         return "redirect:/login";
     }
 

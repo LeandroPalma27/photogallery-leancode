@@ -68,4 +68,11 @@ public class UsuarioService implements IUsuarioService {
         return usuarioDao.findByUsername(username);
     }
 
+    @Override
+    public void eliminarUsuario(Usuario usuario) {
+        
+        usuarioDao.delete(usuario);
+
+    }
+
 }

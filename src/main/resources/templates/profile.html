@@ -7,8 +7,8 @@
     <div class="main">
         <header th:replace="layout/layout :: header"></header>
         <div th:object="${usuario}">
-            <a class="btn btn-primary" th:href="@{/account/update/}">Update account</a>
-            <a class="btn btn-danger" th:href="@{/account/delete/} + *{username}">Delete account</a>
+            <a class="btn btn-primary" th:href="@{/account/update}">Update account</a>
+            <a class="btn btn-danger" th:href="@{/account/delete}">Delete account</a>
         </div>
     </div>
     <footer th:replace="layout/layout :: footer"></footer>

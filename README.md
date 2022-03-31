@@ -7,5 +7,5 @@ Esto se hace con la finalidad de tener mas seguridad en el manejo de las cuentas
 
 - Se cambio la manera de ingresar a los endpoint que permitiran actualizar campos como el nombre y la contraseña (SE GUARDARA EN OTRA RAMA).
 
-- En esta rama se trabajara consultando por el usuario a la BD y guardando la respuesta en la sesion activa, para que desde ahi se cargue todo.
+- En esta otra rama, se manejan los endpoint para el acceso a la cuenta y las modificaciones pero usando la sesion que se crea al loguearse, usando la interfaz "Authentication" en nuestro controller.
 
