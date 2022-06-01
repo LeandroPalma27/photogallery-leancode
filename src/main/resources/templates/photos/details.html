@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <link rel="stylesheet" th:href="@{/css/photos/details.css}">
+    <div class="main">
+        <header th:replace="layout/layout :: header"></header>
+        <main>
+            <div class="container_details-general">
+                <div class="container_details-photo" th:object="${photoDetails}">
+                    <div class="photo_img" id="photoBox">
+                        <span class="img-url" hidden th:text="*{urlPhoto}"></span>
+                        <span class="img-title" hidden th:text="*{title}"></span>
+                        <div class="update_or_delete-options-2">
+                            <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="" type="button"><span><i
+                                        class="fa-solid fa-ellipsis"></i></span></button>
+                        </div>
+                        <img>
+                        <div class="liked-heart">
+                            <span><i class="fa-solid fa-heart"></i></span>
+                        </div>
+                    </div>
+                    <div class="photo_details">
+                        <div class="details_level-1">
+                            <header class="details-autor">
+                                <div class="autor">
+                                    <span class="autor_info">Autor:</span>
+                                    <span class="autor_name" th:text="*{usuario.nombre + ' ' + usuario.apellidos}"></span>
+                                </div>
+                                <div th:if="${usuario.username == photoDetails.usuario.username}"
+                                    class="update_or_delete-options">
+                                    <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class=""
+                                        type="button"><span><i class="fa-solid fa-ellipsis"></i></span></button>
+                                </div>
+                            </header>
+                            <div class="details-title_and_desc">
+                                <h4 th:text="*{title}"></h4>
+                                <p th:text="*{description}"></p>
+                            </div>
+                        </div>
+                        <div class="details_level-2">
+                            <div class="details-actions_likes-and-date">
+                                <div class="details-actions">
+                                    <div class="like-button_and_like-count">
+                                        <div class="like-button">
+                                            <button id="btnNotLiked" type="button" class="not-liked active"><span><i
+                                                        class="fa-regular fa-heart"></i></span></button>
+                                            <button type="button" class="liked"><span><i
+                                                        class="fa-solid fa-heart"></i></span></button>
+                                        </div>
+                                        <div class="like-count">
+                                            <span><i class="fa-solid fa-thumbs-up"></i></span>
+                                            <span th:text="*{likes}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="save-button">
+                                        <button title="Add to favorites" type="button" class="not-saved active"><span><i
+                                                    class="fa-regular fa-bookmark"></i></span></button>
+                                        <button title="Remove from favorites" type="button" class="saved"><span><i
+                                                    class="fa-solid fa-bookmark"></i></button>
+                                    </div>
+                                </div>
+                                <div class="date">
+                                    <span id="fechaRegistro" th:text="*{date}"></span>
+                                    <span th:if="${isProfilePhoto != null}">(<span th:text="${isProfilePhoto}"></span>)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${usuario.username == photoDetails.usuario.username}" class="modal fade" id="modalDeletePhoto" tabindex="-1" aria-labelledby="modalDeletePhoto" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content modal-content-updater">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Delete account</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">Are you sure you want to delete the photo? You won't be able to get it back.</div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Not sure</button>
+                                    <a th:href="@{'/photos/details/delete/' + ${photoDetails.uploadId}}" type="button" class="btn btn-primary">Yes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${usuario.username == photoDetails.usuario.username or isProfilePhoto == null}" class="modal fade" id="modalSetAsProfilePicture" tabindex="-1" aria-labelledby="modalSetAsProfilePicture" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content modal-content-updater">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Change role</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to set this photo as your profile picture?</div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Not sure</button>
+                                    <a th:href="@{'/photos/details/change-role/' + ${photoDetails.uploadId}}" type="button" class="btn btn-primary">Yes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container_back-button">
+                    <a type="" th:href="@{/photos/own}" class="btn btn-primary">Back to List</a>
+                </div>
+            </div>
+            <div th:if="${usuario.username == photoDetails.usuario.username}" class="modal fade" id="staticBackdrop"
+                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <ul class="crud-photo_options">
+                            <li><button id="btnModalUpdatePhoto" data-bs-toggle="modal"
+                                    data-bs-target="#modalForUpdatePhoto" type="button">Update</button></li>
+                            <li th:if="${isProfilePhoto == null}"><button id="btnModalSetAsProfilePicture" data-bs-toggle="modal"
+                                    data-bs-target="#modalSetAsProfilePicture" type="button">Set as profile picture</button></li>
+                            <li class="delete-option"><button data-bs-toggle="modal" data-bs-target="#modalDeletePhoto" type="button">Delete photo</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${usuario.username == photoDetails.usuario.username}" class="modal fade modal-update"
+                id="modalForUpdatePhoto" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content modal-content-updater">
+                        <form method="post" th:action="@{/photos/details/update}" th:object="${photoUpdater}">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="">Update photo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="inputs">
+                                    <div class="input-container input-title">
+                                        <label for="title">Title</label>
+                                        <input id="title" type="text" th:field="*{title}">
+                                        <div class="name-error" th:if="${#fields.hasErrors('title')}"
+                                            th:errors="*{title}">
+                                        </div>
+                                    </div>
+                                    <div class="input-container input-description">
+                                        <label for="description">Description</label>
+                                        <textarea cols="30" rows="10"
+                                            id="description" type="text" th:field="*{description}"></textarea>
+                                        <div class="name-error" th:if="${#fields.hasErrors('description')}"
+                                            th:errors="*{description}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <span id="modalActivator" hidden th:if="${modalActivator != null}" th:text="${modalActivator}"></span>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+    <script th:src="@{/js/modalActivator.js}"></script>
+    <script th:src="@{/js/charge-photo.js}"></script>
+    <script th:src="@{/js/photo-time-formatter.js}"></script>
+    <script th:src="@{/js/save_and_like-button.js}"></script>
+    <script th:src="@{/js/double-tap-like.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,756 @@
+* {
+    box-sizing: border-box;
+}
+
+.container_profile {
+    font-family: 'Fredoka';
+    width: 100%;
+    height: auto;
+    display: flex;
+    padding: 15px 0;
+    padding-top: 15px;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.profile {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile .content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+}
+
+.profile .title {
+    border-bottom: 3px solid rgb(218, 218, 218);
+}
+
+.profile .title h1 {
+    padding-bottom: 15px;
+    margin: 0;
+    color: rgb(49, 49, 49);
+}
+
+.container_profile .profile .content .profile-card {
+    width: 280px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px;
+    padding-top: 20px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.container_profile .profile .content .profile-card .card-data {
+    padding: 20px 8px;
+    padding-bottom: 25px;
+    width: 280px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    background: rgba(119, 241, 108, 0.2);
+    background: linear-gradient(0deg, rgba(119, 241, 108, 0.2) 0%, rgba(15, 196, 106, 0.2) 57%);
+}
+
+.data_profile-photo {
+    width: 100%;
+    height: 39%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.data_profile-photo>.profile-photo {
+    border: 4px solid rgba(48, 219, 114, 0.35);
+    width: 200px;
+    height: 200px;
+    border-radius: 190px;
+    box-sizing: content-box;
+    position: relative;
+}
+
+.data_profile-photo .profile-photo .change-photo {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 130px;
+    height: 20px;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+}
+
+.data_profile-photo .profile-photo .change-photo .change-button {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.data_profile-photo .profile-photo .change-photo .change-button button {
+    box-sizing: content-box;
+    padding: 1px 9.5px;
+    color: rgb(44, 44, 44);
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: center;
+    width: auto;
+    border-radius: 12px;
+    height: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    background: rgba(119, 241, 108, 0.5);
+    background: linear-gradient(0deg, rgba(119, 241, 108, 0.5) 0%, rgba(15, 196, 106, 0.5) 57%);
+    opacity: 0.5;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    outline: none;
+    margin-bottom: 6px;
+}
+
+.data_profile-photo .profile-photo .change-photo .change-button button * {
+    padding: 0 3px;
+}
+
+.data_profile-photo .profile-photo .change-photo .change-button button:hover {
+    opacity: 1;
+}
+
+.data_profile-photo .profile-photo .change-photo .change-button button i {
+    font-size: 14px;
+}
+
+.data_profile-photo .profile-photo .change-photo .change-button a {
+    box-sizing: content-box;
+    padding: 1px 9.4px;
+    color: rgb(44, 44, 44);
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: center;
+    width: auto;
+    border-radius: 12px;
+    height: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    background: rgba(246, 41, 41, 0.5);
+    opacity: 0.5;
+    transition: all 0.2s ease-in-out;
+}
+
+.data_profile-photo .profile-photo .change-photo .change-button a * {
+    padding: 0 3px;
+}
+
+.data_profile-photo .profile-photo .change-photo .change-button a:hover {
+    opacity: 1;
+}
+
+.data_profile-photo .profile-photo .change-photo .change-button a i {
+    font-size: 14px;
+}
+
+.data_profile-photo .profile-photo:hover .change-photo {
+    opacity: 1;
+}
+
+.data_profile-photo>.profile-photo .photo img {
+    width: 100%;
+    height: 100%;
+    border-radius: 170px;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    object-fit: cover;
+}
+
+.data_profile-photo>.profile-photo .photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 170px;
+    border: 4px solid rgb(255, 255, 255);
+}
+
+.data_profile-photo>.profile-photo:hover .photo img {
+    filter: blur(3px);
+    filter: brightness(90%) blur(2px);
+}
+
+.container_profile .profile .content .profile-data {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: calc(100% - 320px);
+    height: auto;
+}
+
+.profile-data .data {
+    max-width: 100%;
+    height: 675px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.data .data_first-floor {
+    max-width: 100%;
+    height: auto;
+}
+
+.data .data_last-floor {
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: auto;
+}
+
+.data .data_last-floor .container_button-delete {
+    width: auto;
+    height: auto;
+    margin: 4px 6px;
+    margin-bottom: 0;
+}
+
+.container_button-delete a {
+    color: rgb(216, 47, 47);
+    opacity: 0.8;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
+    padding-bottom: 0;
+    padding-right: 0;
+}
+
+.container_button-delete a>span {
+    padding: 0 5px;
+    font-size: 1.2rem;
+}
+
+.container_button-delete a:hover {
+    color: rgb(216, 47, 47);
+    opacity: 1;
+}
+
+.container_button-delete a:focus {
+    box-shadow: none;
+}
+
+.container_profile .profile-photos {
+    width: 75%;
+    height: 100%;
+}
+
+.modal {
+    font-family: 'Fredoka';
+}
+
+.data_profile-credentials {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 52%;
+    box-sizing: border-box;
+}
+
+.data_profile-credentials>div {
+    height: auto;
+    display: flex;
+}
+
+.data_profile-credentials .credentials_name {
+    font-size: 22px;
+    font-weight: bold;
+    height: 30px;
+    width: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.data_profile-credentials .credentials_photos {
+    margin: 14px auto;
+    margin-bottom: 0;
+    margin-top: 5px;
+    padding-bottom: 20px;
+    width: auto;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.number-photos {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 22px;
+    font-family: var(--bs-body-font-family);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.number-photos .number {
+    font-weight: bold;
+}
+
+.number-photos span {
+    padding: 0 2px;
+}
+
+.number-photos>.desc {
+    font-size: 14px;
+    padding-bottom: 4px;
+}
+
+.data_profile-credentials .credentials_photos a {
+    background-color: rgb(36, 36, 36);
+    outline: none;
+    border: 0;
+    border-radius: 0;
+    display: inline-flex;
+    width: auto;
+    height: auto;
+    padding: 6px 8px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    opacity: 0.94;
+}
+
+.data_profile-credentials .credentials_photos a:hover {
+    opacity: 1;
+}
+
+.data_profile-credentials .border-for-description {
+    width: 80%;
+    margin: 0 auto;
+    height: auto;
+    border-top: 2px solid rgba(47, 219, 113, 0.15);
+}
+
+.data_profile-credentials .credentials_description {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    padding-top: 7px;
+    height: auto;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: rgba(255, 255, 255, 0.239);
+}
+
+.data_profile-credentials .credentials_description div {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    margin-bottom: 3px;
+    cursor: default;
+    font-size: calc(0.75rem + 0.2vw);
+    text-align: justify;
+}
+
+.data_profile-credentials .credentials_description a {
+
+    font-size: 11px;
+}
+
+.data_profile-create-date {
+    width: 100%;
+    height: 9%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.data_profile-create-date span {
+    width: auto;
+    height: auto;
+    padding: 4px 8px;
+    font-size: 15px;
+    background-color: rgb(219, 219, 219);
+    border-radius: 10px;
+}
+
+#fechaRegistro {
+    padding: 0;
+    padding-left: 4px;
+}
+
+.complete-name_and_username>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.complete-name {}
+
+.complete-name h3 {
+    font-size: calc(0.9rem + .4vw);
+    display: inline-block;
+    font-weight: bold;
+    margin: 0;
+    margin-right: 20px;
+}
+
+.complete-name_and_username {
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba(189, 189, 189, 0.253);
+}
+
+.complete-name_and_username>div {
+    margin-bottom: 10px;
+}
+
+.complete-name a {
+    font-size: calc(0.55rem + 1.1vw);
+    text-decoration: underline rgb(197, 197, 197);
+}
+
+.complete-name a:hover {
+    text-decoration: underline rgb(33, 93, 224);
+}
+
+.username {
+    margin-bottom: 30px;
+}
+
+.username>div {
+    display: inline-block;
+}
+
+.username>div>.user {
+    font-weight: bold;
+}
+
+.username_part-1 {
+    font-size: calc(0.9rem + .4vw);
+    margin-right: 20px;
+}
+
+.username_part-2 a {
+    font-size: calc(0.55rem + 1.1vw);
+    text-decoration: underline rgb(197, 197, 197);
+}
+
+.username_part-2 a:hover {
+    text-decoration: underline rgb(33, 93, 224);
+}
+
+.email-password-status {
+    padding-bottom: 35px;
+    padding-top: 15px;
+}
+
+.email-password-status>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.email>div {
+    display: inline-block;
+}
+
+.email>div>.ema {
+    font-weight: bold;
+}
+
+.email_part-1 {
+    font-size: calc(0.82rem + .4vw);
+    margin-right: 20px;
+}
+
+.email_part-2 a {
+    font-size: calc(0.55rem + 1.1vw);
+    text-decoration: underline rgb(197, 197, 197);
+}
+
+.email_part-2 a:hover {
+    text-decoration: underline rgb(33, 93, 224);
+}
+
+.password>div {
+    display: inline-block;
+}
+
+.password>div>.pass {
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.password_part-1 {
+    margin-right: 20px;
+    font-size: calc(0.9rem + .4vw);
+}
+
+.password_part-2 a {
+    font-size: calc(0.55rem + 1.1vw);
+    text-decoration: underline rgb(197, 197, 197);
+}
+
+.password_part-2 a:hover {
+    text-decoration: underline rgb(33, 93, 224);
+}
+
+.status>div {
+    display: inline-block;
+}
+
+.status>div>.sta {
+    font-weight: bold;
+    cursor: pointer;
+    background-color: rgb(250, 250, 250);
+    outline: none;
+    border: none;
+}
+
+.status_part-1 {
+    font-size: calc(0.9rem + .4vw);
+}
+
+.inputs > div input {
+    width: 100%;
+    height: auto;
+    text-align: start;
+    vertical-align: top;
+    outline: none;
+    border: 2px solid rgb(226, 226, 226);
+    border-radius: 10px;
+    padding: 5px 11px;
+    margin-bottom: 5px;
+}
+
+.name-error {
+    padding: 0 5px;
+    color: rgb(206, 40, 40);
+}
+
+.lastname-error {
+    padding: 0 5px;
+    color: rgb(206, 40, 40);
+}
+
+.input-desc > .input {
+    border: 2px solid rgb(226, 226, 226);
+    border-radius: 10px;
+}
+
+.input-desc > .input {
+    width: auto;
+    height: auto;
+    position: relative;
+}
+
+.input .character-count {
+    font-size: 12px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: 185px;
+    margin-left: calc(100% - 60px);
+    width: 60px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-desc > .input textarea{
+    resize: none;
+    height: 200px;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 10px;
+    padding-bottom: 0;
+}
+
+.input-desc .desc-error {
+    margin-top: 10px;
+    padding: 0 5px;
+    color: rgb(206, 40, 40);
+}
+
+#nameAndLastname1 {
+    font-size: calc(1rem + .4vw); 
+}
+
+/* #nameAndLastname2 {
+    font-size: calc(0.9rem + .4vw);
+    
+} */
+
+
+@media (max-width: 1024px) {
+
+    .profile .content {
+        justify-content: center;
+    }
+
+    .container_profile .profile .content .profile-data {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .profile-data .data {
+        height: auto;
+        padding: 0 20px;
+    }
+
+}
+
+.picture-uploader {
+    width: 320px;
+    height: 220px;
+}
+
+.picture-details {
+    height: auto;
+}
+
+.details_form-group > textarea {
+    height: 110px;
+    font-size: 13px;
+}
+
+.modal-body {
+    padding: 10px;
+}
+
+.modal-footer {
+    padding: 10px 10px;
+}
+
+.modal-footer > button {
+    padding: 5px 15px;
+    color: black;
+    border: 1px solid rgb(202, 241, 108);
+    background: rgb(202, 241, 108);
+}
+
+.modal-footer > button:hover {
+    padding: 5px 15px;
+    color: black;
+    border: 1px solid rgb(202, 241, 108);
+    background: rgb(202, 241, 108);
+    opacity: 0.8;
+}
+
+.form-picture_inputs {
+    gap: 0;
+    padding: 10px;
+}
+
+.picture-details .details {
+    padding-bottom: 0;
+}
+
+.picture-details .details > .form-button {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+}
+
+.drag-area {
+    padding-top: 0;
+}
+
+.drag-area .header-file header {
+    font-size: 17px;
+}
+
+.drag-area .icon {
+    font-size: 50px;
+}
+
+.drag-area .span-file {
+    margin-bottom: 5px;
+}
+
+.body-message {
+    width: 100%;
+    padding: 10px 15px;
+}
+
+@media (min-width: 1281px) {
+
+    .container_profile .profile .content .profile-data {
+        width: calc(100% - 310px);
+    }
+
+}
+
+@media (min-width: 950px) {
+
+    .status_part-1 {
+        font-size: calc(0.7rem + .4vw);
+    }
+
+    .password_part-1 {
+        font-size: calc(0.7rem + .4vw);
+    }
+
+    .password_part-2 a {
+        font-size: calc(0.1rem + 1.1vw);
+        text-decoration: underline rgb(197, 197, 197);
+    }
+
+    .email_part-1 {
+        font-size: calc(0.7rem + .4vw);
+    }
+    
+    .email_part-2 a {
+        font-size: calc(0.1rem + 1.1vw);
+        text-decoration: underline rgb(197, 197, 197);
+    }
+
+    .username_part-1 {
+        font-size: calc(0.7rem + .4vw);
+    }
+    
+    .username_part-2 a {
+        font-size: calc(0.1rem + 1.1vw);
+        text-decoration: underline rgb(197, 197, 197);
+    }
+
+    .complete-name a {
+        font-size: calc(0.1rem + 1.1vw);
+        text-decoration: underline rgb(197, 197, 197);
+    }
+
+}
+
+@media (max-width: 320px) {
+
+    .container_profile .profile .content .profile-card {
+        width: 265px;
+    }
+
+}
+
+@media (max-width: 290px) {
+
+    .container_profile .profile .content .profile-card {
+        width: 230px;
+    }
+
+}

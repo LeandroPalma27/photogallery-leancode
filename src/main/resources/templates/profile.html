@@ -4,14 +4,370 @@
 <head th:replace="layout/layout :: head"></head>
 
 <body class="body-page">
+    <link rel="stylesheet" th:href="@{/css/photos/photos.css}">
+    <link rel="stylesheet" th:href="@{/css/photos/drag_and_drop_file.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
     <div class="main">
         <header th:replace="layout/layout :: header"></header>
-        <div th:object="${usuario}">
-            <a class="btn btn-primary" th:href="@{/account/update}">Update account</a>
-            <a class="btn btn-danger" th:href="@{/account/delete}">Delete account</a>
+        <main>
+            <div th:object="${usuario}" class="container_profile">
+                <!-- <a class="btn btn-primary" th:href="@{/account/update}">Update account</a>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete account</button> -->
+                <div class="profile">
+                    <div class="title">
+                        <h1>My account</h1>
+                    </div>
+                    <div class="content">
+                        <div class="profile-card">
+                            <div class="card-data">
+                                <div class="data_profile-photo">
+                                    <div class="profile-photo">
+                                        <div th:if="${profilePictureUser == null}" class="photo"><img th:src="@{/img/default_profile.jpg}" alt=""></div>
+                                        <div th:if="${profilePictureUser != null}" class="photo">
+                                            <span id="profilePictureUserUrl" th:text="${profilePictureUser}" hidden></span>
+                                            <img src="" alt="">
+                                        </div>
+                                        <div class="change-photo">
+                                            <div class="change-button">
+                                                <button th:if="${profilePictureUser == null}" id="btnForModalPicture" data-bs-toggle="modal"
+                                                data-bs-target="#modalForUploadProfilePicture" type="button"><span>Upload</span><i class="fa-solid fa-pencil"></i></button>
+                                                <button th:if="${profilePictureUser != null}" id="btnForModalPicture" data-bs-toggle="modal"
+                                                data-bs-target="#modalForUploadProfilePicture" type="button"><span>Change</span><i class="fa-solid fa-pencil"></i></button>
+                                                <a th:if="${profilePictureUser != null}" th:href="@{'/account/delete/profile-picture/' + ${profilePictureUploadId}}" type="button"><span>Remove</span><i class="fa-solid fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="data_profile-credentials">
+                                    <div class="credentials_name"><span id="nameAndLastname1"
+                                            th:text="*{nombre + '  ' + apellidos}"></span></div>
+                                    <div class="credentials_username"><span th:text="*{'@' + username}"></span></div>
+                                    <div class="credentials_photos">
+                                        <span class="number-photos">
+                                            <span class="number" th:text="${#lists.size(usuario.photos)}">500</span>
+                                            <span class="desc">photos</span>
+                                        </span>
+                                        <a class="" th:href="@{/photos/own}">View photos</a>
+                                    </div>
+                                    <div class="border-for-description"></div>
+                                    <div class="credentials_description">
+                                        <div title="description" th:text="*{description}"></div>
+                                        <a id="btnModalDesc" type="button" data-bs-toggle="modal"
+                                            data-bs-target="#modalForDescription" title="Change my description"
+                                            href="">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="data_profile-create-date">
+                                    <span>Joined on<span th:text="*{fechaRegistro}" id="fechaRegistro"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-data">
+                            <div class="data">
+                                <div class="data_first-floor">
+                                    <div class="complete-name_and_username">
+                                        <div class="complete-name">
+                                            <h3 id="nameAndLastname2" th:text="*{nombre + '  ' + apellidos}"></h3>
+                                            <a id="btnModalNameAndLastName" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#modalForNameAndLastName" href="">Change</a>
+                                        </div>
+                                        <div class="username">
+                                            <div class="username_part-1">
+                                                <span>Username: </span>
+                                                <span class="user" th:text="*{username}"></span>
+                                            </div>
+                                            <div class="username_part-2">
+                                                <a id="btnModalUsername" type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#modalForUsername" href="">Change username</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="email-password-status">
+                                        <div class="email">
+                                            <div class="email_part-1">
+                                                <span>Email: </span>
+                                                <span class="ema" th:text="*{email}"></span>
+                                            </div>
+                                            <div class="email_part-2">
+                                                <a type="button" href="#">Change email</a>
+                                            </div>
+                                        </div>
+                                        <div class="password">
+                                            <div class="password_part-1">
+                                                <span>Password: </span>
+                                                <span class="pass">************</span>
+                                            </div>
+                                            <div class="password_part-2">
+                                                <a type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#modalForPassword" href="">Change password</a>
+                                            </div>
+                                        </div>
+                                        <div class="status">
+                                            <div class="status_part-1">
+                                                <span>Account status: </span>
+                                                <button id="accountStatus" type="button" class="sta"
+                                                    th:text="*{enabled}" data-bs-container="body"
+                                                    data-bs-toggle="popover" data-bs-placement="bottom"
+                                                    data-bs-trigger="focus"
+                                                    data-bs-content="En caso de no estar activada, revise su correo y active su cuenta con el enlace enviado."></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="data_last-floor">
+                                    <div class="container_button-delete">
+                                        <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                            class="btn btn-outline" href="#"><span><i
+                                                    class="fa-solid fa-trash-can"></i></span>Delete account</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">Are you sure you want to delete your account? (all records
+                        photographs will be deleted and there will be no way to recover them).</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Not sure</button>
+                        <a th:href="@{/account/delete}" type="button" class="btn btn-primary">Yes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modalForUploadProfilePicture" tabindex="-1" aria-labelledby="modalForUploadProfilePicture" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Change your profile picture</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" th:action="@{/account/upload-profile-photo}" enctype="multipart/form-data" th:object="${photoValidator}">
+                            <div class="form-picture_inputs">
+                                <div class="picture-uploader">
+                                    <div class="uploader">
+                                        <div class="drag-area">
+                                            <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                                            <div class="header-file">
+                                                <header class="">Drag & drop to Upload File</header>
+                                            </div>
+                                            <div class="span-file"><span>or</span></div>
+                                            <div class="button-file">
+                                                <button type="button">Browse File</button>
+                                            </div>
+                                            <input type="file" hidden th:field="*{file}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="picture-details">
+                                    <div class="details">
+                                        <div class="details_form-group form-title">
+                                            <label for="title">Title</label>
+                                            <input type="text" placeholder="Place the title" id="title"
+                                            th:field="*{title}"  maxlength="60">
+                                        </div>
+                                        <div class="details_form-group">
+                                            <label for="description">Description</label>
+                                            <textarea id="description" cols="40" rows="7"
+                                            th:field="*{description}" placeholder="Place the description" maxlength="200"
+                                                ></textarea>
+                                        </div>
+                                        <div class="details_form-group form-button">
+                                            <button type="submit" class="btn-save">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div th:if="${formErrors != null}" class="form-picture_error-messages alert alert-danger">
+                            <ul>
+                                <li th:each="formError: ${formErrors}" class=""><span
+                                        th:text="${formError.getDefaultMessage()}"></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalForDescription" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form method="post" th:action="@{/account/update-description}" th:object="${formDescripcion}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">Change description</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                            </div>
+                            <div class="input-desc">
+                                <div class="input">
+                                    <textarea id="textAreaDescription" cols="30" rows="10" th:field="*{content}"
+                                        placeholder="My description is..."></textarea>
+                                    <!-- <span class="character-count">
+                                            <span id="counter">0</span>
+                                            <span>/</span>
+                                            <span>200</span>
+                                        </span> -->
+                                </div>
+                                <div class="desc-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalForNameAndLastName" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form method="post" th:action="@{/account/update-names}" th:object="${formNameAndLastName}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">Change</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                            </div>
+                            <div class="inputs">
+                                <div class="input-name">
+                                    <label for="name">Name</label>
+                                    <input id="name" type="text" placeholder="Name" th:field="*{name}">
+                                    <div class="name-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                                    </div>
+                                </div>
+                                <div class="input-lastname">
+                                    <label for="lastname">Lastname</label>
+                                    <input id="lastname" type="text" placeholder="Lastname" th:field="*{lastname}">
+                                    <div class="lastname-error" th:if="${#fields.hasErrors('lastname')}"
+                                        th:errors="*{lastname}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalForUsername" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form method="post" th:action="@{/account/update-username}" th:object="${formUsername}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">Change username</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                            </div>
+                            <div class="inputs">
+                                <div class="input-name">
+                                    <input id="username" type="text" placeholder="Place username" th:field="*{content}">
+                                    <div class="name-error" th:if="${#fields.hasErrors('content')}"
+                                        th:errors="*{content}"></div>
+                                </div>
+                                <!-- <div class="input-lastname">
+                                    <label for="lastname">Lastname</label>
+                                    <input id="lastname" type="text" placeholder="Lastname" th:field="*{lastname}">
+                                    <div class="lastname-error" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalForPassword" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form method="post" th:action="@{/account/update-pass1}" th:object="${formChangePassword}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">Change password</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="inputs">
+                                <div class="input-name">
+                                    <label for="oldPassword">Old password</label>
+                                    <input id="oldPassword" type="text" th:field="*{oldpass}">
+                                </div>
+                                <div class="input-lastname">
+                                    <label for="newPassword">New password</label>
+                                    <input id="newPassword" type="text" th:field="*{newpass}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <button id="btnInvalidFile" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#invalidFileModal" hidden></button>
+        <div class="modal fade" id="invalidFileModal" tabindex="-1" aria-labelledby="invalidFileModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="body-message">This file is not valid (<b>JPG</b>, <b>JPEG</b> and/or <b>PNG</b> are accepted).</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="btnInvalidSizeFile" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#invalidSizeFile" hidden></button>
+        <div class="modal fade" id="invalidSizeFile" tabindex="-1" aria-labelledby="invalidSizeFile" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="body-message">Max size exceed (max <b>10MB</b>).</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <footer th:replace="layout/layout :: footer"></footer>
+    <span th:if="${modalActivator}" id="modalActivator" th:text="${modalActivator}" hidden></span>
+    <script th:src="@{/js/user-time-formatter.js}"></script>
+    <script th:src="@{/js/popover.js}"></script>
+    <script th:src="@{/js/modalActivator.js}"></script>
+    <script th:src="@{/js/character-count-inputs.js}"></script>
+    <script th:src="@{/js/showModalForUploadPicture.js}"></script>
+    <script th:src="@{/js/drag-and-drop-file.js}"></script>
 </body>
 
 </html>

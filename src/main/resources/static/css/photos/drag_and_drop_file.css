@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+
+.drag-area {
+  border: 2px dashed rgb(41, 41, 41);
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+
+.uploader:hover .drag-area {
+  transform: scale(1.02);
+}
+
+.uploader:hover .drag-area.active {
+  transform: scale(1);
+}
+
+.drag-area .span-file {
+  margin-bottom: 10px;
+}
+
+.drag-area.active {
+  border: 2px solid #fff;
+}
+
+.drag-area .icon {
+  font-size: 70px;
+  color: rgb(43, 43, 43);
+}
+
+.drag-area .header-file {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.drag-area .header-file header {
+  width: auto;
+  height: auto;
+  font-size: 25px;
+  font-weight: 500;
+  color: rgb(43, 43, 43);
+  box-shadow: none;
+}
+
+.drag-area .span-file span {
+  font-size: 20px;
+  font-weight: 500;
+  color: rgb(43, 43, 43);
+}
+
+.drag-area .button-file button {
+  padding: 5px 25px;
+  padding-bottom: 7px;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  background: rgb(202, 241, 108);
+  color: #262626;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+
+.drag-area .button-file button:hover {
+  opacity: 0.8;
+}
+
+.drag-area img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+@media (max-width: 1250px) {
+  .drag-area .header-file header {
+    font-size: calc(0.65rem + 1.3vw);
+  }
+}
+
+@media (max-width: 400px) {
+
+  .drag-area {
+    padding: 10px;
+    padding-top: 0;
+  }
+
+  .drag-area .icon {
+    font-size: 50px;
+    color: rgb(43, 43, 43);
+  }
+
+  .drag-area .header-file header {
+    font-size: calc(0.35rem + 1.3vw);
+  }
+
+  .drag-area .span-file {
+    margin: 4px;
+    margin-top: 0;
+  }
+
+  .drag-area .span-file span {
+    font-size: calc(0.55rem + 1.3vw);
+  }
+
+  .drag-area .button-file button {
+    padding: 3px 20px;
+    padding-bottom: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    background: rgb(202, 241, 108);
+    color: #262626;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.4s;
+  }
+
+}

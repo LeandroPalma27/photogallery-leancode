@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body class="body-page">
+    <script src="https://npmcdn.com/minigrid@3.0.1/dist/minigrid.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/photos/photos.css}">
+    <link rel="stylesheet" th:href="@{/css/photos/keep.css}">
+    <div class="main">
+        <header th:replace="layout/layout :: header"></header>
+        <main>
+            <div class="container_photos">
+                <div class="photos">
+                    <div class="title_and_desc">
+                        <h1>My photos</h1>
+                        <p>
+                            In this option are your personal photos.
+                        </p>
+                        <p th:if="${usuario.photos.isEmpty()}" class="upload-text"> You don't have photos uploaded?
+                            <a th:href="@{/photos/upload}">Start uploading your first photo.</a>
+                        </p>
+                    </div>
+                    <div class="main_content">
+                        <div th:replace="layout/card-body :: card-body"></div>
+                    </div>
+                    <div th:if="${!photosUsuario.isEmpty}" class="paginator">
+                        <nav th:replace="paginator-nav :: paginator"></nav>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+    <script th:src="@{/js/for-download-photo.js}"></script>
+    <script th:src="@{/js/charge-photos.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body class="body-page">
+    <link rel="stylesheet" th:href="@{/css/photos/photos.css}">
+    <link rel="stylesheet" th:href="@{/css/photos/drag_and_drop_file.css}">
+    <div class="main">
+        <header th:replace="layout/layout :: header"></header>
+        <main>
+            <div class="container_photos">
+                <div class="photos">
+                    <div class="title_and_desc">
+                        <h1>Upload photos</h1>
+                    </div>
+                    <div class="main_content">
+                        <div class="content_form-picture">
+                            <form method="post" th:action="@{/photos/upload}" th:object="${photoValidator}"
+                                class="form-picture_1" enctype="multipart/form-data">
+                                <div class="form-picture_inputs">
+                                    <div class="picture-uploader">
+                                        <div class="uploader">
+                                            <div class="drag-area">
+                                                <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                                                <div class="header-file">
+                                                    <header class="">Drag & drop to Upload File</header>
+                                                </div>
+                                                <div class="span-file"><span>or</span></div>
+                                                <div class="button-file">
+                                                    <button type="button">Browse File</button>
+                                                </div>
+                                                <input type="file" hidden th:field="*{file}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="picture-details">
+                                        <div class="details">
+                                            <div class="details_form-group form-title">
+                                                <label for="title">Title</label>
+                                                <input type="text" placeholder="Place the title" id="title"
+                                                    th:field="*{title}" maxlength="60">
+                                            </div>
+                                            <div class="details_form-group">
+                                                <label for="description">Description</label>
+                                                <textarea id="description" cols="40" rows="7"
+                                                    placeholder="Place the description" maxlength="200"
+                                                    th:field="*{description}"></textarea>
+                                            </div>
+                                            <div class="details_form-group form-button">
+                                                <button type="submit" class="btn-save">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div th:if="${formErrors != null}" class="form-picture_error-messages alert alert-danger">
+                                <ul>
+                                    <li th:each="formError: ${formErrors}" class=""><span
+                                            th:text="${formError.getDefaultMessage()}"></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <button id="btnInvalidFile" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#invalidFileModal" hidden></button>
+        <div class="modal fade" id="invalidFileModal" tabindex="-1" aria-labelledby="invalidFileModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        This file is not valid (<b>JPG</b>, <b>JPEG</b> and/or <b>PNG</b> are accepted).
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="btnInvalidSizeFile" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#invalidSizeFile" hidden></button>
+        <div class="modal fade" id="invalidSizeFile" tabindex="-1" aria-labelledby="invalidSizeFile" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Max size exceed (max <b>10MB</b>).
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+    <script th:src="@{/js/drag-and-drop-file.js}"></script>
+</body>
+
+</html>

@@ -16,14 +16,14 @@
 
 <body>
     
-    <header th:fragment="header">
+    <header class="header" th:fragment="header">
         <nav class="header_navbar">
             <div class="accordion">
                 <ul class="list-accordion">
-                    <li><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></a></li>
-                    <li><a href="#">All photos</a></li>
-                    <li><a href="#">My photos</a></li>
-                    <li><a href="#">Favorites</a></li>
+                    <li><a th:href="@{/photos/search}"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></a></li>
+                    <li><a th:href="@{/photos/all}">All photos</a></li>
+                    <li><a th:href="@{/photos/own}">My photos</a></li>
+                    <li><a th:href="@{/photos/favorites}">Saved</a></li>
                 </ul>
             </div>
             <div class="navbar_container-responsive">
@@ -43,11 +43,14 @@
                         <a th:href="@{/login}" class="account_sign-log" title="Sign-in" sec:authorize="isAnonymous()">
                             <i class="fa-solid fa-right-to-bracket"></i>
                         </a>
-                        <a th:href="@{/account/} + ${user}" class="userprofile-photo dropdown-toggle" sec:authorize="isAuthenticated()" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img th:src="@{/img/foto-leandro-facebook.jpg}" alt="">
+                        <a th:href="@{/account}" class="userprofile-photo dropdown-toggle" sec:authorize="isAuthenticated()" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img th:if="${profilePictureUser == null}" th:src="@{/img/default_profile.jpg}" alt="">
+                            <span th:if="${profilePictureUser != null}" th:text="${profilePictureUser}" hidden id="urlPictureForLayout"></span>
+                            <img th:if="${profilePictureUser != null}" src="" alt="">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <li><a class="dropdown-item" th:href="@{/account/} + ${user}">My profile</a></li>
+                            <li><a class="dropdown-item" th:href="@{/account}">My profile</a></li>
+                            <li><a class="dropdown-item" th:href="@{/photos/upload}">Upload photo</a></li>
                             <li>
                                 <a class="dropdown-item" href="">
                                     <form id="logoutForm" class="form-logout" th:action="@{/logout}" method="post">
@@ -63,10 +66,10 @@
             <div class="navbar_container-list">
                 <ul class="list">
                     <li class="list_logo"><a th:href="@{/}">Photogallery</a></li>
-                    <li class="list_option list_index"><a href="#">All photos</a></li>
-                    <li class="list_option list_my-photos"><a href="#">My photos</a></li>
-                    <li class="list_option list_search"><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-                    <li class="list_option list_favorites"><a href="#">Favorites</a></li>
+                    <li class="list_option list_index"><a th:href="@{/photos/all}">All photos</a></li>
+                    <li class="list_option list_my-photos"><a th:href="@{/photos/own}">My photos</a></li>
+                    <li class="list_option list_search"><a th:href="@{/photos/search}"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+                    <li class="list_option list_favorites"><a th:href="@{/photos/favorites}">Saved</a></li>
                 </ul>
             </div>
             <div class="navbar_container-sign" sec:authorize="isAnonymous()">
@@ -81,14 +84,17 @@
                 <div class="dropdown userprofile">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="userprofile-photo">
-                            <img th:src="@{/img/foto-leandro-facebook.jpg}" alt="">
+                            <img th:if="${profilePictureUser == null}" th:src="@{/img/default_profile.jpg}" alt="">
+                            <span th:if="${profilePictureUser != null}" th:text="${profilePictureUser}" hidden id="urlPictureForLayout2"></span>
+                            <img th:if="${profilePictureUser != null}" src="" alt="">
                         </div>
                         <div class="userprofile-name">
-                            <span th:text="${nombre}"></span>
+                            <span id="nombreCortado" th:text="${usuario.nombre + ' ' + usuario.apellidos}"></span>
                         </div>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" th:href="@{/account/} + ${user}">My profile</a></li>
+                        <li><a class="dropdown-item" th:href="@{/account}">My profile</a></li>
+                        <li><a class="dropdown-item" th:href="@{/photos/upload}">Upload photo</a></li>
                         <li>
                             <a class="dropdown-item" href="">
                                 <form class="form-logout" th:action="@{/logout}" method="post">
@@ -101,6 +107,24 @@
                 </div>
             </div>
         </nav>
+        <div class="alert alert-info" th:if="${info != null}">
+            <span class="controller-messages info-message" th:text="${info}"></span>
+            <button type="button" class="close-button_controller-message"><i class="fa-solid fa-x"></i></button>
+        </div>
+        <div class="alert alert-success" th:if="${successMessage != null}">
+            <span class="controller-messages success-message" th:text="${successMessage}"></span>
+            <button type="button" class="close-button_controller-message"><i class="fa-solid fa-x"></i></button>
+        </div>
+        <div class="alert alert-danger" th:if="${errorMessage != null}">
+            <span class="controller-messages error-message" th:text="${errorMessage}"></span>
+            <button type="button" class="close-button_controller-message"><i class="fa-solid fa-x"></i></button>
+        </div>
+        <!-- <div class="alert alert-success" th:if="${successfulUpdateUsername != null}" th:text="${successfulUpdateUsername}"></div>
+        <div class="alert alert-success" th:if="${successfulPhoto != null}" th:text="${successfulPhoto}"></div>
+        <div class="alert alert-success" th:if="${successfulUpdatePassword != null}" th:text="${successfulUpdatePassword}"></div>
+		<div class="alert alert-danger" th:if="${errorUpdateUsername != null}" th:text="${errorUpdateUsername}"></div>
+		<div class="alert alert-danger" th:if="${errorPhoto != null}" th:text="${errorPhoto}"></div>
+		<div class="alert alert-danger" th:if="${errorUpdatePassword != null}" th:text="${errorUpdatePassword}"></div> -->
     </header>
 
     <footer th:fragment="footer" class="gallery-footer">
@@ -171,7 +195,12 @@
             <div class="copyright"><span>Copyright ©2022 All rights reserved.</span></div>
             <div class="author"><span>This page is created by <a href="#">LeanCoder.</a></span></div>
         </div>
+        <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
         <script th:src="@{/js/accordion.js}"></script>
+        <script th:src="@{/js/popover.bundle.js}"></script>
+        <script th:src="@{/js/profile-details.js}"></script>
+        <script th:src="@{/js/controller-messages.js}"></script>
+        <script th:src="@{/js/charge-profile-photo.js}"></script>
     </footer>
 
 </body>

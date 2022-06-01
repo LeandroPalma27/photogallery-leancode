@@ -43,7 +43,7 @@ body {
 }
 
 .triangle .form > div > form .login_input .control-password {
-  padding-right: 19px;
+  padding-right: 22px;
 }
 
 .eye {
@@ -116,7 +116,7 @@ body {
 
 .triangle .form > div > form .login_title {
   margin-bottom: 10px;
-  font-family: 'Fredoka'';
+  font-family: 'Fredoka';
 }
 
 .triangle .form > div > form .login_title h4{
@@ -136,6 +136,7 @@ body {
   width: 100%;
   border-radius: 0;
   background-color: rgba(255, 255, 255, 0);
+  padding-right: 22px;
 }
 
 .triangle .form > div > form .login_input label{
