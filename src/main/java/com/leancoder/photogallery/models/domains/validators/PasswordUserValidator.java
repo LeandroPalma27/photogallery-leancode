@@ -4,6 +4,9 @@ import javax.validation.constraints.Size;
 
 import com.leancoder.photogallery.custom.annotations.password.ValidPassword;
 
+/* 
+ * DTO para validar el formulario que actualiza la constraseña de un usuario
+ */
 public class PasswordUserValidator {
     
     private String oldpass;

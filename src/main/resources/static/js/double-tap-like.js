@@ -15,7 +15,7 @@
         if (element.matches('.active')){
             setTimeout(() => {
                 element.classList.toggle('active');
-            }, 1500)
+            }, 800)
         }
     }
 })()

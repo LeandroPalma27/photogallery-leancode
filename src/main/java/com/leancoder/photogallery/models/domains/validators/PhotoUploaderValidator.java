@@ -6,6 +6,9 @@ import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
 
+/* 
+ * DTO para validar el formulario que registra una foto en el servicio cloudinary y base de datos.
+ */
 public class PhotoUploaderValidator {
     
     @NotBlank(message = "Place the title.")

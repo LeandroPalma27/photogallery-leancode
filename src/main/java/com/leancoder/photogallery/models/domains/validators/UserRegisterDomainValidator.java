@@ -8,6 +8,9 @@ import javax.validation.constraints.Size;
 
 import com.leancoder.photogallery.custom.annotations.password.ValidPassword;
 
+/* 
+ * DTO para validar el formulario que registra un usuario en el sistema.
+ */
 public class UserRegisterDomainValidator {
 
     @Size(max=60, message = "No exceda los 60 caracteres.")

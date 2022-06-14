@@ -10,8 +10,56 @@
     height: auto;
 }
 
-.photos .title_and_desc {
+.title-desc_and_btn-upload {
     width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn_go-to-upload-picture {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.go-to-upload {
+    width: auto;
+    height: auto;
+    padding: 3px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Fredoka';
+    font-size: 13px;
+    text-decoration: none;
+    background-color: rgb(202, 241, 108);
+    color: rgb(37, 37, 37);
+    font-weight: bold;
+    border-radius: 12px;
+}
+
+.go-to-upload span {
+    font-size: 13px;
+    text-decoration: none;
+    background-color: rgb(202, 241, 108);
+    color: rgb(37, 37, 37);
+    font-weight: bold;
+}
+
+.upload-icon {
+    display: none;
+}
+
+.go-to-upload:hover {
+    color: rgb(37, 37, 37);
+    opacity: 0.9;
+}
+
+.photos .title_and_desc {
+    width: auto;
     height: auto;
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.059);
@@ -300,6 +348,29 @@
 
     .photos .title_and_desc p {
         font-size: calc(0.35rem + 1.3vw);
+    }
+
+}
+
+@media (max-width: 660px) {
+
+    .go-to-upload {
+        padding: 0;
+        border-radius: 35px;
+        width: 35px;
+        height: 35px;
+    }
+
+    .upload-icon {
+        display: inherit;
+    }
+    
+    .upload-icon i {
+        font-size: 16px;
+    }
+
+    .upload-text {
+        display: none;
     }
 
 }

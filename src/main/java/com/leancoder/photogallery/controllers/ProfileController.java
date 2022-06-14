@@ -63,10 +63,10 @@ public class ProfileController {
 
     // Objetos creados para un valor por defecto en los formularios o vistas (el
     // objeto que carga al usuario):
-    /* @ModelAttribute("photoValidator")
+    @ModelAttribute("photoValidator")
     public PhotoUploaderValidator validator() {
         return new PhotoUploaderValidator();
-    } */
+    }
 
     /*
         Objecto cargado con la descripcion del usuario para la vista que actualiza ese campo en su formulario respectivo.

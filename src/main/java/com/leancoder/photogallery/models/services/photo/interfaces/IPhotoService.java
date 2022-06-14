@@ -28,7 +28,7 @@ public interface IPhotoService {
 
     public UpdateOrRegisterDetailsResponse actualizarDetallesFoto(String uploadId, PhotoUpdaterValidator photoValidator);
 
-    public UpdateOrRegisterDetailsResponse eliminarFoto(String uploadId, Photo photo) throws IOException;
+    public UpdateOrRegisterDetailsResponse eliminarFoto(Photo photo) throws IOException;
 
     public UpdateOrRegisterDetailsResponse removerFotoDePerfil(String uploadId);
 

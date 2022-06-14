@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 
 import com.leancoder.photogallery.models.entities.user.User;
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /* 
@@ -45,7 +47,7 @@ public class Photo {
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName="id", updatable = false)
-    private User usuario;
+    private User user;
 
     @OneToMany(mappedBy = "photo", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<RolePhoto> roles;
@@ -105,12 +107,12 @@ public class Photo {
         this.likes = likes;
     }
 
-    public User getUsuario() {
-        return usuario;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsuario(User usuario) {
-        this.usuario = usuario;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getUploadId() {

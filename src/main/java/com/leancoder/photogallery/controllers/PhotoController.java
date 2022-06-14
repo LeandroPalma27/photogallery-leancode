@@ -58,7 +58,8 @@ public class PhotoController {
     private IPhotoService photoService;
 
     /*
-        Objecto cargado con informacion general del usuario globalmente para todas las vistas en este controlador.
+     * Objecto cargado con informacion general del usuario globalmente para todas
+     * las vistas en este controlador.
      */
     @ModelAttribute("usuario")
     public User cargarUsuario(Authentication authentication, Principal principal) {
@@ -70,9 +71,11 @@ public class PhotoController {
     }
 
     /*
-        <=== Objecto cargado con informacion(url de foto de perfil) globalmente para todas las vistas en este controlador ===>
-            * Se hace con el fin de poder tener la url para la carga de la foto de perfil en el layout general para todas
-              las vistas. 
+     * <=== Objecto cargado con informacion(url de foto de perfil) globalmente para
+     * todas las vistas en este controlador ===>
+     * Se hace con el fin de poder tener la url para la carga de la foto de perfil
+     * en el layout general para todas
+     * las vistas.
      */
     @ModelAttribute("profilePictureUser")
     public String cargarFotoDePerfil(Authentication authentication) {
@@ -96,9 +99,11 @@ public class PhotoController {
     }
 
     /*
-        <=== Objecto cargado con informacion(url de foto de perfil) globalmente para todas las vistas en este controlador ===>
-            * Se hace con el fin de poder tener la url para la carga de la foto de perfil en el layout general para todas
-              las vistas. 
+     * <=== Objecto cargado con informacion(url de foto de perfil) globalmente para
+     * todas las vistas en este controlador ===>
+     * Se hace con el fin de poder tener la url para la carga de la foto de perfil
+     * en el layout general para todas
+     * las vistas.
      */
     @ModelAttribute("profilePictureUploadId")
     public String cargarIdDeFotoPerfil(Authentication authentication) {
@@ -122,8 +127,9 @@ public class PhotoController {
     }
 
     /*
-        Endpoint que carga la vista para el listado de todas las fotos registradas en nuestra aplicacion.
-            * Se utiliza un pagueado para la lista de fotos.
+     * Endpoint que carga la vista para el listado de todas las fotos registradas en
+     * nuestra aplicacion.
+     * Se utiliza un pagueado para la lista de fotos.
      */
     @GetMapping("/all")
     public String All(@RequestParam(name = "page", defaultValue = "0") int page, Authentication authentication,
@@ -143,8 +149,9 @@ public class PhotoController {
     }
 
     /*
-        Endpoint que carga la vista para el listado de las fotos registradas de un solo usuario, en nuestra aplicacion.
-            * Se utiliza un pagueado para la lista de fotos.
+     * Endpoint que carga la vista para el listado de las fotos registradas de un
+     * solo usuario, en nuestra aplicacion.
+     * Se utiliza un pagueado para la lista de fotos.
      */
     @GetMapping("/own")
     public String Own(@RequestParam(name = "page", defaultValue = "0") int page, Authentication authentication,
@@ -165,7 +172,7 @@ public class PhotoController {
     }
 
     /*
-        Endpoint que carga la vista del formulario para la subida de fotos.
+     * Endpoint que carga la vista del formulario para la subida de fotos.
      */
     @GetMapping("/upload")
     public String UploadNormalPhoto(Authentication authentication, Model model) {
@@ -176,10 +183,11 @@ public class PhotoController {
     }
 
     /*
-        Endpoint que procesa la subida de una foto en nuestra aplicacion.
+     * Endpoint que procesa la subida de una foto en nuestra aplicacion.
      */
     @PostMapping("/upload")
-    // No olvidar que @ModelAttribute tambien puede cargar un objeto que extrae del modelo actual.
+    // No olvidar que @ModelAttribute tambien puede cargar un objeto que extrae del
+    // modelo actual.
     public String uploadPhotoProccess(@Valid @ModelAttribute("photoValidator") PhotoUploaderValidator validator,
             BindingResult result, Authentication authentication, RedirectAttributes flash, SessionStatus status,
             Model model) {
@@ -225,10 +233,11 @@ public class PhotoController {
     }
 
     /*
-        Endpoint que carga los detalles de una sola foto que este subida en nuestra aplicacion.
+     * Endpoint que carga los detalles de una sola foto que este subida en nuestra
+     * aplicacion.
      */
     @GetMapping("/details/{public_id}")
-    public String Details(@PathVariable("public_id") String public_id, Model model) {
+    public String Details(@PathVariable("public_id") String public_id, Authentication authentication, Model model) {
 
         var photo = photoService.buscarFoto(public_id);
         model.addAttribute("title", "Details");
@@ -241,7 +250,8 @@ public class PhotoController {
             model.addAttribute("photoDetails", photo);
             if (photo.getRoles().size() > 1) {
                 for (var role : photo.getRoles()) {
-                    if (role.getRole().equals("ROLE_PROFILE")) {
+                    if (role.getRole().equals("ROLE_PROFILE")
+                            && photo.getUser().getUsername().equals(authentication.getName())) {
                         model.addAttribute("isProfilePhoto", "The current photo is set as the profile picture.");
                         break;
                     }
@@ -254,7 +264,8 @@ public class PhotoController {
     }
 
     /*
-        Endpoint que actualiza los detalles de una foto que este subida en nuestra aplicacion.
+     * Endpoint que actualiza los detalles de una foto que este subida en nuestra
+     * aplicacion.
      */
     @PostMapping("/details/update")
     public String UpdatePhoto(@ModelAttribute("photoDetails") Photo photo,
@@ -282,26 +293,27 @@ public class PhotoController {
     }
 
     /*
-        Endpoint que elimina una foto que este subida en nuestra aplicacion.
+     * Endpoint que elimina una foto que este subida en nuestra aplicacion.
      */
     @GetMapping("/details/delete/{public_id}")
     public String DeletePhoto(@PathVariable("public_id") String public_id, RedirectAttributes flash, Model model)
             throws IOException {
 
         var photoFound = photoService.buscarFoto(public_id);
-        var res = photoService.eliminarFoto(public_id, photoFound);
-
+        var res = photoService.eliminarFoto(photoFound);
+        
         if (res.getName().equals("successful_delete")) {
             flash.addFlashAttribute("successMessage", res.getMessage());
             return "redirect:/photos/own";
-        } else {
-            flash.addFlashAttribute("errorMessage", res.getMessage());
-            return "redirect:/photos/own";
         }
+        flash.addFlashAttribute("errorMessage", res.getMessage());
+        System.out.println(photoFound.getUploadId().toString().concat(" xdddddd"));
+        return "redirect:/photos/own";
+
     }
 
     /*
-        Endpoint que cambia el estado de una foto con rol NORMAL a un rol PROFILE.
+     * Endpoint que cambia el estado de una foto con rol NORMAL a un rol PROFILE.
      */
     @GetMapping("/details/change-role/{public_id}")
     public String ChangeNormalPhotoToProfilePhoto(@PathVariable("public_id") String public_id,

@@ -10,12 +10,17 @@
         <main>
             <div class="container_photos">
                 <div class="photos">
-                    <div class="title_and_desc">
-                        <h1>All photos</h1>
-                        <p>Discover the pictures upload by users of Photogallery.</p>
-                        <p class="upload-text"> You don't have photos uploaded?
-                            <a th:href="@{/photos/upload}">Start uploading your first photo.</a>
-                        </p>
+                    <div class="title-desc_and_btn-upload">
+                        <div class="title_and_desc">
+                            <h1>All photos</h1>
+                            <p>Discover the pictures upload by users of Photogallery.</p>
+                        </div>
+                        <div class="btn_go-to-upload-picture">
+                            <a class="go-to-upload" th:href="@{/photos/upload}">
+                                <span class="upload-text">Upload picture</span>
+                                <span class="upload-icon"><i class="fa-solid fa-arrow-up-from-bracket"></i></span>
+                            </a>
+                        </div>
                     </div>
                     <div class="main_content">
                         <div class="content-cards">
@@ -38,7 +43,7 @@
                                         <div class="info">
                                             <div class="info_author">
                                                 <span class="desc">Author: </span>
-                                                <span class="authorFoto" th:text="${photo.usuario.nombre + ' ' + photo.usuario.apellidos}"></span>
+                                                <span class="authorFoto" th:text="${photo.user.nombre + ' ' + photo.user.apellidos}"></span>
                                             </div>
                                         </div>
                                     </div>

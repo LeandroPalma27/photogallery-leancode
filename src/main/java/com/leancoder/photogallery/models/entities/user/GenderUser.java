@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "gender")
+@Table(name = "genders_user")
 public class GenderUser implements Serializable {
     
     @Id

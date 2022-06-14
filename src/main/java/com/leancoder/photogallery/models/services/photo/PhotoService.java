@@ -87,7 +87,7 @@ public class PhotoService implements IPhotoService {
         var photo = subirFotoAlServidor(photoValidator);
 
         if (photo != null) {
-            photo.setUsuario(usuario);
+            photo.setUser(usuario);
             photo.setRoles(Arrays.asList(new RolePhoto("ROLE_NORMAL", photo)));
             photoDao.save(photo);
             response.setName("successful");
@@ -138,14 +138,14 @@ public class PhotoService implements IPhotoService {
 
     @Override
     @Transactional
-    public UpdateOrRegisterDetailsResponse eliminarFoto(String uploadId, Photo photo) throws IOException {
+    public UpdateOrRegisterDetailsResponse eliminarFoto(Photo photo) throws IOException {
 
         UpdateOrRegisterDetailsResponse response = new UpdateOrRegisterDetailsResponse();
 
-        var res = cloudinaryService.delete(uploadId);
+        var res = cloudinaryService.delete(photo.getUploadId());
+        photoDao.deleteById2(photo.getId());
 
         if ((boolean) res.get("isDelete")) {
-            photoDao.delete(photo);
             response.setName("successful_delete");
             response.setMessage("La foto se elimino con exito.");
             return response;
@@ -192,7 +192,7 @@ public class PhotoService implements IPhotoService {
                     continue;
                 }
             }
-            photo.setUsuario(usuario);
+            photo.setUser(usuario);
             photo.setRoles(Arrays.asList(new RolePhoto("ROLE_NORMAL", photo), new RolePhoto("ROLE_PROFILE", photo)));
             photoDao.save(photo);
             response.setName("successful");

@@ -16,7 +16,7 @@
     <div class="triangle">
         <div class="logo">
             <div>
-                <h3>Photogallery</h3>
+                <h3><a th:href="@{/}">Photogallery</a></h3>
             </div>
         </div>
         <div class="form">
@@ -39,7 +39,7 @@
                     </div>
                     <div class="login_input">
                         <label for="genero">Genero</label>
-                        <select id="genero" th:field="*{genderId}">
+                        <select class="form-select" id="genero" th:field="*{genderId}">
                             <!-- Es importante manejar una una opcion por defecto y que tenga un valor nulo, para asi poder validar que no se este enviando un campo vacio o errado -->
                             <option value="">---Select yout gender---</option>
                             <!-- Solo pasamos el id al objeto -->

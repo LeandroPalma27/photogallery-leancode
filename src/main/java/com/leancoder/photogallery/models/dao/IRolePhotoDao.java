@@ -11,12 +11,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface IRolePhotoDao extends CrudRepository<RolePhoto, Long>{
     
-    @Query(value = "SELECT * FROM photo_roles WHERE photo_id = :photo_id", nativeQuery = true)
+    @Query(value = "SELECT * FROM roles_photo WHERE photo_id = :photo_id", nativeQuery = true)
     public List<RolePhoto> findyByPhoto_id(@Param("photo_id") Long photo_id);
 
     // Se usa la etiqueta @Modifying ya que se necesita en caso de hacer un INSERT, UPDATE o DELETE.
     @Modifying
-    @Query(value = "DELETE FROM photo_roles WHERE id = :id", nativeQuery = true)
+    @Query(value = "DELETE FROM roles_photo WHERE id = :id", nativeQuery = true)
     public void deleteById2(@Param("id") Long id);
 
 }

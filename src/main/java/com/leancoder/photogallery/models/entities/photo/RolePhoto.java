@@ -9,12 +9,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 /* 
     * Entidad para el registro de los roles de cada photo.
     * Se creo con un diseño de uno a muchos.
  */
 @Entity
-@Table(name="photo_roles")
+@Table(name="roles_photo")
 public class RolePhoto {
     
     @Id
@@ -25,6 +28,7 @@ public class RolePhoto {
     private String role;
 
     @ManyToOne(targetEntity = Photo.class)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(nullable = false, name = "photo_id", referencedColumnName = "db_id", updatable = false)
     private Photo photo;
 

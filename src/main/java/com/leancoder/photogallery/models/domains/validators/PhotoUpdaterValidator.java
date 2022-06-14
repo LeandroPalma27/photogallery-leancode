@@ -3,6 +3,9 @@ package com.leancoder.photogallery.models.domains.validators;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/* 
+ * DTO para validar el formulario que actualiza los detalles de una foto(titulo y descripcion)
+ */
 public class PhotoUpdaterValidator {
     
     @NotBlank(message = "Place the title.")

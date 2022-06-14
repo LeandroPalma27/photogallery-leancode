@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.leancoder.photogallery.models.entities.photo.LikesPhoto;
 import com.leancoder.photogallery.models.entities.photo.Photo;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,7 +26,7 @@ import org.springframework.format.annotation.DateTimeFormat;
     * Maneja la relacion con sus fotos "de uno(1 usuario) apuntando a muchos(varias fotos) "
  */
 @Entity
-@Table(name="usuarios")
+@Table(name="users")
 public class User {
     
     @Id
@@ -66,13 +67,24 @@ public class User {
     @JoinColumn(name = "gender_id", nullable = false)
     private GenderUser gender;
 
-    @OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Photo> photos;
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<LikesPhoto> likesPhoto;
 
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;
+    }
+
+    public List<LikesPhoto> getLikesPhoto() {
+        return likesPhoto;
+    }
+
+    public void setLikesPhoto(List<LikesPhoto> likesPhoto) {
+        this.likesPhoto = likesPhoto;
     }
 
     public GenderUser getGender() {

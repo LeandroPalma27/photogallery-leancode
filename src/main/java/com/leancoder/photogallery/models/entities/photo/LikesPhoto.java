@@ -13,6 +13,8 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.leancoder.photogallery.models.entities.user.User;
+
 /* 
     * Entidad para el registro de los likes en cada photo.
     * Se creo con un diseño de uno a muchos.
@@ -33,6 +35,19 @@ public class LikesPhoto {
     @ManyToOne(targetEntity = Photo.class)
     @JoinColumn(nullable = false, name = "photo_id", referencedColumnName = "db_id", updatable = false)
     private Photo photo;
+
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(nullable = false, name = "user_id", referencedColumnName ="id", updatable = false)
+    private User user;
+    
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 
     public Long getId() {
         return id;

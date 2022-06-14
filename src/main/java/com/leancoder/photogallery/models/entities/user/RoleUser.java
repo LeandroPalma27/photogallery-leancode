@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
     * Se creo con la finalidad de un diseño de uno a muchos.
  */
 @Entity
-@Table(name = "authorities")
+@Table(name = "roles_user")
 public class RoleUser implements Serializable {
     
     @Id

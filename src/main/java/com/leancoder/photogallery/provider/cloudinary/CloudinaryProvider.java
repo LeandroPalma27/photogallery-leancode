@@ -59,7 +59,7 @@ public class CloudinaryProvider implements ICloudinaryProvider {
     public Map<String, Object> delete(String public_id) throws IOException {
 
         Map<String, Object> res = new HashMap<String, Object>();
-        var deleteResponse = cloudinaryProvider.uploader().destroy(public_id, ObjectUtils.emptyMap());
+        var deleteResponse = cloudinaryProvider.uploader().destroy(public_id, ObjectUtils.asMap("resource_type","image"));
         var isDelete = deleteResponse.get("result").equals("ok") ? true:false;
         res.put("isDelete", isDelete);
         
