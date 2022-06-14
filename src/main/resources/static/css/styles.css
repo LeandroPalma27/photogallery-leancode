@@ -420,7 +420,7 @@ main {
     height: auto;
     display: flex;
     flex-direction: column;
-    background: rgba(15, 196, 106, 0.087);
+    background: rgba(15, 196, 106, 0.049);
     border-radius: 10px;
     box-shadow: 10px 10px 38px -12px rgba(0, 0, 0, 0.290);
     -webkit-box-shadow: 10px 10px 38px -12px rgba(0, 0, 0, 0.290);
@@ -428,20 +428,13 @@ main {
 }
 
 .popover {
-    height: 35px !important;
+    height: auto;
 }
 
-.popover>div {
+.popover > div {
     display: flex;
     align-items: center;
-    line-height: 0px;
 }
-
-/* .
-
-.popover .popover-body {
-    height: 30px !important;
-} */
 
 .card_photo .photo {
     width: 100%;
@@ -504,7 +497,7 @@ main {
 }
 
 .card_photo .photo .container-description .info {
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     font-size: 14px;
 }
 

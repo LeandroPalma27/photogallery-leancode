@@ -335,7 +335,7 @@
 @media (min-width: 1919px) {
 
     .photos .title_and_desc p {
-        font-size: calc(0.35rem + 0.75vw);
+        font-size: calc(0.35rem + 0.70vw);
     }
 
 }

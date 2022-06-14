@@ -514,10 +514,10 @@
     display: inline-block;
 }
 
-.status>div>.sta {
+.status > div >.sta {
     font-weight: bold;
     cursor: pointer;
-    background-color: rgb(250, 250, 250);
+    background-color: rgb(255, 255, 255);
     outline: none;
     border: none;
 }
@@ -595,11 +595,13 @@
     font-size: calc(1rem + .4vw); 
 }
 
-/* #nameAndLastname2 {
-    font-size: calc(0.9rem + .4vw);
-    
-} */
+@media(min-width: 1800px) {
 
+    #nameAndLastname1 {
+        font-size: calc(0.8rem + .4vw); 
+    }
+
+}
 
 @media (max-width: 1024px) {
 
@@ -710,7 +712,7 @@
     }
 
     .password_part-2 a {
-        font-size: calc(0.1rem + 1.1vw);
+        font-size: calc(0.1rem + 1vw);
         text-decoration: underline rgb(197, 197, 197);
     }
 
@@ -719,7 +721,7 @@
     }
     
     .email_part-2 a {
-        font-size: calc(0.1rem + 1.1vw);
+        font-size: calc(0.1rem + 1vw);
         text-decoration: underline rgb(197, 197, 197);
     }
 
@@ -728,12 +730,12 @@
     }
     
     .username_part-2 a {
-        font-size: calc(0.1rem + 1.1vw);
+        font-size: calc(0.1rem + 1vw);
         text-decoration: underline rgb(197, 197, 197);
     }
 
     .complete-name a {
-        font-size: calc(0.1rem + 1.1vw);
+        font-size: calc(0.1rem + 1vw);
         text-decoration: underline rgb(197, 197, 197);
     }
 
