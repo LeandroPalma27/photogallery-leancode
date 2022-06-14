@@ -50,7 +50,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // Proporciona soporte para el logout de nuestra aplicacion(como manipular la
                 // ruta de cierre, manipular cookies, etc):
-                .logout().deleteCookies("JSESSIONID")
+                .logout()
                 .and()
 
                 // Establece que solo se pueda tener una sola sesion valida por usuario(si se

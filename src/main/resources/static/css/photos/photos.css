@@ -332,15 +332,11 @@
     margin: 0;
 }
 
-@media (max-width: 1115px) {
+@media (min-width: 1919px) {
 
-    /* .picture-uploader {
-        width: 350px;
+    .photos .title_and_desc p {
+        font-size: calc(0.35rem + 0.75vw);
     }
-    
-    .picture-details {
-        width: 350px;
-    } */
 
 }
 

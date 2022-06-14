@@ -3,14 +3,8 @@ package com.leancoder.photogallery;
 import java.util.EnumSet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
 import javax.servlet.SessionTrackingMode;
-
 import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.context.support.GenericWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
 
 public class MyWebInitializer implements WebApplicationInitializer {
 
@@ -19,17 +13,8 @@ public class MyWebInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
 
-        AnnotationConfigWebApplicationContext root = new AnnotationConfigWebApplicationContext();
-        root.scan("com.leancoder.photogallery");
-        servletContext.addListener(new ContextLoaderListener(root));
-        ServletRegistration.Dynamic appServlet = servletContext.addServlet("dispatcherServlet",
-                new DispatcherServlet(new GenericWebApplicationContext()));
-        appServlet.setLoadOnStartup(1);
-        appServlet.addMapping("/");
-
-
         // Investigar como hacer esto
-        servletContext.getSessionCookieConfig().setName("FONKYID");
+        /* servletContext.getSessionCookieConfig().setName("FONKYID"); */
 
         // Permite indicar al servlet context que la informacion de sesion sea manejada
         // por las cookies y no por la URL(Investigar):
