@@ -4,7 +4,6 @@ import com.leancoder.photogallery.models.dao.IRoleDao;
 import com.leancoder.photogallery.models.dao.IUsuarioDao;
 import com.leancoder.photogallery.models.domain.FailRegister;
 import com.leancoder.photogallery.models.domain.RegisterUsuario;
-import com.leancoder.photogallery.models.entity.Role;
 import com.leancoder.photogallery.models.entity.Usuario;
 
 import org.springframework.beans.factory.annotation.Autowired;
