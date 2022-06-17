@@ -52,7 +52,7 @@ public class Photo {
     @OneToMany(mappedBy = "photo", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<RolePhoto> roles;
 
-    @OneToMany(mappedBy = "photo", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "photo", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<LikesPhoto> likesPhoto;
 
     @Column(name = "fecha_registro")

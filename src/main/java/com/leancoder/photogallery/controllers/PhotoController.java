@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.validation.Valid;
 
+import com.leancoder.photogallery.models.dao.ILikesPhotoDao;
 import com.leancoder.photogallery.models.dao.IUsuarioDao;
 import com.leancoder.photogallery.models.domains.paginator.PageRenderBean;
 import com.leancoder.photogallery.models.domains.validators.PhotoUpdaterValidator;
@@ -16,6 +17,8 @@ import com.leancoder.photogallery.models.services.photo.interfaces.IPhotoService
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /*
@@ -57,6 +62,9 @@ public class PhotoController {
     @Autowired
     private IPhotoService photoService;
 
+    @Autowired
+    private ILikesPhotoDao likesPhotoDao;
+
     /*
      * Objecto cargado con informacion general del usuario globalmente para todas
      * las vistas en este controlador.
@@ -68,6 +76,12 @@ public class PhotoController {
         } else {
             return null;
         }
+    }
+
+    public Boolean IsLiked(Long userId, Long photoId) {
+        var likePhoto = likesPhotoDao.findByUserIdAndPhotoId(userId, photoId);
+        var isLiked = (likePhoto != null) ? true : false;
+        return isLiked;
     }
 
     /*
@@ -239,15 +253,21 @@ public class PhotoController {
     @GetMapping("/details/{public_id}")
     public String Details(@PathVariable("public_id") String public_id, Authentication authentication, Model model) {
 
-        var photo = photoService.buscarFoto(public_id);
         model.addAttribute("title", "Details");
+
+        var photo = photoService.buscarFoto(public_id);
+        
         if (photo == null) {
             return "redirect:/errors/not-found";
         } else {
             PhotoUpdaterValidator updater = new PhotoUpdaterValidator();
+            var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
+            var isLiked = IsLiked(usuario.getId(), photo.getId());
             updater.setTitle(photo.getTitle());
             updater.setDescription(photo.getDescription());
             model.addAttribute("photoDetails", photo);
+            model.addAttribute("user", usuario);
+            model.addAttribute("isLiked", isLiked);
             if (photo.getRoles().size() > 1) {
                 for (var role : photo.getRoles()) {
                     if (role.getRole().equals("ROLE_PROFILE")
@@ -277,8 +297,12 @@ public class PhotoController {
         model.addAttribute("title", "Details");
 
         if (result.hasErrors()) {
+            var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
+            var isLiked = IsLiked(usuario.getId(), photo.getId());
             model.addAttribute("photoDetails", photoFound);
             model.addAttribute("modalActivator", "photoUpdate");
+            model.addAttribute("user", usuario);
+            model.addAttribute("isLiked", isLiked);
             return "photos/details";
         }
 

@@ -45,14 +45,10 @@
                                 <div class="details-actions">
                                     <div class="like-button_and_like-count">
                                         <div class="like-button">
-                                            <button id="btnNotLiked" type="button" class="not-liked active"><span><i
-                                                        class="fa-regular fa-heart"></i></span></button>
-                                            <button type="button" class="liked"><span><i
-                                                        class="fa-solid fa-heart"></i></span></button>
                                         </div>
                                         <div class="like-count">
                                             <span><i class="fa-solid fa-thumbs-up"></i></span>
-                                            <span th:text="*{likes}"></span>
+                                            <span th:text="*{likesPhoto.size()}"></span>
                                         </div>
                                     </div>
                                     <div class="save-button">
@@ -158,6 +154,9 @@
             </div>
         </main>
         <span id="modalActivator" hidden th:if="${modalActivator != null}" th:text="${modalActivator}"></span>
+        <span hidden th:text="${photoDetails.uploadId}" id="photoIdForLike"></span>
+        <span hidden th:text="${user.username}" id="usernameForLike"></span>
+        <span hidden th:text="${isLiked}" id="isLiked"></span>
     </div>
     <footer th:replace="layout/layout :: footer"></footer>
     <script th:src="@{/js/modalActivator.js}"></script>
@@ -165,7 +164,7 @@
     <script th:src="@{/js/photo-time-formatter.js}"></script>
     <script th:src="@{/js/save_and_like-button.js}"></script>
     <script th:src="@{/js/double-tap-like.js}"></script>
-    <script th:src="@{/js/back-to-list.js}"></script>
+    <script th:src="@{/js/like-consumer.js}"></script>
 </body>
 
 </html>

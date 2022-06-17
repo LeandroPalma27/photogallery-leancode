@@ -3,6 +3,7 @@ package com.leancoder.photogallery.models.services.photo.interfaces;
 import java.io.IOException;
 import java.util.List;
 
+import com.leancoder.photogallery.models.domains.responses.LikeResponse;
 import com.leancoder.photogallery.models.domains.responses.UpdateOrRegisterDetailsResponse;
 import com.leancoder.photogallery.models.domains.validators.PhotoUpdaterValidator;
 import com.leancoder.photogallery.models.domains.validators.PhotoUploaderValidator;
@@ -33,5 +34,9 @@ public interface IPhotoService {
     public UpdateOrRegisterDetailsResponse removerFotoDePerfil(String uploadId);
 
     public UpdateOrRegisterDetailsResponse establecerComoFotoDePerfil(String uploadId, User usuario);
+
+    public LikeResponse likearFoto(String photo_id, String user);
+
+    public LikeResponse quitarLike(String photo_id, String user);
 
 }

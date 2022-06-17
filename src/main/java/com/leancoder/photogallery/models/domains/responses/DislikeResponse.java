@@ -1,17 +1,17 @@
 package com.leancoder.photogallery.models.domains.responses;
 
-public class TransactionResponseBody {
+public class DislikeResponse {
     
-    private String state;
+    private Boolean isDisliked;
     private String message;
     private String description;
 
-    public String getState() {
-        return state;
+    public Boolean getIsDisliked() {
+        return isDisliked;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setIsDisliked(Boolean isDisliked) {
+        this.isDisliked = isDisliked;
     }
 
     public String getMessage() {

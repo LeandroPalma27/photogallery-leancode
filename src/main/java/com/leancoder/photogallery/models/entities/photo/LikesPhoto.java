@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.leancoder.photogallery.models.entities.user.User;
@@ -33,6 +35,7 @@ public class LikesPhoto {
     private Date date;
 
     @ManyToOne(targetEntity = Photo.class)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(nullable = false, name = "photo_id", referencedColumnName = "db_id", updatable = false)
     private Photo photo;
 

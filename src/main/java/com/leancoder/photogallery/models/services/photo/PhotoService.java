@@ -3,12 +3,16 @@ package com.leancoder.photogallery.models.services.photo;
 import java.io.IOException;
 import java.util.Arrays;
 
+import com.leancoder.photogallery.models.dao.ILikesPhotoDao;
 import com.leancoder.photogallery.models.dao.IPhotoDao;
 import com.leancoder.photogallery.models.dao.IRolePhotoDao;
+import com.leancoder.photogallery.models.dao.IUsuarioDao;
 import com.leancoder.photogallery.models.domains.functionalities.current_date.CurrentDateBean;
+import com.leancoder.photogallery.models.domains.responses.LikeResponse;
 import com.leancoder.photogallery.models.domains.responses.UpdateOrRegisterDetailsResponse;
 import com.leancoder.photogallery.models.domains.validators.PhotoUpdaterValidator;
 import com.leancoder.photogallery.models.domains.validators.PhotoUploaderValidator;
+import com.leancoder.photogallery.models.entities.photo.LikesPhoto;
 import com.leancoder.photogallery.models.entities.photo.Photo;
 import com.leancoder.photogallery.models.entities.photo.RolePhoto;
 import com.leancoder.photogallery.models.entities.user.User;
@@ -32,7 +36,13 @@ public class PhotoService implements IPhotoService {
     private IPhotoDao photoDao;
 
     @Autowired
+    private IUsuarioDao usuarioDao;
+
+    @Autowired
     private IRolePhotoDao rolePhotoDao;
+
+    @Autowired
+    private ILikesPhotoDao likesPhotoDao;
 
     @Autowired
     private ICloudinaryProvider cloudinaryService;
@@ -57,27 +67,6 @@ public class PhotoService implements IPhotoService {
         }
         return null;
     }
-
-    /* private Boolean quitarRolPerfil (List<Photo> fotosUsuario) {
-
-        principal: for (var foto : fotosUsuario) {
-            if (foto.getRoles().size() > 1) {
-                for (var role : foto.getRoles()) {
-                    if (role.getRole().equals("ROLE_PROFILE")) {
-                        rolePhotoDao.deleteById2(role.getId());
-                        return true;
-                    } else {
-                        continue principal;
-                    }
-                }
-            } else {
-                continue;
-            }
-
-        }
-        return false;
-
-    } */
 
     @Override
     @Transactional
@@ -143,9 +132,9 @@ public class PhotoService implements IPhotoService {
         UpdateOrRegisterDetailsResponse response = new UpdateOrRegisterDetailsResponse();
 
         var res = cloudinaryService.delete(photo.getUploadId());
-        photoDao.deleteById2(photo.getId());
-
+        
         if ((boolean) res.get("isDelete")) {
+            photoDao.deleteById2(photo.getId());
             response.setName("successful_delete");
             response.setMessage("La foto se elimino con exito.");
             return response;
@@ -281,6 +270,90 @@ public class PhotoService implements IPhotoService {
             return response;
         }
 
+    }
+
+    @Override
+    @Transactional
+    public LikeResponse likearFoto(String photo_id, String user) {
+
+        LikeResponse response = new LikeResponse();
+        CurrentDateBean currentDate = new CurrentDateBean("yyyy-MM-dd HH:mm:ss");
+
+        var photo = photoDao.findByUpload_id(photo_id);
+        var usuario = usuarioDao.findByUsername(user);
+
+        if (photo == null) {
+            response.setIsLiked(false);
+            response.setMessage("photo_notFound");
+            response.setDescription("La foto no existe en el sistema.");
+            return response;
+        }
+
+        if (usuario == null) {
+            response.setIsLiked(false);
+            response.setMessage("user_notFound");
+            response.setDescription("El usuario indicado no existe en el sistema.");
+            return response;
+        }
+
+        if (likesPhotoDao.findByUserIdAndPhotoId(usuario.getId(), photo.getId()) != null) {
+            response.setIsLiked(false);
+            response.setMessage("like_exists");
+            response.setDescription("Ya existe un like del usuario ".concat(usuario.getUsername()));
+            return response;
+        }
+
+        LikesPhoto like = new LikesPhoto();
+        like.setPhoto(photo);
+        like.setUser(usuario);
+        like.setDate(currentDate.getCurrentDate());
+        likesPhotoDao.save(like);
+
+        response.setIsLiked(true);
+        response.setMessage("like_success");
+        response.setDescription("El registro del like fue exitoso.");
+
+        return response;
+    }
+
+    @Override
+    @Transactional
+    public LikeResponse quitarLike(String photo_id, String user) {
+        LikeResponse response = new LikeResponse();
+
+        var photo = photoDao.findByUpload_id(photo_id);
+        var usuario = usuarioDao.findByUsername(user);
+
+        if (photo == null) {
+            response.setIsLiked(false);
+            response.setMessage("photo_notFound");
+            response.setDescription("La foto no existe en el sistema.");
+            return response;
+        }
+
+        if (usuario == null) {
+            response.setIsLiked(false);
+            response.setMessage("user_notFound");
+            response.setDescription("El usuario indicado no existe en el sistema.");
+            return response;
+        }
+
+        var like = likesPhotoDao.findByUserIdAndPhotoId(usuario.getId(), photo.getId());
+
+        if (like == null) {
+            response.setIsLiked(false);
+            response.setMessage("like_notExists");
+            response.setDescription("No existe un like del usuario ".concat(usuario.getUsername()));
+            return response;
+        }
+
+        likesPhotoDao.delete2(like.getId());
+
+        response.setIsLiked(true);
+        response.setMessage("dislike_success");
+        response.setDescription("El dislike fue exitoso.");
+
+        return response;
     }
 
 }

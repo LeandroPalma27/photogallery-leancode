@@ -1,10 +1,13 @@
 (()=>{
     const photoBox = document.querySelector('#photoBox');
-    const btnNotLiked = document.querySelector('#btnNotLiked');
+   
     photoBox.addEventListener('dblclick', (e) => {
         showHeart(document.querySelector('.liked-heart'));
-        if (btnNotLiked.matches('.active')) {
-            btnNotLiked.click();
+        const btnNotLiked = document.querySelector('#btnNotLiked');
+        if (btnNotLiked != null) {
+            if (btnNotLiked.matches('.active')) {
+                btnNotLiked.click();
+            }
         }
     })
 
