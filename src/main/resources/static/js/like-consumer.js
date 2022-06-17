@@ -1,4 +1,6 @@
 (() => {
+    const url = window.location.host;
+    console.log(url)
     const token = document.querySelector("meta[name='_csrf']").content;
     const header = document.querySelector("meta[name='_csrf_header']").content;
 
@@ -37,24 +39,8 @@
 
     chargeButton(isLiked);
 
-   /*  const changeLikeButton = (isSuccesful) => {
-        if (isSuccesful) {
-            likeButtonsDiv.innerHTML = BTNDISLIKE;
-            const btnDisLike = document.querySelector('.liked');
-            btnDisLike.addEventListener('click', () => {
-                darLike(photoId, username);
-            });
-        } else {
-            likeButtonsDiv.innerHTML = BTNLIKE;
-            const btnLike = document.querySelector('.not-liked');
-            btnLike.addEventListener('click', () => {
-                darLike(photoId, username);
-            });
-        }
-    } */
-
     const darLike = (photoId, username) => {
-        fetch("http://localhost:8080/like", {
+        fetch("http://".concat(url + "/like"), {
             method: "POST",
             headers: {
                 [header]: token,
@@ -74,7 +60,7 @@
     }
 
     const darDislike = (photoId, username) => {
-        fetch("http://localhost:8080/dislike", {
+        fetch("http://".concat(url + "/dislike"), {
             method: "POST",
             headers: {
                 [header]: token,

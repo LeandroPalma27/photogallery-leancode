@@ -36,7 +36,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         // usando "RequestMatchers"(obligatoriamente).
         // Por defecto, cualquier ruta existente que no este siendo tomada por este
         // metodo, no tendra restriccion alguna.
-        http.authorizeRequests().antMatchers("/css/**", "/img/**", "/photos/all", "/like", "/dislike", "/photos/lista/random", "/login").permitAll()
+        http.authorizeRequests().antMatchers("/css/**", "/img/**", "/photos/all", "/like", "/dislike", "/login").permitAll()
                 .antMatchers("/account/**", "/photos/**").authenticated()
                 .and()
 
@@ -66,8 +66,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Este comportamiento ya se hace por defecto. Basicamente copia la sesion
                 // existente(si existe), si un usuario inicia
                 // sesion desde otro navegador.
-                .sessionManagement().sessionFixation().migrateSession()
-                .and()
+                /* .sessionManagement().sessionFixation().migrateSession()
+                .and() */
 
                 .cors().disable()
 
