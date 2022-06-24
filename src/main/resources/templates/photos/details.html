@@ -52,10 +52,10 @@
                                         </div>
                                     </div>
                                     <div class="save-button">
-                                        <button title="Add to favorites" type="button" class="not-saved active"><span><i
+                                        <!-- <button title="Add to favorites" type="button" class="not-saved active"><span><i
                                                     class="fa-regular fa-bookmark"></i></span></button>
                                         <button title="Remove from favorites" type="button" class="saved"><span><i
-                                                    class="fa-solid fa-bookmark"></i></button>
+                                                    class="fa-solid fa-bookmark"></i></button> -->
                                     </div>
                                 </div>
                                 <div class="date">
@@ -157,6 +157,7 @@
         <span hidden th:text="${photoDetails.uploadId}" id="photoIdForLike"></span>
         <span hidden th:text="${user.username}" id="usernameForLike"></span>
         <span hidden th:text="${isLiked}" id="isLiked"></span>
+        <span hidden th:text="${isSaved}" id="isSaved"></span>
     </div>
     <footer th:replace="layout/layout :: footer"></footer>
     <script th:src="@{/js/modalActivator.js}"></script>
@@ -165,6 +166,7 @@
     <script th:src="@{/js/save_and_like-button.js}"></script>
     <script th:src="@{/js/double-tap-like.js}"></script>
     <script th:src="@{/js/like-consumer.js}"></script>
+    <script th:src="@{/js/favorite-consumer.js}"></script>
 </body>
 
 </html>

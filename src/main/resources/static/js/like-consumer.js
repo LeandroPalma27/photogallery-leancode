@@ -1,6 +1,5 @@
 (() => {
     const url = window.location.host;
-    console.log(url)
     const token = document.querySelector("meta[name='_csrf']").content;
     const header = document.querySelector("meta[name='_csrf_header']").content;
 
@@ -15,25 +14,27 @@
     const BTNDISLIKE = '<button type="button" class="liked active"><span><i class="fa-solid fa-heart"></i></span></button>';
     const BTNLIKE = '<button id="btnNotLiked" type="button" class="not-liked active"><span><i class="fa-regular fa-heart"></i></span></button>';
 
-    const chargeButton = (isSuccesful) => {
-        if (isSuccesful) {
-            likeButtonsDiv.innerHTML = BTNDISLIKE;
-            const btnDisLike = document.querySelector('.liked');
-            const likeCounter = btnDisLike.parentElement.nextElementSibling.lastElementChild;
-            btnDisLike.addEventListener('click', () => {
-                darDislike(photoId, username);
-                let counter = likeCounter.textContent;
-                likeCounter.textContent = --counter;
-            });
-        } else {
-            likeButtonsDiv.innerHTML = BTNLIKE;
-            const btnLike = document.querySelector('.not-liked');
-            const likeCounter = btnLike.parentElement.nextElementSibling.lastElementChild;
-            btnLike.addEventListener('click', () => {
-                darLike(photoId, username);
-                let counter = likeCounter.textContent;
-                likeCounter.textContent = ++counter;
-            });
+    const chargeButton = (isLiked) => {
+        if (isLiked != null) {
+            if (isLiked) {
+                likeButtonsDiv.innerHTML = BTNDISLIKE;
+                const btnDisLike = document.querySelector('.liked');
+                const likeCounter = btnDisLike.parentElement.nextElementSibling.lastElementChild;
+                btnDisLike.addEventListener('click', () => {
+                    darDislike(photoId, username);
+                    let counter = likeCounter.textContent;
+                    likeCounter.textContent = --counter;
+                });
+            } else {
+                likeButtonsDiv.innerHTML = BTNLIKE;
+                const btnLike = document.querySelector('.not-liked');
+                const likeCounter = btnLike.parentElement.nextElementSibling.lastElementChild;
+                btnLike.addEventListener('click', () => {
+                    darLike(photoId, username);
+                    let counter = likeCounter.textContent;
+                    likeCounter.textContent = ++counter;
+                });
+            }
         }
     }
 
@@ -54,7 +55,7 @@
         }).then(res => {
             res.json().then(json => {
                 console.log(json)
-                chargeButton(json.isLiked)
+                chargeButton(json.isSuccesful == true ? true : null)
             })
         });
     }
@@ -74,7 +75,7 @@
         }).then(res => {
             res.json().then(json => {
                 console.log(json)
-                chargeButton(json.isDisliked)
+                chargeButton(json.isSuccesful == true ? false : null)
             })
         });
     }

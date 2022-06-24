@@ -29,4 +29,7 @@ public interface IPhotoDao extends PagingAndSortingRepository<Photo, Long>{
     @Query(value = "DELETE FROM photos where db_id = :id", nativeQuery = true)
     public void deleteById2(@Param("id") Long id);
 
+    @Query(value = "SELECT * FROM photos JOIN users u where title like %:keyword% or u.username like %:keyword% or u.nombre like %:keyword%", nativeQuery = true)
+    public Page<Photo> findPhotosByKeywordLike(@Param("keyword") String keyword, Pageable pageable);
+
 }

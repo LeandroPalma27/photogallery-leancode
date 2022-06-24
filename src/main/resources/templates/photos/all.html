@@ -17,7 +17,7 @@
                         </div>
                         <div class="btn_go-to-upload-picture">
                             <a class="go-to-upload" th:href="@{/photos/upload}">
-                                <span class="upload-text">Upload picture</span>
+                                <span class="upload-text-2">Upload picture</span>
                                 <span class="upload-icon"><i class="fa-solid fa-arrow-up-from-bracket"></i></span>
                             </a>
                         </div>
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="paginator">
+                    <div th:if="${!photos.isEmpty}" class="paginator">
                         <nav th:replace="paginator-nav :: paginator"></nav>
                     </div>
                 </div>

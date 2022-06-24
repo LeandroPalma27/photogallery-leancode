@@ -18,13 +18,13 @@
                             <p>
                                 In this option are your personal photos.
                             </p>
-                            <p th:if="${usuario.photos.isEmpty()}" class="upload-text"> You don't have photos uploaded?
+                            <p th:if="${usuario.photos.isEmpty()}" class="upload-text-1"> You don't have photos uploaded?
                                 <a th:href="@{/photos/upload}">Start uploading your first photo.</a>
                             </p>
                         </div>
                         <div th:if="${!(usuario.photos.isEmpty())}" class="btn_go-to-upload-picture">
                             <a class="go-to-upload" th:href="@{/photos/upload}">
-                                <span class="upload-text">Upload picture</span>
+                                <span class="upload-text-2">Upload picture</span>
                                 <span class="upload-icon"><i class="fa-solid fa-arrow-up-from-bracket"></i></span>
                             </a>
                         </div>

@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.leancoder.photogallery.models.entities.photo.FavoritePhoto;
 import com.leancoder.photogallery.models.entities.photo.LikesPhoto;
 import com.leancoder.photogallery.models.entities.photo.Photo;
 
@@ -73,10 +74,21 @@ public class User {
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<LikesPhoto> likesPhoto;
 
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<FavoritePhoto> favorites;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;
+    }
+
+    public List<FavoritePhoto> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<FavoritePhoto> favorites) {
+        this.favorites = favorites;
     }
 
     public List<LikesPhoto> getLikesPhoto() {

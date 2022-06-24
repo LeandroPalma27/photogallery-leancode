@@ -25,16 +25,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.leancoder.photogallery.models.domains.responses.LikeResponse;
-import com.leancoder.photogallery.models.domains.validators.LikeValidator;
+import com.leancoder.photogallery.models.domains.responses.RestRequestResponse;
+import com.leancoder.photogallery.models.domains.validators.RestRequestValidator;
 import com.leancoder.photogallery.models.services.photo.interfaces.IPhotoService;
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
-
+/* 
+ * Controlador para la funcionalidades manejadas como un @RestController
+ * Aca se encuentran los metodos que retornan datos JSON, mas no vistas.
+ */
 @RestController
 public class ResponseBodiesController {
-
-    @Autowired
-    AuthenticationManager authenticationManager;
 
     @Autowired
     IUsuarioService usuarioService;
@@ -43,14 +43,26 @@ public class ResponseBodiesController {
     IPhotoService photoService;
 
     @PostMapping("/like")
-    public ResponseEntity<Object> GenerarLike(@RequestBody(required = true) LikeValidator likeValidator) {
+    public ResponseEntity<Object> GenerarLike(@RequestBody(required = true) RestRequestValidator likeValidator) {
         var res = photoService.likearFoto(likeValidator.getPhoto_id(), likeValidator.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     @PostMapping("/dislike")
-    public ResponseEntity<Object> GenerarDisLike(@RequestBody(required = true) LikeValidator likeValidator) {
+    public ResponseEntity<Object> GenerarDisLike(@RequestBody(required = true) RestRequestValidator likeValidator) {
         var res = photoService.quitarLike(likeValidator.getPhoto_id(), likeValidator.getUser());
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+    @PostMapping("/add-favorites")
+    public ResponseEntity<Object> AñadirFavoritos(@RequestBody(required = true) RestRequestValidator validator) {
+        var res = photoService.añadirFavoritos(validator.getPhoto_id(), validator.getUser());
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+    @PostMapping("/remove-favorites")
+    public ResponseEntity<Object> QuitarFavoritos(@RequestBody(required = true) RestRequestValidator validator) {
+        var res = photoService.quitarFavoritos(validator.getPhoto_id(), validator.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 

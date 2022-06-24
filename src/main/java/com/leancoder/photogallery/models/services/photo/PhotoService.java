@@ -2,16 +2,19 @@ package com.leancoder.photogallery.models.services.photo;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
+import com.leancoder.photogallery.models.dao.IFavoritePhotoDao;
 import com.leancoder.photogallery.models.dao.ILikesPhotoDao;
 import com.leancoder.photogallery.models.dao.IPhotoDao;
 import com.leancoder.photogallery.models.dao.IRolePhotoDao;
 import com.leancoder.photogallery.models.dao.IUsuarioDao;
 import com.leancoder.photogallery.models.domains.functionalities.current_date.CurrentDateBean;
-import com.leancoder.photogallery.models.domains.responses.LikeResponse;
+import com.leancoder.photogallery.models.domains.responses.RestRequestResponse;
 import com.leancoder.photogallery.models.domains.responses.UpdateOrRegisterDetailsResponse;
 import com.leancoder.photogallery.models.domains.validators.PhotoUpdaterValidator;
 import com.leancoder.photogallery.models.domains.validators.PhotoUploaderValidator;
+import com.leancoder.photogallery.models.entities.photo.FavoritePhoto;
 import com.leancoder.photogallery.models.entities.photo.LikesPhoto;
 import com.leancoder.photogallery.models.entities.photo.Photo;
 import com.leancoder.photogallery.models.entities.photo.RolePhoto;
@@ -43,6 +46,9 @@ public class PhotoService implements IPhotoService {
 
     @Autowired
     private ILikesPhotoDao likesPhotoDao;
+
+    @Autowired
+    private IFavoritePhotoDao favoritePhotoDao;
 
     @Autowired
     private ICloudinaryProvider cloudinaryService;
@@ -272,32 +278,33 @@ public class PhotoService implements IPhotoService {
 
     }
 
+    // Metodo para transaccionar un like en una foto, por parte de un usuario.
     @Override
     @Transactional
-    public LikeResponse likearFoto(String photo_id, String user) {
+    public RestRequestResponse likearFoto(String photo_id, String user) {
 
-        LikeResponse response = new LikeResponse();
+        RestRequestResponse response = new RestRequestResponse();
         CurrentDateBean currentDate = new CurrentDateBean("yyyy-MM-dd HH:mm:ss");
 
         var photo = photoDao.findByUpload_id(photo_id);
         var usuario = usuarioDao.findByUsername(user);
 
         if (photo == null) {
-            response.setIsLiked(false);
+            response.setIsSuccesful(false);
             response.setMessage("photo_notFound");
             response.setDescription("La foto no existe en el sistema.");
             return response;
         }
 
         if (usuario == null) {
-            response.setIsLiked(false);
+            response.setIsSuccesful(false);
             response.setMessage("user_notFound");
             response.setDescription("El usuario indicado no existe en el sistema.");
             return response;
         }
 
         if (likesPhotoDao.findByUserIdAndPhotoId(usuario.getId(), photo.getId()) != null) {
-            response.setIsLiked(false);
+            response.setIsSuccesful(false);
             response.setMessage("like_exists");
             response.setDescription("Ya existe un like del usuario ".concat(usuario.getUsername()));
             return response;
@@ -309,30 +316,31 @@ public class PhotoService implements IPhotoService {
         like.setDate(currentDate.getCurrentDate());
         likesPhotoDao.save(like);
 
-        response.setIsLiked(true);
+        response.setIsSuccesful(true);
         response.setMessage("like_success");
         response.setDescription("El registro del like fue exitoso.");
 
         return response;
     }
 
+    // Metodo para transaccionar un dislike en una foto, por parte de un usuario.
     @Override
     @Transactional
-    public LikeResponse quitarLike(String photo_id, String user) {
-        LikeResponse response = new LikeResponse();
+    public RestRequestResponse quitarLike(String photo_id, String user) {
+        RestRequestResponse response = new RestRequestResponse();
 
         var photo = photoDao.findByUpload_id(photo_id);
         var usuario = usuarioDao.findByUsername(user);
 
         if (photo == null) {
-            response.setIsLiked(false);
+            response.setIsSuccesful(false);
             response.setMessage("photo_notFound");
             response.setDescription("La foto no existe en el sistema.");
             return response;
         }
 
         if (usuario == null) {
-            response.setIsLiked(false);
+            response.setIsSuccesful(false);
             response.setMessage("user_notFound");
             response.setDescription("El usuario indicado no existe en el sistema.");
             return response;
@@ -341,7 +349,7 @@ public class PhotoService implements IPhotoService {
         var like = likesPhotoDao.findByUserIdAndPhotoId(usuario.getId(), photo.getId());
 
         if (like == null) {
-            response.setIsLiked(false);
+            response.setIsSuccesful(false);
             response.setMessage("like_notExists");
             response.setDescription("No existe un like del usuario ".concat(usuario.getUsername()));
             return response;
@@ -349,11 +357,103 @@ public class PhotoService implements IPhotoService {
 
         likesPhotoDao.delete2(like.getId());
 
-        response.setIsLiked(true);
+        response.setIsSuccesful(true);
         response.setMessage("dislike_success");
         response.setDescription("El dislike fue exitoso.");
 
         return response;
+    }
+
+    // Metodo para transaccionar una foto a favoritos, por parte de un usuario.
+    @Override
+    @Transactional
+    public RestRequestResponse añadirFavoritos(String photo_id, String user) {
+        RestRequestResponse response = new RestRequestResponse();
+        CurrentDateBean currentDate = new CurrentDateBean("yyyy-MM-dd HH:mm:ss");
+
+        var photo = photoDao.findByUpload_id(photo_id);
+        var usuario = usuarioDao.findByUsername(user);
+
+        if (photo == null) {
+            response.setIsSuccesful(false);
+            response.setMessage("photo_notFound");
+            response.setDescription("La foto no existe en el sistema.");
+            return response;
+        }
+
+        if (usuario == null) {
+            response.setIsSuccesful(false);
+            response.setMessage("user_notFound");
+            response.setDescription("El usuario indicado no existe en el sistema.");
+            return response;
+        }
+
+        FavoritePhoto favorite = new FavoritePhoto();
+        favorite.setDate(currentDate.getCurrentDate());
+        favorite.setPhoto(photo);
+        favorite.setUser(usuario);
+
+        favoritePhotoDao.save(favorite);
+        response.setIsSuccesful(true);
+        response.setMessage("favorite_success");
+        response.setDescription("La foto fue guardada en favoritos satisfactoriamente.");
+
+        return response;
+    }
+
+    // Metodo para transaccionar el quite de una foto de favoritos, por parte de un usuario.
+    @Override
+    @Transactional
+    public RestRequestResponse quitarFavoritos(String photo_id, String user) {
+        RestRequestResponse response = new RestRequestResponse();
+
+        var photo = photoDao.findByUpload_id(photo_id);
+        var usuario = usuarioDao.findByUsername(user);
+
+        if (photo == null) {
+            response.setIsSuccesful(false);
+            response.setMessage("photo_notFound");
+            response.setDescription("La foto no existe en el sistema.");
+            return response;
+        }
+
+        if (usuario == null) {
+            response.setIsSuccesful(false);
+            response.setMessage("user_notFound");
+            response.setDescription("El usuario indicado no existe en el sistema.");
+            return response;
+        }
+
+        var favorite = favoritePhotoDao.findByUserIdAndPhotoId(usuario.getId(), photo.getId());
+
+        if (favorite == null) {
+            response.setIsSuccesful(false);
+            response.setMessage("save_notExists");
+            response.setDescription("No existe un guardado de esa foto por parte del usuario ".concat(usuario.getUsername()));
+            return response;
+        }
+
+        favoritePhotoDao.delete2(favorite.getId());
+
+        response.setIsSuccesful(true);
+        response.setMessage("remove_success");
+        response.setDescription("La foto guardada se removio con exito.");
+
+        return response;
+    }
+
+    // Metodo para obtener todas las fotos guardadas en favoritos, pageadas
+    @Override
+    @Transactional(readOnly = true)
+    public Page<FavoritePhoto> obtenerTodosLosFavoritosPagueados(Long id, Pageable pageable) {
+        return favoritePhotoDao.findAllByUser_id(id, pageable);
+    }
+
+    // Metodo para obtener fotos buscadas por una keyword, pageadas
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Photo> obtenerFotosPorKeyword(String keyword, Pageable pageable) {
+        return photoDao.findPhotosByKeywordLike(keyword, pageable);
     }
 
 }

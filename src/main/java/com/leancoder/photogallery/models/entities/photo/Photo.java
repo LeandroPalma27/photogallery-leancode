@@ -55,9 +55,20 @@ public class Photo {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "photo", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<LikesPhoto> likesPhoto;
 
+    @OneToMany(mappedBy = "photo", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<FavoritePhoto> favorite;
+
     @Column(name = "fecha_registro")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
+
+    public List<FavoritePhoto> getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(List<FavoritePhoto> favorite) {
+        this.favorite = favorite;
+    }
 
     public Long getId() {
         return id;

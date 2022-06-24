@@ -3,14 +3,19 @@ package com.leancoder.photogallery.controllers;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.leancoder.photogallery.models.dao.IFavoritePhotoDao;
 import com.leancoder.photogallery.models.dao.ILikesPhotoDao;
 import com.leancoder.photogallery.models.dao.IUsuarioDao;
 import com.leancoder.photogallery.models.domains.paginator.PageRenderBean;
 import com.leancoder.photogallery.models.domains.validators.PhotoUpdaterValidator;
 import com.leancoder.photogallery.models.domains.validators.PhotoUploaderValidator;
+import com.leancoder.photogallery.models.entities.photo.FavoritePhoto;
 import com.leancoder.photogallery.models.entities.photo.Photo;
 import com.leancoder.photogallery.models.entities.user.User;
 import com.leancoder.photogallery.models.services.photo.interfaces.IPhotoService;
@@ -65,6 +70,9 @@ public class PhotoController {
     @Autowired
     private ILikesPhotoDao likesPhotoDao;
 
+    @Autowired
+    private IFavoritePhotoDao favoritePhotoDao;
+
     /*
      * Objecto cargado con informacion general del usuario globalmente para todas
      * las vistas en este controlador.
@@ -78,10 +86,40 @@ public class PhotoController {
         }
     }
 
+    /* 
+     * Metodo para saber si una foto tiene un like por parte del usuario actual
+     */
     public Boolean IsLiked(Long userId, Long photoId) {
         var likePhoto = likesPhotoDao.findByUserIdAndPhotoId(userId, photoId);
         var isLiked = (likePhoto != null) ? true : false;
         return isLiked;
+    }
+
+    /* 
+     * Metodo para saber si una foto esta guardada por parte del usuario actual
+     */
+    public Boolean IsSaved(Long userId, Long photoId) {
+        var favorite = favoritePhotoDao.findByUserIdAndPhotoId(userId, photoId);
+        var isSaved = (favorite != null) ? true : false;
+        return isSaved;
+    }
+
+    /* 
+     * Metodo para fitrar fotos repetidas en una lista de fotos buscada por una keyword
+     */
+    public List<Photo> filterRepeatPhotos(Page<Photo> photos) {
+        Set<Long> collect = photos.stream().map(i -> i.getId()).collect(Collectors.toSet());
+        List<Photo> differentList = new ArrayList<Photo>();
+        for(var photo : photos) {
+            if(collect.contains(photo.getId())) {
+                differentList.remove(photo);
+                differentList.add(photo);
+                continue;
+            } else {
+                differentList.add(photo);
+            }
+        }
+        return differentList;
     }
 
     /*
@@ -256,18 +294,20 @@ public class PhotoController {
         model.addAttribute("title", "Details");
 
         var photo = photoService.buscarFoto(public_id);
-        
+
         if (photo == null) {
             return "redirect:/errors/not-found";
         } else {
             PhotoUpdaterValidator updater = new PhotoUpdaterValidator();
             var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
             var isLiked = IsLiked(usuario.getId(), photo.getId());
+            var isSaved = IsSaved(usuario.getId(), photo.getId());
             updater.setTitle(photo.getTitle());
             updater.setDescription(photo.getDescription());
             model.addAttribute("photoDetails", photo);
             model.addAttribute("user", usuario);
             model.addAttribute("isLiked", isLiked);
+            model.addAttribute("isSaved", isSaved);
             if (photo.getRoles().size() > 1) {
                 for (var role : photo.getRoles()) {
                     if (role.getRole().equals("ROLE_PROFILE")
@@ -325,7 +365,7 @@ public class PhotoController {
 
         var photoFound = photoService.buscarFoto(public_id);
         var res = photoService.eliminarFoto(photoFound);
-        
+
         if (res.getName().equals("successful_delete")) {
             flash.addFlashAttribute("successMessage", res.getMessage());
             return "redirect:/photos/own";
@@ -355,15 +395,65 @@ public class PhotoController {
         }
     }
 
+    /* 
+     * Endpoint que carga la vista de favoritos, cargando los registros de la tabla favoritos y paginado tambien
+     */
     @GetMapping("/favorites")
-    public String Favorites(Authentication authentication, Model model) {
+    public String Favorites(@RequestParam(name = "page", defaultValue = "0") int page, Authentication authentication,
+            Model model) {
+
+        var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
+
+        Pageable pageRequest = PageRequest.of(page, 12);
+        Page<FavoritePhoto> fotos = photoService.obtenerTodosLosFavoritosPagueados(usuario.getId(), pageRequest);
+        PageRenderBean<FavoritePhoto> pageRender = new PageRenderBean<FavoritePhoto>("/photos/favorites", fotos);
+
         model.addAttribute("title", "Favorites");
+        model.addAttribute("photos", fotos);
+        model.addAttribute("page", pageRender);
         return "photos/favorites";
     }
 
+    /* 
+     * Endpoint que carga la vista para la busqueda de fotos por keywords, usando paginado.
+     * Se carga con la posibilidad de tener 2 parametros en la url, para asi poder cargas o nada, o un mensaje de "no se encontro nada" o las fotos encontradas
+     * por ess keyword.
+     */
     @GetMapping("/search")
-    public String SearchPhotoByTitle(Authentication authentication, Model model) {
+    public String SearchPhotoByTitle(@RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "keyword", required = false) String keyword, Authentication authentication,
+            Model model) {
         model.addAttribute("title", "Search");
+        if (keyword == null) {
+            Pageable pageRequest = PageRequest.of(page, 12);
+            var fotos = photoService.obtenerFotosPorKeyword(keyword, pageRequest);
+            PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/search", fotos);
+            model.addAttribute("photos", fotos);
+            model.addAttribute("page", pageRender);
+        } else {
+            if (keyword.trim().equals("")) {
+                Pageable pageRequest = PageRequest.of(page, 12);
+                var fotos = photoService.obtenerFotosPorKeyword(null, pageRequest);
+                PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/search", fotos);
+                model.addAttribute("emptyPhotos", "No se encontro ningun resultado.");
+                model.addAttribute("photos", fotos);
+                model.addAttribute("page", pageRender);
+            } else {
+                Pageable pageRequest = PageRequest.of(page, 12);
+                var fotos = photoService.obtenerFotosPorKeyword(keyword, pageRequest);
+                PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/search?keyword=".concat(keyword), fotos);
+                var fotosFiltradas = filterRepeatPhotos(fotos);
+                if (fotosFiltradas.isEmpty()) {
+                    model.addAttribute("page", pageRender);
+                    model.addAttribute("photos", fotosFiltradas);
+                    model.addAttribute("emptyPhotos", "No se encontro ningun resultado.");
+                } else {
+                    model.addAttribute("photos", fotosFiltradas);
+                    model.addAttribute("page", pageRender);
+                }
+            }
+        }
+
         return "photos/search";
     }
 

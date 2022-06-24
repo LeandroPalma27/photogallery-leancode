@@ -417,7 +417,7 @@ main {
 
 .card_photo {
     width: 265px;
-    height: auto;
+    height: 390px;
     display: flex;
     flex-direction: column;
     background: rgba(15, 196, 106, 0.049);

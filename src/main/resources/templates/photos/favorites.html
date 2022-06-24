@@ -14,155 +14,45 @@
                         <h1>Favorites</h1>
                         <p>The photos you most liked.</p>
                     </div>
-                    <div class="content">
-                        <div class="cards">
-                            <div class="card_photo">
-                                <div class="photo-image">
-                                    <div class="for-scale">
-                                        <img th:src="@{/img/one.jpeg}" alt="">
-                                        <div class="photo-details">
-                                            <a title="Details" href="#"><i class="fa-solid fa-circle-info"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="photo">
-                                    <div class="container-description">
-                                        <div class="title">
-                                            <span>Example</span>
-                                        </div>
-                                        <div class="info">
-                                            <div class="info_author">
-                                                <span class="desc">Author: </span>
-                                                <span>Leandro Palma</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="container-buttons">
-                                        <div class="info_likes">
-                                            <i class="fa-solid fa-thumbs-up"></i>
-                                            <span>40</span>
-                                        </div>
-                                        <div class="buttons">
-                                            <div class="button_download">
-                                                <a title="Download" href="#"><i class="fa-solid fa-circle-arrow-down"></i></a>
-                                            </div>
-                                            <div class="button_add-favorites">
-                                                <a title="Add to favorites" class="favorites" href="#"><i
-                                                        class="fa-solid fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="main_content">
+                        <div class="content-cards">
+                            <div class="empty" th:if="${photos.isEmpty}">
+                                <h2>You do not have saved photos, check the <a th:href="@{/photos/all}">list of photos</a>.</h2>
                             </div>
-                            <div class="card_photo">
+                            <div class="card_photo" th:each="photo: ${photos}">
                                 <div class="photo-image">
                                     <div class="for-scale">
-                                        <img th:src="@{/img/one.jpeg}" alt="">
-                                        <div class="photo-details">
-                                            <a title="Details" href="#"><i class="fa-solid fa-circle-info"></i></a>
-                                        </div>
+                                        <span th:text="${photo.photo.urlPhoto}" class="urlFoto"></span>
+                                        <span th:text="${photo.photo.title}" class="titleFoto"></span>
+                                        <img >
+                                        <span class="photo-details">
+                                            <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Details" type="button" title="" th:href="@{/photos/details/} + ${photo.photo.uploadId}"><i class="fa-solid fa-circle-info"></i></a>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="photo">
                                     <div class="container-description">
                                         <div class="title">
-                                            <span>Example</span>
+                                            <span th:text="${photo.photo.title}"></span>
                                         </div>
                                         <div class="info">
                                             <div class="info_author">
                                                 <span class="desc">Author: </span>
-                                                <span>Leandro Palma</span>
+                                                <span class="authorFoto" th:text="${photo.photo.user.nombre + ' ' + photo.photo.user.apellidos}"></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="container-buttons">
                                         <div class="info_likes">
                                             <i class="fa-solid fa-thumbs-up"></i>
-                                            <span>40</span>
+                                            <span th:text="${photo.photo.likesPhoto.size()}"></span>
                                         </div>
                                         <div class="buttons">
                                             <div class="button_download">
-                                                <a title="Download" href="#"><i class="fa-solid fa-circle-arrow-down"></i></a>
-                                            </div>
-                                            <div class="button_add-favorites">
-                                                <a title="Add to favorites" class="favorites" href="#"><i
-                                                        class="fa-solid fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card_photo">
-                                <div class="photo-image">
-                                    <div class="for-scale">
-                                        <img th:src="@{/img/one.jpeg}" alt="">
-                                        <div class="photo-details">
-                                            <a title="Details" href="#"><i class="fa-solid fa-circle-info"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="photo">
-                                    <div class="container-description">
-                                        <div class="title">
-                                            <span>Example</span>
-                                        </div>
-                                        <div class="info">
-                                            <div class="info_author">
-                                                <span class="desc">Author: </span>
-                                                <span>Leandro Palma</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="container-buttons">
-                                        <div class="info_likes">
-                                            <i class="fa-solid fa-thumbs-up"></i>
-                                            <span>40</span>
-                                        </div>
-                                        <div class="buttons">
-                                            <div class="button_download">
-                                                <a title="Download" href="#"><i class="fa-solid fa-circle-arrow-down"></i></a>
-                                            </div>
-                                            <div class="button_add-favorites">
-                                                <a title="Add to favorites" class="favorites" href="#"><i
-                                                        class="fa-solid fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card_photo">
-                                <div class="photo-image">
-                                    <div class="for-scale">
-                                        <img th:src="@{/img/one.jpeg}" alt="">
-                                        <div class="photo-details">
-                                            <a title="Details" href="#"><i class="fa-solid fa-circle-info"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="photo">
-                                    <div class="container-description">
-                                        <div class="title">
-                                            <span>Example</span>
-                                        </div>
-                                        <div class="info">
-                                            <div class="info_author">
-                                                <span class="desc">Author: </span>
-                                                <span>Leandro Palma</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="container-buttons">
-                                        <div class="info_likes">
-                                            <i class="fa-solid fa-thumbs-up"></i>
-                                            <span>40</span>
-                                        </div>
-                                        <div class="buttons">
-                                            <div class="button_download">
-                                                <a title="Download" href="#"><i class="fa-solid fa-circle-arrow-down"></i></a>
-                                            </div>
-                                            <div class="button_add-favorites">
-                                                <a title="Add to favorites" class="favorites" href="#"><i
-                                                        class="fa-solid fa-heart"></i></a>
+                                                <span th:text="${photo.photo.urlPhoto}" hidden class="download-link-span"></span>
+                                                <span th:text="${photo.photo.title}" hidden></span>
+                                                <!-- <a title="Download" href="" download="" target="_blank"><i
+                                                        class="fa-solid fa-circle-arrow-down"></i></a> -->
                                             </div>
                                         </div>
                                     </div>
@@ -170,11 +60,15 @@
                             </div>
                         </div>
                     </div>
+                    <div th:if="${!photos.isEmpty}" class="paginator">
+                        <nav th:replace="paginator-nav :: paginator"></nav>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
     <footer th:replace="layout/layout :: footer"></footer>
+    <script th:src="@{/js/charge-photos.js}"></script>
 </body>
 
 </html>

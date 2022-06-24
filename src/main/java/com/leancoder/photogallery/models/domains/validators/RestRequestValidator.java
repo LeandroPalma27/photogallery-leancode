@@ -1,6 +1,9 @@
 package com.leancoder.photogallery.models.domains.validators;
 
-public class LikeValidator {
+/* 
+ * DTO para validar los endopoints de tipo REST.
+ */
+public class RestRequestValidator {
     
     private String photo_id;
     private String user;
