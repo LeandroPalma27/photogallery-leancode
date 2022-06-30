@@ -17,6 +17,8 @@ import org.thymeleaf.templateresolver.StringTemplateResolver;
 
 @Configuration
 public class SpringMailConfig {
+
+    public static final String EMAIL_TEMPLATE_ENCODING = "UTF-8";
     
     @Bean
     public JavaMailSender getJavaMailSender() {
@@ -64,6 +66,7 @@ public class SpringMailConfig {
         templateResolver.setPrefix("/mail/");
         templateResolver.setSuffix(".txt");
         templateResolver.setTemplateMode(TemplateMode.TEXT);
+        templateResolver.setCharacterEncoding(EMAIL_TEMPLATE_ENCODING);
         templateResolver.setCacheable(false);
         return templateResolver;
     }
@@ -75,6 +78,7 @@ public class SpringMailConfig {
         templateResolver.setPrefix("/mail/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCharacterEncoding(EMAIL_TEMPLATE_ENCODING);
         templateResolver.setCacheable(false);
         return templateResolver;
     }
