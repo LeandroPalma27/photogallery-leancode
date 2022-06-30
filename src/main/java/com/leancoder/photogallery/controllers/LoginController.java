@@ -31,7 +31,8 @@ public class LoginController {
         // Al producirse un error, internamente se envia un parametro con informacion, en la url. 
         // Este parametro se carga como "error"
         if (error != null) {
-            model.addAttribute("errorLogin", "No existe una cuenta con las credenciales colocadas.");
+            model.addAttribute("post_register", "Remember to verify your account, check your email and verify it through the verification link.");
+            model.addAttribute("errorLogin", "There is no account with the credentials placed or it may not be verified.");
         }
 
         return "login";

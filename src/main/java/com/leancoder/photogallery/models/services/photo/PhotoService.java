@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import com.leancoder.photogallery.custom.rest_provider.cloudinary.interfaces.ICloudinaryProvider;
 import com.leancoder.photogallery.models.dao.IFavoritePhotoDao;
 import com.leancoder.photogallery.models.dao.ILikesPhotoDao;
 import com.leancoder.photogallery.models.dao.IPhotoDao;
@@ -20,7 +21,6 @@ import com.leancoder.photogallery.models.entities.photo.Photo;
 import com.leancoder.photogallery.models.entities.photo.RolePhoto;
 import com.leancoder.photogallery.models.entities.user.User;
 import com.leancoder.photogallery.models.services.photo.interfaces.IPhotoService;
-import com.leancoder.photogallery.provider.cloudinary.interfaces.ICloudinaryProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

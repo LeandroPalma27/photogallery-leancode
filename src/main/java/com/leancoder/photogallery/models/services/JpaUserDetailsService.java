@@ -30,8 +30,8 @@ public class JpaUserDetailsService implements UserDetailsService{
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(usuario.getRole().getAuthority()));
         
-        if (username == null || username == "" || authorities.isEmpty()) {
-            throw new UsernameNotFoundException("Error al loguear: Credenciales invalidas o usuario sin rol asignado.");
+        if (username == null || username == "" || authorities.isEmpty() || usuario.getEnabled() == false) {
+            throw new UsernameNotFoundException("Error al loguear: Credenciales invalidas, usuario sin rol asignado o cuenta no verificada.");
         }
 
         return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true, authorities);

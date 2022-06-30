@@ -1,4 +1,4 @@
-package com.leancoder.photogallery.provider.cloudinary;
+package com.leancoder.photogallery.custom.rest_provider.cloudinary;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.leancoder.photogallery.provider.cloudinary.interfaces.ICloudinaryProvider;
+import com.leancoder.photogallery.custom.rest_provider.cloudinary.interfaces.ICloudinaryProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,4 +1,4 @@
-package com.leancoder.photogallery.provider.cloudinary.interfaces;
+package com.leancoder.photogallery.custom.rest_provider.cloudinary.interfaces;
 
 import java.io.IOException;
 import java.util.Map;

@@ -1,9 +1,15 @@
 package com.leancoder.photogallery.models.services.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
+
+import com.leancoder.photogallery.custom.mail_sender.IEmailService;
 import com.leancoder.photogallery.models.dao.IGenderUserDao;
 import com.leancoder.photogallery.models.dao.IRoleUserDao;
 import com.leancoder.photogallery.models.dao.IUsuarioDao;
@@ -14,6 +20,7 @@ import com.leancoder.photogallery.models.domains.validators.PasswordUserValidato
 import com.leancoder.photogallery.models.domains.validators.UserRegisterDomainValidator;
 import com.leancoder.photogallery.models.entities.user.GenderUser;
 import com.leancoder.photogallery.models.entities.user.User;
+import com.leancoder.photogallery.models.entities.verification.VerificationRecords;
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +45,12 @@ public class UsuarioService implements IUsuarioService {
     IRoleUserDao roleDao;
 
     @Autowired
+    IEmailService emailService;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    private String preToken = "tatitkm";
 
     @Override
     @Transactional
@@ -53,19 +65,33 @@ public class UsuarioService implements IUsuarioService {
                 var generoEscogido = obtenerGeneroPorId(usuario.getGenderId());
 
                 if (generoEscogido != null) {
+                    CurrentDateBean currentDate = new CurrentDateBean("yyyy-MM-dd HH:mm:ss");
 
                     User usu = new User();
 
-                    CurrentDateBean currentDate = new CurrentDateBean("yyyy-MM-dd HH:mm:ss");
+
+                    // SI LA CUENTA NO SE ACTIVA PASADOS LOS 3 DIAS, SE ELMINA, IGUAL EL REGISTRO DE ACTIVACION DE CUENTA
+                    VerificationRecords verificator = new VerificationRecords();
+                    // Se genera token y luego se genera un registro para que se pueda cargar una vista con un boton que active la cuenta(TOKEN COMO PARAMETRO)
+                    // El registro debe contener datos del usuario, como el username, los nombres con apellidos, la fecha, id, el token, tambien si la verificacion esta en activo y el email
+                    // Si el registro no existe, la aplicacion debe cargar una vista que diga que no existe una verificaion pendiente o que quiza ya haya caducado
+                    var token = passwordEncoder.encode(preToken);
+
+                    verificator.setToken(token);
+                    verificator.setFechaRegistro(currentDate.getCurrentDate());
+                    verificator.setEmail(usuario.getEmail());
+                    verificator.setEnabled(true);
+                    verificator.setUsername(usuario.getUsername());
+                    verificator.setVerificationType("email");
+
 
                     var role = roleDao.findById((long) 2).get();
-
                     usu.setNombre(usuario.getNombre());
                     usu.setApellidos(usuario.getApellidos());
                     usu.setEmail(usuario.getEmail());
                     usu.setPassword(passwordEncoder.encode(usuario.getPassword()));
                     usu.setUsername(usuario.getUsername());
-                    usu.setEnabled(true);
+                    usu.setEnabled(false);
                     usu.setFechaRegistro(currentDate.getCurrentDate());
                     usu.setGender(generoEscogido);
                     usu.setRole(role);
@@ -111,6 +137,12 @@ public class UsuarioService implements IUsuarioService {
     public void actualizarDescripcion(User usuario, String descripcion) {
         usuario.setDescription(descripcion);
         usuarioDao.save(usuario);
+        try {
+            Map<String, Object> model = new HashMap<String, Object>();
+            emailService.sendMessageUsingThymeleafTemplate(usuario.getEmail(), "CAMBIO DE DESCRIPCION", "prueba", model);
+        } catch (MessagingException e) {
+            System.out.println("ERRROR AL ENVIAR EMAIL.");
+        }
     }
 
     @Override

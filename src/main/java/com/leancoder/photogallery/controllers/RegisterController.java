@@ -38,7 +38,7 @@ public class RegisterController {
     }
 
     @PostMapping("/signup")
-    public String processRegister(@Validated @ModelAttribute("usuarioDomain") UserRegisterDomainValidator usuario, BindingResult result, Model model) {
+    public String processRegister(@Validated @ModelAttribute("usuarioDomain") UserRegisterDomainValidator usuario, RedirectAttributes flash, BindingResult result, Model model) {
 
         model.addAttribute("generos", usuarioService.listarGenerosUsuario());
 
@@ -72,7 +72,7 @@ public class RegisterController {
             return "register";
         }
 
-
+        flash.addFlashAttribute("post_register", "An email was sent to your email address, please verify your account to log in.");
         return "redirect:/login";
     }
 
