@@ -39,6 +39,7 @@ public class FavoritePhoto {
     private Photo photo;
 
     @ManyToOne(targetEntity = User.class)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(nullable = false, name = "user_id", referencedColumnName ="id", updatable = false)
     private User user;
 

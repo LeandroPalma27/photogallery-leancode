@@ -8,4 +8,6 @@ import com.leancoder.photogallery.models.entities.verification.VerificationRecor
 @Repository
 public interface IVerificationRecords extends CrudRepository<VerificationRecords, Long>{
     
+    public VerificationRecords findByToken(String token);
+
 }

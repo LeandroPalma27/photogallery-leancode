@@ -18,4 +18,8 @@ public interface ILikesPhotoDao extends PagingAndSortingRepository<LikesPhoto, L
     @Query(value = "DELETE FROM likes_photo WHERE id = :id", nativeQuery = true)
     public void delete2(@Param(value = "id") Long id);
 
+    @Modifying
+    @Query(value = "DELETE FROM likes_photo WHERE user_id = :id", nativeQuery = true)
+    public void deleteByUser_Id(@Param(value = "id") Long user_id);
+
 }

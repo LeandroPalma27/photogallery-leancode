@@ -51,8 +51,8 @@ public class HomeController {
     }
 
     /*
-        <=== Objecto cargado con informacion(url de foto de perfil) globalmente para todas las vistas en este controlador ===>
-            * Se hace con el fin de poder tener la url para la carga de la foto de perfil en el layout general para todas
+        <=== Objecto cargado con informacion(cloudinary_id de foto de perfil) globalmente para todas las vistas en este controlador ===>
+            * Se hace con el fin de poder tener el id para la carga de la foto de perfil en el layout general para todas
               las vistas. 
      */
     @ModelAttribute("profilePictureUploadId")

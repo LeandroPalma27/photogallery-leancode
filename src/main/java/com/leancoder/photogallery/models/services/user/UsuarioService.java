@@ -10,9 +10,13 @@ import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 
 import com.leancoder.photogallery.custom.mail_sender.IEmailService;
+import com.leancoder.photogallery.models.dao.IFavoritePhotoDao;
 import com.leancoder.photogallery.models.dao.IGenderUserDao;
+import com.leancoder.photogallery.models.dao.ILikesPhotoDao;
+import com.leancoder.photogallery.models.dao.IPhotoDao;
 import com.leancoder.photogallery.models.dao.IRoleUserDao;
 import com.leancoder.photogallery.models.dao.IUsuarioDao;
+import com.leancoder.photogallery.models.dao.IVerificationRecords;
 import com.leancoder.photogallery.models.domains.functionalities.current_date.CurrentDateBean;
 import com.leancoder.photogallery.models.domains.responses.UpdateOrRegisterDetailsResponse;
 import com.leancoder.photogallery.models.domains.validators.NameAndLastNameOfUserValidator;
@@ -39,10 +43,22 @@ public class UsuarioService implements IUsuarioService {
     IUsuarioDao usuarioDao;
 
     @Autowired
+    IVerificationRecords verificationRecords;
+
+    @Autowired
     IGenderUserDao genderUserDao;
 
     @Autowired
     IRoleUserDao roleDao;
+
+    @Autowired
+    ILikesPhotoDao likesPhotoDao;
+
+    @Autowired
+    IFavoritePhotoDao favoritePhotoDao;
+
+    @Autowired
+    IPhotoDao photoDao;
 
     @Autowired
     IEmailService emailService;
@@ -75,7 +91,8 @@ public class UsuarioService implements IUsuarioService {
                     // Se genera token y luego se genera un registro para que se pueda cargar una vista con un boton que active la cuenta(TOKEN COMO PARAMETRO)
                     // El registro debe contener datos del usuario, como el username, los nombres con apellidos, la fecha, id, el token, tambien si la verificacion esta en activo y el email
                     // Si el registro no existe, la aplicacion debe cargar una vista que diga que no existe una verificaion pendiente o que quiza ya haya caducado
-                    var token = passwordEncoder.encode(preToken);
+                    var pre_token = passwordEncoder.encode(preToken);
+                    var token = pre_token.replace("/", "replacement");
 
                     verificator.setToken(token);
                     verificator.setFechaRegistro(currentDate.getCurrentDate());
@@ -83,6 +100,19 @@ public class UsuarioService implements IUsuarioService {
                     verificator.setEnabled(true);
                     verificator.setUsername(usuario.getUsername());
                     verificator.setVerificationType("email");
+
+                    verificationRecords.save(verificator);
+
+                    try {
+                        String url = "http://192.168.1.39:8080/verify-account/".concat(token);
+                        Map<String, Object> model = new HashMap<String, Object>();
+                        model.put("name", usuario.getNombre());
+                        model.put("token", token);
+                        model.put("link", url);
+                        emailService.sendMessageUsingThymeleafTemplate(usuario.getEmail(), "Verificacion de correo", "verificator", model);
+                    } catch (MessagingException e) {
+                        System.out.println("ERRROR AL ENVIAR EMAIL.");
+                    }
 
 
                     var role = roleDao.findById((long) 2).get();
@@ -129,7 +159,10 @@ public class UsuarioService implements IUsuarioService {
     @Override
     @Transactional
     public void eliminarUsuario(User usuario) {
-        usuarioDao.delete(usuario);
+        likesPhotoDao.deleteByUser_Id(usuario.getId());
+        favoritePhotoDao.deleteByUser_Id(usuario.getId());
+        photoDao.deleteByUser_Id(usuario.getId());
+        usuarioDao.deleteById2(usuario.getId());
     }
 
     @Override
@@ -137,12 +170,6 @@ public class UsuarioService implements IUsuarioService {
     public void actualizarDescripcion(User usuario, String descripcion) {
         usuario.setDescription(descripcion);
         usuarioDao.save(usuario);
-        try {
-            Map<String, Object> model = new HashMap<String, Object>();
-            emailService.sendMessageUsingThymeleafTemplate(usuario.getEmail(), "CAMBIO DE DESCRIPCION", "prueba", model);
-        } catch (MessagingException e) {
-            System.out.println("ERRROR AL ENVIAR EMAIL.");
-        }
     }
 
     @Override
@@ -225,17 +252,51 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GenderUser> listarGenerosUsuario() {
         List<GenderUser> listaGeneros = new ArrayList<GenderUser>();
         genderUserDao.findAll().forEach(listaGeneros::add);
         return listaGeneros;
     }
 
+    @Transactional(readOnly = true)
     public GenderUser obtenerGeneroPorId(Long id) {
         if (!genderUserDao.findById(id).isEmpty()) {
             return genderUserDao.findById(id).get();
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public UpdateOrRegisterDetailsResponse VerificarUsuario(String token) {
+        UpdateOrRegisterDetailsResponse res = new UpdateOrRegisterDetailsResponse();
+        var verificator = verificationRecords.findByToken(token);
+        if (verificator != null) {
+            if (verificator.getEnabled()) {
+                var usuario = usuarioDao.findByUsername(verificator.getUsername());
+                if (usuario != null) {
+                    if (!usuario.getEnabled()) {
+                        verificator.setEnabled(false);
+                        usuario.setEnabled(true);
+                        usuarioDao.save(usuario);
+                        verificationRecords.save(verificator);
+
+                        res.setName("successful_process");
+                        res.setMessage("Se verifico con exito la cuenta.");
+                        return res;
+                    }
+                    res.setName("user_verificado");
+                    return res;
+                }
+                res.setName("user_notFound");
+                return res;
+            }
+            res.setName("verificator_notValid");
+            return res;
+        }
+        res.setName("verificator_notExists");
+        return res;
     }
 
 }

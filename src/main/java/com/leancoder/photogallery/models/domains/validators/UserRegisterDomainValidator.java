@@ -27,7 +27,7 @@ public class UserRegisterDomainValidator {
 
     @NotBlank(message = "Rellene el campo.")
     @Size(max=60, message = "No exceda los 60 caracteres.")
-    @ValidPassword
+    @ValidPassword()
     private String password;
 
     @NotBlank(message = "Rellene el campo.")

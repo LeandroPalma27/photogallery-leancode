@@ -27,4 +27,6 @@ public interface IUsuarioService {
 
     public List<GenderUser> listarGenerosUsuario();
 
+    public UpdateOrRegisterDetailsResponse VerificarUsuario(String token);
+
 }

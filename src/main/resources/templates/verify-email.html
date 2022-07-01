@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://thymeleaf.org/"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head th:replace="layout/layout :: head"></head>
+
+  <body class="body-page">
+    <link rel="stylesheet" th:href="@{/css/verify.css}" />
+    <div class="main">
+      <header th:replace="layout/layout :: header"></header>
+      <main>
+        <div class="index_content">
+          <div class="body body-1" th:if="${verified == true}">
+            <h2>Gracias por verificar tu cuenta.</h2>
+            <p>¡Bienvenid@ a Photogallery!</p>
+            <p>
+              A partir de ahora tu cuenta esta verificada, y podras acceder a la
+              comunidad de Photogallery.
+            </p>
+            <p>
+              Recuerda mantener un orden y respetar a todos los miembros de la
+              comunidad.
+            </p>
+            <p>Inicia sesion <a th:href="@{/login}">aqui.</a></p>
+          </div>
+          <div class="body body-2" th:if="${verified == false}">
+            <p>
+              El codigo de verificacion no existe o quiza ya este caducado.
+            </p>
+          </div>
+        </div>
+      </main>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+  </body>
+</html>

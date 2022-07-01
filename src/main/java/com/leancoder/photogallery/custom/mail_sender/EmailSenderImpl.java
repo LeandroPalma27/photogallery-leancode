@@ -20,8 +20,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 @Component
 public class EmailSenderImpl implements IEmailService {
 
-    private static final String EMAIL_SIMPLE_TEMPLATE_NAME = "html/prueba";
-
     @Autowired
     private JavaMailSender emailSender;
 
@@ -53,7 +51,7 @@ public class EmailSenderImpl implements IEmailService {
     public void sendMessageUsingThymeleafTemplate(String to, String subject, String templateType, Map<String, Object> templateModel) throws MessagingException {
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
-        String htmlBody = templateEngine.process(EMAIL_SIMPLE_TEMPLATE_NAME.concat(".html"), thymeleafContext);
+        String htmlBody = templateEngine.process("mail/".concat(templateType).concat(".html"), thymeleafContext);
         sendHtmlMessage(to, subject, htmlBody);
     }
 

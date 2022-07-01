@@ -38,7 +38,7 @@ public class RegisterController {
     }
 
     @PostMapping("/signup")
-    public String processRegister(@Validated @ModelAttribute("usuarioDomain") UserRegisterDomainValidator usuario, RedirectAttributes flash, BindingResult result, Model model) {
+    public String processRegister(@Valid @ModelAttribute("usuarioDomain") UserRegisterDomainValidator usuario, BindingResult result, RedirectAttributes flash, Model model) {
 
         model.addAttribute("generos", usuarioService.listarGenerosUsuario());
 
