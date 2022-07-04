@@ -10,6 +10,6 @@ public interface IEmailService {
 
     public void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException;
 
-    public void sendMessageUsingThymeleafTemplate(String to, String subject, String templateType, Map<String, Object> templateModel) throws MessagingException;
+    public void sendMessageUsingThymeleafTemplate(String to, String subject, String templateName, Map<String, Object> templateModel) throws MessagingException;
 
 }

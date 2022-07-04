@@ -92,7 +92,7 @@ public class UsuarioService implements IUsuarioService {
                     // El registro debe contener datos del usuario, como el username, los nombres con apellidos, la fecha, id, el token, tambien si la verificacion esta en activo y el email
                     // Si el registro no existe, la aplicacion debe cargar una vista que diga que no existe una verificaion pendiente o que quiza ya haya caducado
                     var pre_token = passwordEncoder.encode(preToken);
-                    var token = pre_token.replace("/", "replacement");
+                    var token = pre_token.replace("/", "");
 
                     verificator.setToken(token);
                     verificator.setFechaRegistro(currentDate.getCurrentDate());
@@ -109,7 +109,7 @@ public class UsuarioService implements IUsuarioService {
                         model.put("name", usuario.getNombre());
                         model.put("token", token);
                         model.put("link", url);
-                        emailService.sendMessageUsingThymeleafTemplate(usuario.getEmail(), "Verificacion de correo", "verificator", model);
+                        emailService.sendMessageUsingThymeleafTemplate(usuario.getEmail(), "Verificacion de correo", "email-verificator", model);
                     } catch (MessagingException e) {
                         System.out.println("ERRROR AL ENVIAR EMAIL.");
                     }

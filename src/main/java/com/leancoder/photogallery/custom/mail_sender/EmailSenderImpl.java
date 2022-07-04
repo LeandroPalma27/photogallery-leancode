@@ -44,14 +44,13 @@ public class EmailSenderImpl implements IEmailService {
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
         emailSender.send(message);
-        
     }
 
     @Override
-    public void sendMessageUsingThymeleafTemplate(String to, String subject, String templateType, Map<String, Object> templateModel) throws MessagingException {
+    public void sendMessageUsingThymeleafTemplate(String to, String subject, String templateName, Map<String, Object> templateModel) throws MessagingException {
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
-        String htmlBody = templateEngine.process("mail/".concat(templateType).concat(".html"), thymeleafContext);
+        String htmlBody = templateEngine.process("mail/".concat(templateName).concat(".html"), thymeleafContext);
         sendHtmlMessage(to, subject, htmlBody);
     }
 

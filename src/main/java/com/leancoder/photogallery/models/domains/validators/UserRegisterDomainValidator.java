@@ -22,6 +22,7 @@ public class UserRegisterDomainValidator {
     private String apellidos;
 
     @NotBlank(message = "Rellene el campo.")
+    @Size(max=70, message = "No exceda los 70 caracteres.")
     @Email(message = "Coloque un email valido.")
     private String email;
 
