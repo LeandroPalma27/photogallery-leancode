@@ -32,7 +32,7 @@
                             required>
                     </div>
                     <div class="login_input input_password">
-                        <label for="password">Password</label>
+                        <label for="password">Contraseña</label>
                         <div class="container_input-button">
                             <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
                             <span class="eye disabled"><i class="fa-solid fa-eye"></i></span>
@@ -41,7 +41,7 @@
                     </div>
                     <input name="_csrf" type="hidden" value="63155ace-bc25-48a4-b881-1ad730b9268b" />
                     <div class="login_submit">
-                        <button class="" type="submit">Log in</button>
+                        <button class="" type="submit">Inicia sesion</button>
                     </div>
 		            <div class="container-error">
                         <div class="" th:if="${errorLogin != null}" th:text="${errorLogin}"></div>
@@ -50,24 +50,40 @@
             </div>
             <div class="form-create-account">
                 <div>
-                    <span>Are you not registered?</span>
-                    <a th:href="@{/signup}">Create account</a>
+                    <span>¿No estas registrado?</span>
+                    <a th:href="@{/signup}">Crea una cuenta</a>
+                </div>
+                <div>
+                    <span>¿Olvidaste tu contraseña? <a th:href="@{/forgot-password}">Clic aqui.</a></span>
+
                 </div>
             </div>
         </div>
     </div>
-    <button th:if="${post_register != null}" id="post_register_button" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postRegister" hidden>
-        Launch demo modal
-    </button>
+    <button th:if="${post_register != null}" id="post_register_button" type="button" class="btn btn-primary modal-activator_form" data-bs-toggle="modal" data-bs-target="#postRegister" hidden></button>
+    <button th:if="${info != null}" id="post_register_button" type="button" class="btn btn-primary modal-activator_form" data-bs-toggle="modal" data-bs-target="#info" hidden></button>
     <div class="modal fade" id="postRegister" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Important</h5>
+                  <h5 class="modal-title" id="exampleModalLabel">Importante</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p th:if="${post_register != null}" th:text="${post_register}"></p>
+                </div>
+              </div>
+        </div>
+    </div>
+    <div class="modal fade" id="info" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Importante</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p th:if="${info != null}" th:text="${info}"></p>
                 </div>
               </div>
         </div>

@@ -333,13 +333,12 @@ public class PhotoController {
             BindingResult result, Authentication authentication, RedirectAttributes flash, SessionStatus status,
             Model model) {
 
-        var photoFound = photoService.buscarFoto(photo.getUploadId());
         model.addAttribute("title", "Details");
 
         if (result.hasErrors()) {
             var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
             var isLiked = IsLiked(usuario.getId(), photo.getId());
-            model.addAttribute("photoDetails", photoFound);
+            model.addAttribute("photoDetails", photo);
             model.addAttribute("modalActivator", "photoUpdate");
             model.addAttribute("user", usuario);
             model.addAttribute("isLiked", isLiked);

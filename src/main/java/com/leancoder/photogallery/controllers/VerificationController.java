@@ -1,19 +1,37 @@
 package com.leancoder.photogallery.controllers;
 
+import java.security.Principal;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.leancoder.photogallery.models.dao.IVerificationRecords;
+import com.leancoder.photogallery.models.domains.validators.ForgotPasswordValidator;
+import com.leancoder.photogallery.models.entities.verification.VerificationRecords;
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
 @Controller
+@SessionAttributes({"verificator"})
 public class VerificationController {
 
     @Autowired
     IUsuarioService usuarioService;
+
+    @Autowired
+    IVerificationRecords verificationRecords;
 
     @GetMapping("/verify-account/{token}")
     public String VerificarEmail(@PathVariable("token") String token, Model model) {
@@ -29,6 +47,44 @@ public class VerificationController {
         model.addAttribute("verified", false);
         return "verify-email";
 
+    }
+
+    @GetMapping("/change-password/{token}")
+    public String CambiarContraseña(@PathVariable("token") String token, Principal principal, RedirectAttributes flash, Model model) {
+        model.addAttribute("title", "Change password");
+        if (token == null || token == "") {
+            return "redirect:/";
+        }
+        if (principal != null) {
+            flash.addFlashAttribute("info", "Ya se ha iniciado sesion.");
+            return "redirect:/";
+        }
+        var verificator = verificationRecords.findByToken(token);
+        var verificadorExiste = verificator != null && verificator.getVerificationType().equals("change_password") && verificator.getEnabled() == true ? true : false;
+        if (!verificadorExiste) {
+            flash.addFlashAttribute("info", "El codigo de verificacion no existe o esta caducado.");
+            return "redirect:/";
+        }
+        ForgotPasswordValidator validator = new ForgotPasswordValidator();
+        model.addAttribute("validator", validator);
+        model.addAttribute("verificator", verificator);
+        return "forgot-password";
+    }
+
+    @PostMapping("/change-password")
+    public String ProcesarCambioContraseña(@ModelAttribute("verificator") VerificationRecords verificator, @Valid ForgotPasswordValidator validator, BindingResult result, RedirectAttributes flash, SessionStatus status, Model model) {
+        if (result.hasErrors() || !validator.getNewPassword().equals(validator.getConfirmPassword())) {
+            flash.addFlashAttribute("error_changePassword", "Recuerde que la nueva contraseña debe tener una letra mayuscula, un caracter especial y tambien un numero. Asi como tambien coincidir con el campo de confirmacion de contraseña.");
+            return "redirect:/change-password/".concat(verificator.getToken());
+        }
+        var res = usuarioService.cambiarContraseñaOlvidada(verificator, validator.getNewPassword());
+        if (!res) {
+            flash.addFlashAttribute("error_changePassword", "Ocurrio algun error, vuelva a intentarlo mas tarde o solicite otro cambio de contraseña.");
+            return "redirect:/change-password/".concat(verificator.getToken());
+        }
+        status.setComplete();
+        flash.addFlashAttribute("info", "Se realizo el cambio de contraseña con exito.");
+        return "redirect:/login";
     }
 
 }

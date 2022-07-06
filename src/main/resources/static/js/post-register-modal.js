@@ -1,5 +1,5 @@
 (()=>{
-    const btnModal = document.querySelector('#post_register_button');
+    const btnModal = document.querySelector('.modal-activator_form');
 
     if(btnModal != null) {
         btnModal.click();

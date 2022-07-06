@@ -200,6 +200,7 @@ body {
 .modal-content {
   padding: 10px 10px;
   padding-bottom: 2px;
+  border: none;
 }
 
 .modal-header{

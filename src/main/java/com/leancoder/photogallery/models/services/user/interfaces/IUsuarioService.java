@@ -8,6 +8,7 @@ import com.leancoder.photogallery.models.domains.validators.PasswordUserValidato
 import com.leancoder.photogallery.models.domains.validators.UserRegisterDomainValidator;
 import com.leancoder.photogallery.models.entities.user.GenderUser;
 import com.leancoder.photogallery.models.entities.user.User;
+import com.leancoder.photogallery.models.entities.verification.VerificationRecords;
 
 public interface IUsuarioService {
     
@@ -28,5 +29,9 @@ public interface IUsuarioService {
     public List<GenderUser> listarGenerosUsuario();
 
     public UpdateOrRegisterDetailsResponse VerificarUsuario(String token);
+
+    public VerificationRecords crearPeticionParaCambioContraseña(String email);
+
+    public Boolean cambiarContraseñaOlvidada(VerificationRecords record, String nuevaContraseña);
 
 }

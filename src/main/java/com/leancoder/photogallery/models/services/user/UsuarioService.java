@@ -299,4 +299,56 @@ public class UsuarioService implements IUsuarioService {
         return res;
     }
 
+    @Override
+    public VerificationRecords crearPeticionParaCambioContraseña(String email) {
+        var usuario = usuarioDao.findByEmail(email);
+        var usuarioExiste = usuario != null && usuario.getEnabled() == true ? true : false;
+
+        if (!usuarioExiste) {
+            return null;
+        }
+
+        CurrentDateBean currentDate = new CurrentDateBean("yyyy-MM-dd HH:mm:ss");
+        VerificationRecords record = new VerificationRecords();
+        var pre_token = passwordEncoder.encode(preToken);
+        var token = pre_token.replace("/", "");
+        record.setEmail(email);
+        record.setEnabled(true);
+        record.setUsername(usuario.getUsername());
+        record.setVerificationType("change_password");
+        record.setFechaRegistro(currentDate.getCurrentDate());
+        record.setToken(token);
+        verificationRecords.save(record);
+
+        try {
+            String url = "http://192.168.1.39:8080/change-password/".concat(token);
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("name", usuario.getNombre());
+            model.put("token", token);
+            model.put("link", url);
+            emailService.sendMessageUsingThymeleafTemplate(usuario.getEmail(), "Cambio de contraseña", "forgot-pass", model);
+        } catch (MessagingException e) {
+            System.out.println("ERRROR AL ENVIAR EMAIL.");
+        }
+
+        return record;
+    }
+
+    @Override
+    public Boolean cambiarContraseñaOlvidada(VerificationRecords record, String nuevaContraseña) {
+        var usuario = usuarioDao.findByUsername(record.getUsername());
+        var nuevaContraseñaCifrada = passwordEncoder.encode(nuevaContraseña);
+        usuario.setPassword(nuevaContraseñaCifrada);
+        record.setEnabled(false);
+
+        try {
+            verificationRecords.save(record);
+        } catch (Exception e) {
+            return false;
+        }
+
+        usuarioDao.save(usuario);
+        return true;
+    }
+
 }
