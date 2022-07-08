@@ -48,7 +48,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
         * El cambio de contraseña cuando se olvida se hara con una verificacion con el correo
  */
 @Controller
-@Secured(value = { "ROLE_USER", "ROLE_ADMIN" })
 @RequestMapping("/account")
 public class ProfileController {
 

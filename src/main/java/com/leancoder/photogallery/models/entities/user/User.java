@@ -61,7 +61,7 @@ public class User {
     private Date fechaRegistro;
 
     @ManyToOne(targetEntity = RoleUser.class)
-    @JoinColumn(name = "auth_id", nullable = false, referencedColumnName="id")
+    @JoinColumn(name = "auth_id", nullable = true, referencedColumnName="id")
     private RoleUser role;
 
     @ManyToOne(targetEntity = GenderUser.class)

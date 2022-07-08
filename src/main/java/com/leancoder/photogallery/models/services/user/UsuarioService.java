@@ -104,7 +104,7 @@ public class UsuarioService implements IUsuarioService {
                     verificationRecords.save(verificator);
 
                     try {
-                        String url = "http://192.168.1.39:8080/verify-account/".concat(token);
+                        String url = "http://localhost:8080/verify-account/".concat(token);
                         Map<String, Object> model = new HashMap<String, Object>();
                         model.put("name", usuario.getNombre());
                         model.put("token", token);
@@ -321,7 +321,7 @@ public class UsuarioService implements IUsuarioService {
         verificationRecords.save(record);
 
         try {
-            String url = "http://192.168.1.39:8080/change-password/".concat(token);
+            String url = "http://localhost:8080/change-password/".concat(token);
             Map<String, Object> model = new HashMap<String, Object>();
             model.put("name", usuario.getNombre());
             model.put("token", token);
