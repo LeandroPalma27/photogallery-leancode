@@ -4,6 +4,8 @@ import com.leancoder.photogallery.models.dao.IUsuarioDao;
 import com.leancoder.photogallery.models.entities.user.User;
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -82,7 +84,6 @@ public class HomeController {
     @GetMapping({"", "/"})
     public String Home(Authentication authentication, Model model) {
         model.addAttribute("title", "Photogallery");
-        
         if (authentication != null) {
 
             var usuario = usuarioDao.findByUsername(authentication.getName());

@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,17 +34,62 @@ public class VerificationController {
     @Autowired
     IVerificationRecords verificationRecords;
 
+    @ModelAttribute("profilePictureUser")
+    public String cargarFotoDePerfil(Authentication authentication) {
+
+        if (authentication != null) {
+            var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
+
+            var fotosUsuario = usuario.getPhotos();
+            for (var foto : fotosUsuario) {
+                if (foto.getRoles().size() > 1) {
+                    for (var role : foto.getRoles()) {
+                        if (role.getRole().equals("ROLE_PROFILE")) {
+                            return foto.getUrlPhoto();
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+
+    }
+
+    @ModelAttribute("profilePictureUploadId")
+    public String cargarIdDeFotoPerfil(Authentication authentication) {
+
+        if (authentication != null) {
+            var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
+
+            var fotosUsuario = usuario.getPhotos();
+            for (var foto : fotosUsuario) {
+                if (foto.getRoles().size() > 1) {
+                    for (var role : foto.getRoles()) {
+                        if (role.getRole().equals("ROLE_PROFILE")) {
+                            return foto.getUploadId();
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+
+    }
+
     @GetMapping("/verify-account/{token}")
-    public String VerificarEmail(@PathVariable("token") String token, Model model) {
+    public String VerificarEmail(@PathVariable("token") String token, Authentication authentication, Model model) {
         model.addAttribute("title", "Verificator account");
         if (token == null || token == "") {
             return "redirect:/";
         }
         var res = usuarioService.VerificarUsuario(token);
+        var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
         if (res.getMessage()!=null) {
+            model.addAttribute("usuario", usuario);
             model.addAttribute("verified", true);
             return "verify-email";
         } 
+        model.addAttribute("usuario", usuario);
         model.addAttribute("verified", false);
         return "verify-email";
 
