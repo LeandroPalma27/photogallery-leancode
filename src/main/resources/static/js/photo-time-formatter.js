@@ -7,13 +7,13 @@
         const day = (date.getDate());
         const year = date.getFullYear();
         
-        const allMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const allMonths = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         
         
-        const nuevaFecha = allMonths[month].concat(' ' + day).concat(', ' + year)
+        const nuevaFecha = day.toString().concat(' de ' + allMonths[month]).concat(', ' + year);
         
         fechaDom.innerHTML = nuevaFecha;
     } else {
-        fechaDom.innerHTML = 'March 27, 2022';
+        fechaDom.innerHTML = '27 Marzo, 2022';
     }
 })()

@@ -83,13 +83,14 @@ public class VerificationController {
             return "redirect:/";
         }
         var res = usuarioService.VerificarUsuario(token);
-        var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
-        if (res.getMessage()!=null) {
+        if (authentication != null) {
+            var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
             model.addAttribute("usuario", usuario);
+        }
+        if (res.getMessage()!=null) {
             model.addAttribute("verified", true);
             return "verify-email";
         } 
-        model.addAttribute("usuario", usuario);
         model.addAttribute("verified", false);
         return "verify-email";
 
@@ -131,6 +132,20 @@ public class VerificationController {
         status.setComplete();
         flash.addFlashAttribute("info", "Se realizo el cambio de contraseña con exito.");
         return "redirect:/login";
+    }
+
+    @GetMapping("/reapply-verification")
+    public String VolverSolicitarVerificacion(Authentication authentication, RedirectAttributes flash) {
+        if (authentication != null) {
+            var res = usuarioService.solicitarVerificacionCuenta(authentication.getName());
+            if (res) {
+                flash.addFlashAttribute("successMessage", "Solicitud procesada con exito, revise su correo y verifique su cuenta.");
+                return "redirect:/account";
+            }
+            flash.addFlashAttribute("errorMessage", "Ocurrio algun error al solicitar la verificacion, intentelo mas tarde.");
+            return "redirect:/account";
+        }
+        return "redirect:/";
     }
 
 }

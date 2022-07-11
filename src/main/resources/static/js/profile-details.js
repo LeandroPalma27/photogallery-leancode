@@ -9,9 +9,9 @@
 
     if (accountStatus != null) {
         if (accountStatus.innerText == 'true') {
-            accountStatus.innerText = 'Active';
+            accountStatus.innerText = 'Activada';
         } else {
-            accountStatus.innerText = 'No - active';
+            accountStatus.innerText = 'No activada';
         }
     }
 
@@ -35,9 +35,6 @@
         return new bootstrap.Popover(popoverTriggerEl)
     })
 
-    popoversDetail.forEach((popover) => {
-
-    });
 
 
 })();

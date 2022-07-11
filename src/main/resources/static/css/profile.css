@@ -506,6 +506,15 @@
     text-decoration: underline rgb(197, 197, 197);
 }
 
+.status_part-2 a {
+    font-size: calc(0.55rem + 1.1vw);
+    text-decoration: underline rgb(197, 197, 197);
+}
+
+.status_part-2 a:hover {
+    text-decoration: underline rgb(33, 93, 224);
+}
+
 .password_part-2 a:hover {
     text-decoration: underline rgb(33, 93, 224);
 }
@@ -721,6 +730,11 @@
     }
     
     .email_part-2 a {
+        font-size: calc(0.1rem + 1vw);
+        text-decoration: underline rgb(197, 197, 197);
+    }
+
+    .status_part-2 a {
         font-size: calc(0.1rem + 1vw);
         text-decoration: underline rgb(197, 197, 197);
     }

@@ -300,6 +300,7 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
+    @Transactional
     public VerificationRecords crearPeticionParaCambioContraseña(String email) {
         var usuario = usuarioDao.findByEmail(email);
         var usuarioExiste = usuario != null && usuario.getEnabled() == true ? true : false;
@@ -349,6 +350,44 @@ public class UsuarioService implements IUsuarioService {
 
         usuarioDao.save(usuario);
         return true;
+    }
+
+    @Override
+    @Transactional
+    public Boolean solicitarVerificacionCuenta(String username) {
+        var verificador = verificationRecords.findByUsernameTypeAndEnabled(username, "email", 1);
+        if (verificador == null) {
+            return false;
+        }
+
+        verificationRecords.delete(verificador);
+
+        CurrentDateBean currentDate = new CurrentDateBean("yyyy-MM-dd HH:mm:ss");
+        VerificationRecords verificator = new VerificationRecords();
+        var pre_token = passwordEncoder.encode(preToken);
+        var token = pre_token.replace("/", "");
+        var usuario = obtenerUsuarioPorUsername(username);
+        verificator.setToken(token);
+        verificator.setFechaRegistro(currentDate.getCurrentDate());
+        verificator.setEmail(usuario.getEmail());
+        verificator.setEnabled(true);
+        verificator.setUsername(usuario.getUsername());
+        verificator.setVerificationType("email");
+
+        verificationRecords.save(verificator);
+
+        try {
+            String url = "http://localhost:8080/verify-account/".concat(token);
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("name", usuario.getNombre());
+            model.put("token", token);
+            model.put("link", url);
+            emailService.sendMessageUsingThymeleafTemplate(usuario.getEmail(), "Verificacion de correo", "email-verificator", model);
+            return true;
+        } catch (MessagingException e) {
+            System.out.println("ERRROR AL ENVIAR EMAIL.");
+            return false;
+        }
     }
 
 }

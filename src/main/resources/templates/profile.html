@@ -15,7 +15,7 @@
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete account</button> -->
                 <div class="profile">
                     <div class="title">
-                        <h1>My account</h1>
+                        <h1>Mi cuenta</h1>
                     </div>
                     <div class="content">
                         <div class="profile-card">
@@ -30,10 +30,10 @@
                                         <div class="change-photo">
                                             <div class="change-button">
                                                 <button th:if="${profilePictureUser == null}" id="btnForModalPicture" data-bs-toggle="modal"
-                                                data-bs-target="#modalForUploadProfilePicture" type="button"><span>Upload</span><i class="fa-solid fa-pencil"></i></button>
+                                                data-bs-target="#modalForUploadProfilePicture" type="button"><span>Subir</span><i class="fa-solid fa-pencil"></i></button>
                                                 <button th:if="${profilePictureUser != null}" id="btnForModalPicture" data-bs-toggle="modal"
-                                                data-bs-target="#modalForUploadProfilePicture" type="button"><span>Change</span><i class="fa-solid fa-pencil"></i></button>
-                                                <a th:if="${profilePictureUser != null}" th:href="@{'/account/delete/profile-picture/' + ${profilePictureUploadId}}" type="button"><span>Remove</span><i class="fa-solid fa-trash"></i></a>
+                                                data-bs-target="#modalForUploadProfilePicture" type="button"><span>Cambiar</span><i class="fa-solid fa-pencil"></i></button>
+                                                <a th:if="${profilePictureUser != null}" th:href="@{'/account/delete/profile-picture/' + ${profilePictureUploadId}}" type="button"><span>Quitar foto</span><i class="fa-solid fa-trash"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -44,21 +44,21 @@
                                     <div class="credentials_username"><span th:text="*{'@' + username}"></span></div>
                                     <div class="credentials_photos">
                                         <span class="number-photos">
-                                            <span class="number" th:text="${#lists.size(usuario.photos)}">500</span>
-                                            <span class="desc">photos</span>
+                                            <span class="number" th:text="${#lists.size(usuario.photos)}"></span>
+                                            <span class="desc">fotos</span>
                                         </span>
-                                        <a class="" th:href="@{/photos/own}">View photos</a>
+                                        <a class="" th:href="@{/photos/own}">Ver fotos</a>
                                     </div>
                                     <div class="border-for-description"></div>
                                     <div class="credentials_description">
                                         <div title="description" th:text="*{description}"></div>
                                         <a id="btnModalDesc" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#modalForDescription" title="Change my description"
-                                            href="">Edit</a>
+                                            data-bs-target="#modalForDescription" title="Cambia tu descripcion"
+                                            href="">Editar</a>
                                     </div>
                                 </div>
                                 <div class="data_profile-create-date">
-                                    <span>Joined on<span th:text="*{fechaRegistro}" id="fechaRegistro"></span></span>
+                                    <span>Se unio el<span th:text="*{fechaRegistro}" id="fechaRegistro"></span></span>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                                         <div class="complete-name">
                                             <h3 id="nameAndLastname2" th:text="*{nombre + '  ' + apellidos}"></h3>
                                             <a id="btnModalNameAndLastName" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#modalForNameAndLastName" href="">Change</a>
+                                                data-bs-target="#modalForNameAndLastName" href="">Cambiar</a>
                                         </div>
                                         <div class="username">
                                             <div class="username_part-1">
@@ -78,7 +78,7 @@
                                             </div>
                                             <div class="username_part-2">
                                                 <a id="btnModalUsername" type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#modalForUsername" href="">Change username</a>
+                                                    data-bs-target="#modalForUsername" href="">Cambiar username</a>
                                             </div>
                                         </div>
                                     </div>
@@ -89,27 +89,30 @@
                                                 <span class="ema" th:text="*{email}"></span>
                                             </div>
                                             <div class="email_part-2">
-                                                <a type="button" href="#">Change email</a>
+                                                <a type="button" href="#">Cambiar email</a>
                                             </div>
                                         </div>
                                         <div class="password">
                                             <div class="password_part-1">
-                                                <span>Password: </span>
+                                                <span>Contraseña: </span>
                                                 <span class="pass">************</span>
                                             </div>
                                             <div class="password_part-2">
                                                 <a type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#modalForPassword" href="">Change password</a>
+                                                    data-bs-target="#modalForPassword" href="">Cambiar password</a>
                                             </div>
                                         </div>
                                         <div class="status">
                                             <div class="status_part-1">
-                                                <span>Account status: </span>
+                                                <span>Estado de cuenta: </span>
                                                 <button id="accountStatus" type="button" class="sta"
                                                     th:text="*{enabled}" data-bs-container="body"
                                                     data-bs-toggle="popover" data-bs-placement="bottom"
                                                     data-bs-trigger="focus"
                                                     data-bs-content="Active su cuenta con el correo, en caso de no estar activada."></button>
+                                            </div>
+                                            <div class="status_part-2" th:if="*{!enabled}">
+                                                <a th:href="@{/reapply-verification}">Solicitar verificacion</a>
                                             </div>
                                         </div>
                                     </div>
@@ -118,7 +121,7 @@
                                     <div class="container_button-delete">
                                         <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
                                             class="btn btn-outline" href="#"><span><i
-                                                    class="fa-solid fa-trash-can"></i></span>Delete account</a>
+                                                    class="fa-solid fa-trash-can"></i></span>Eliminar cuenta</a>
                                     </div>
                                 </div>
                             </div>
@@ -131,14 +134,13 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete account</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Eliminar cuenta</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">Are you sure you want to delete your account? (all records
-                        photographs will be deleted and there will be no way to recover them).</div>
+                    <div class="modal-body">¿Esta seguro de eliminar su cuenta? (Todos los registros de fotos y sus acciones seran eliminados, sin posibilidad de recuperarlos).</div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Not sure</button>
-                        <a th:href="@{/account/delete}" type="button" class="btn btn-primary">Yes</a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No estoy seguro</button>
+                        <a th:href="@{/account/delete}" type="button" class="btn btn-primary">Si</a>
                     </div>
                 </div>
             </div>
@@ -147,7 +149,7 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Change your profile picture</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Cambiar tu foto de perfil</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -158,11 +160,11 @@
                                         <div class="drag-area">
                                             <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
                                             <div class="header-file">
-                                                <header class="">Drag & drop to Upload File</header>
+                                                <header class="">Arrastra y suelta para seleccionar</header>
                                             </div>
-                                            <div class="span-file"><span>or</span></div>
+                                            <div class="span-file"><span>o</span></div>
                                             <div class="button-file">
-                                                <button type="button">Browse File</button>
+                                                <button type="button">Selecciona</button>
                                             </div>
                                             <input type="file" hidden th:field="*{file}">
                                         </div>
@@ -171,18 +173,18 @@
                                 <div class="picture-details">
                                     <div class="details">
                                         <div class="details_form-group form-title">
-                                            <label for="title">Title</label>
-                                            <input type="text" placeholder="Place the title" id="title"
+                                            <label for="title">Titulo</label>
+                                            <input type="text" placeholder="Ingresa el titulo" id="title"
                                             th:field="*{title}"  maxlength="60">
                                         </div>
                                         <div class="details_form-group">
-                                            <label for="description">Description</label>
+                                            <label for="description">Descripcion</label>
                                             <textarea id="description" cols="40" rows="7"
-                                            th:field="*{description}" placeholder="Place the description" maxlength="200"
+                                            th:field="*{description}" placeholder="Ingresa la descripcion" maxlength="200"
                                                 ></textarea>
                                         </div>
                                         <div class="details_form-group form-button">
-                                            <button type="submit" class="btn-save">Save</button>
+                                            <button type="submit" class="btn-save">Guardar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -203,7 +205,7 @@
                 <div class="modal-content">
                     <form method="post" th:action="@{/account/update-description}" th:object="${formDescripcion}">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="">Change description</h5>
+                            <h5 class="modal-title" id="">Editar descripcion</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -212,7 +214,7 @@
                             <div class="input-desc">
                                 <div class="input">
                                     <textarea id="textAreaDescription" cols="30" rows="10" th:field="*{content}"
-                                        placeholder="My description is..."></textarea>
+                                        placeholder="Mi descripcion es..."></textarea>
                                     <!-- <span class="character-count">
                                             <span id="counter">0</span>
                                             <span>/</span>
@@ -224,8 +226,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -236,7 +238,7 @@
                 <div class="modal-content">
                     <form method="post" th:action="@{/account/update-names}" th:object="${formNameAndLastName}">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="">Change</h5>
+                            <h5 class="modal-title" id="">Editar</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -244,22 +246,22 @@
                             </div>
                             <div class="inputs">
                                 <div class="input-name">
-                                    <label for="name">Name</label>
-                                    <input id="name" type="text" placeholder="Name" th:field="*{name}">
+                                    <label for="name">Nombres</label>
+                                    <input id="name" type="text" placeholder="Ingrese su nombre" th:field="*{name}">
                                     <div class="name-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
                                     </div>
                                 </div>
                                 <div class="input-lastname">
-                                    <label for="lastname">Lastname</label>
-                                    <input id="lastname" type="text" placeholder="Lastname" th:field="*{lastname}">
+                                    <label for="lastname">Apellidos</label>
+                                    <input id="lastname" type="text" placeholder="Ingrese sus apellidos" th:field="*{lastname}">
                                     <div class="lastname-error" th:if="${#fields.hasErrors('lastname')}"
                                         th:errors="*{lastname}"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -270,7 +272,7 @@
                 <div class="modal-content">
                     <form method="post" th:action="@{/account/update-username}" th:object="${formUsername}">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="">Change username</h5>
+                            <h5 class="modal-title" id="">Cambiar username</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -278,7 +280,7 @@
                             </div>
                             <div class="inputs">
                                 <div class="input-name">
-                                    <input id="username" type="text" placeholder="Place username" th:field="*{content}">
+                                    <input id="username" type="text" placeholder="Ingrese tu nuevo username" th:field="*{content}">
                                     <div class="name-error" th:if="${#fields.hasErrors('content')}"
                                         th:errors="*{content}"></div>
                                 </div>
@@ -290,8 +292,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -302,24 +304,24 @@
                 <div class="modal-content">
                     <form method="post" th:action="@{/account/update-pass1}" th:object="${formChangePassword}">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="">Change password</h5>
+                            <h5 class="modal-title" id="">Cambiar contraseña</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="inputs">
                                 <div class="input-name">
-                                    <label for="oldPassword">Old password</label>
+                                    <label for="oldPassword">Contraseña anterior</label>
                                     <input id="oldPassword" type="text" th:field="*{oldpass}">
                                 </div>
                                 <div class="input-lastname">
-                                    <label for="newPassword">New password</label>
+                                    <label for="newPassword">Nueva contraseña</label>
                                     <input id="newPassword" type="text" th:field="*{newpass}">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -334,10 +336,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="body-message">This file is not valid (<b>JPG</b>, <b>JPEG</b> and/or <b>PNG</b> are accepted).</div>
+                        <div class="body-message">Este archivo no es valido (<b>JPG</b>, <b>JPEG</b> y/o <b>PNG</b> son permitidos).</div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -351,10 +353,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="body-message">Max size exceed (max <b>10MB</b>).</div>
+                        <div class="body-message">Tamaño maximo excedido (max <b>10MB</b>).</div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -365,7 +367,6 @@
     <script th:src="@{/js/user-time-formatter.js}"></script>
     <script th:src="@{/js/popover.js}"></script>
     <script th:src="@{/js/modalActivator.js}"></script>
-    <script th:src="@{/js/character-count-inputs.js}"></script>
     <script th:src="@{/js/drag-and-drop-file.js}"></script>
 </body>
 

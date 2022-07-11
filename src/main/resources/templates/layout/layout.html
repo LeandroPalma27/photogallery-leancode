@@ -22,10 +22,10 @@
         <nav class="header_navbar">
             <div class="accordion">
                 <ul class="list-accordion">
-                    <li><a th:href="@{/photos/search}"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></a></li>
-                    <li><a th:href="@{/photos/all}">All photos</a></li>
-                    <li><a th:href="@{/photos/own}">My photos</a></li>
-                    <li><a th:href="@{/photos/favorites}">Saved</a></li>
+                    <li><a th:href="@{/photos/search}"><i class="fa-solid fa-magnifying-glass"></i><span>Buscar</span></a></li>
+                    <li><a th:href="@{/photos/all}">Todas las fotos</a></li>
+                    <li><a th:href="@{/photos/own}">Mis fotos</a></li>
+                    <li><a th:href="@{/photos/favorites}">Favoritos</a></li>
                 </ul>
             </div>
             <div class="navbar_container-responsive">
@@ -51,13 +51,13 @@
                             <img th:if="${profilePictureUser != null}" src="" alt="">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <li><a class="dropdown-item" th:href="@{/account}">My profile</a></li>
-                            <li><a class="dropdown-item" th:href="@{/photos/upload}">Upload photo</a></li>
+                            <li><a class="dropdown-item" th:href="@{/account}">Mi perfil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/photos/upload}">Subir una foto</a></li>
                             <li>
                                 <a class="dropdown-item" href="">
                                     <form id="logoutForm" class="form-logout" th:action="@{/logout}" method="post">
                                         <input name="_csrf" type="hidden" value="63155ace-bc25-48a4-b881-1ad730b9268b" />
-                                        <button onclick="document.getElementById('logoutForm').submit()" class="btn btn-outline">Signout</button>
+                                        <button onclick="document.getElementById('logoutForm').submit()" class="btn btn-outline">Cerrar sesion</button>
                                     </form>
                                 </a>
                             </li>
@@ -68,18 +68,18 @@
             <div class="navbar_container-list">
                 <ul class="list">
                     <li class="list_logo"><a th:href="@{/}">Photogallery</a></li>
-                    <li class="list_option list_index"><a th:href="@{/photos/all}">All photos</a></li>
-                    <li class="list_option list_my-photos"><a th:href="@{/photos/own}">My photos</a></li>
+                    <li class="list_option list_index"><a th:href="@{/photos/all}">Todas las fotos</a></li>
+                    <li class="list_option list_my-photos"><a th:href="@{/photos/own}">Mis fotos</a></li>
                     <li class="list_option list_search"><a th:href="@{/photos/search}"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-                    <li class="list_option list_favorites"><a th:href="@{/photos/favorites}">Saved</a></li>
+                    <li class="list_option list_favorites"><a th:href="@{/photos/favorites}">Favoritos</a></li>
                 </ul>
             </div>
             <div class="navbar_container-sign" sec:authorize="isAnonymous()">
                 <div class="sign_in">
-                    <a th:href="@{/login}" class="">Log in</a>
+                    <a th:href="@{/login}" class="">Iniciar sesion</a>
                 </div>
                 <div class="log_in">
-                    <a th:href="@{/signup}" class="">Register</a>
+                    <a th:href="@{/signup}" class="">Registrarse</a>
                 </div>
             </div>
             <div class="navbar_container-userprofile" sec:authorize="isAuthenticated()">
@@ -95,13 +95,13 @@
                         </div>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" th:href="@{/account}">My profile</a></li>
-                        <li><a class="dropdown-item" th:href="@{/photos/upload}">Upload photo</a></li>
+                        <li><a class="dropdown-item" th:href="@{/account}">Mi perfil</a></li>
+                        <li><a class="dropdown-item" th:href="@{/photos/upload}">Subir una foto</a></li>
                         <li>
                             <a class="dropdown-item" href="">
                                 <form class="form-logout" th:action="@{/logout}" method="post">
                                     <input name="_csrf" type="hidden" value="63155ace-bc25-48a4-b881-1ad730b9268b" />
-                                    <button type="submit" class="btn btn-outline">Signout</button>
+                                    <button type="submit" class="btn btn-outline">Cerrar sesion</button>
                                 </form>
                             </a>
                         </li>

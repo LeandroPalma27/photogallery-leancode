@@ -17,7 +17,7 @@ public class MvcConfig implements WebMvcConfigurer{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(enabledUserInterceptor).addPathPatterns("/photos/own", "/photos/upload", "/photos/details/**", "/photos/favorites", "/photos/search").excludePathPatterns("/account");
+        registry.addInterceptor(enabledUserInterceptor).addPathPatterns("/photos/own", "/photos/upload", "/photos/details/**", "/photos/favorites", "/photos/search", "/account/**").excludePathPatterns("/account");
     }
     
 }

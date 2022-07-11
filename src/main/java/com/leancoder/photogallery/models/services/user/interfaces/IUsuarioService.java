@@ -34,4 +34,6 @@ public interface IUsuarioService {
 
     public Boolean cambiarContraseñaOlvidada(VerificationRecords record, String nuevaContraseña);
 
+    public Boolean solicitarVerificacionCuenta(String username);
+
 }
