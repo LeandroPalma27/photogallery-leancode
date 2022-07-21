@@ -36,4 +36,6 @@ public interface IUsuarioService {
 
     public Boolean solicitarVerificacionCuenta(String username);
 
+    public Boolean actualizarEmail(String email, String username);
+
 }

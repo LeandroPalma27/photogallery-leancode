@@ -89,7 +89,8 @@
                                                 <span class="ema" th:text="*{email}"></span>
                                             </div>
                                             <div class="email_part-2">
-                                                <a type="button" href="#">Cambiar email</a>
+                                                <a type="button" data-bs-toggle="modal"
+                                                data-bs-target="#modalForEmail" href="">Cambiar email</a>
                                             </div>
                                         </div>
                                         <div class="password">
@@ -294,6 +295,31 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalForEmail" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form method="post" th:action="@{/account/update/email}" th:object="${formChangeEmail}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">Cambiar email</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                            </div>
+                            <div class="inputs">
+                                <div class="input-name">
+                                    <input id="username" type="text" placeholder="Ingrese tu nuevo email" th:field="*{email}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Cambiar</button>
                         </div>
                     </form>
                 </div>

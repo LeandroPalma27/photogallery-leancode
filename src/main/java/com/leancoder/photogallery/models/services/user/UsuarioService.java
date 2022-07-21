@@ -356,7 +356,8 @@ public class UsuarioService implements IUsuarioService {
     @Transactional
     public Boolean solicitarVerificacionCuenta(String username) {
         var verificador = verificationRecords.findByUsernameTypeAndEnabled(username, "email", 1);
-        if (verificador == null) {
+        var usuario = obtenerUsuarioPorUsername(username);
+        if (verificador == null || usuario.getEnabled()) {
             return false;
         }
 
@@ -366,7 +367,6 @@ public class UsuarioService implements IUsuarioService {
         VerificationRecords verificator = new VerificationRecords();
         var pre_token = passwordEncoder.encode(preToken);
         var token = pre_token.replace("/", "");
-        var usuario = obtenerUsuarioPorUsername(username);
         verificator.setToken(token);
         verificator.setFechaRegistro(currentDate.getCurrentDate());
         verificator.setEmail(usuario.getEmail());
@@ -388,6 +388,48 @@ public class UsuarioService implements IUsuarioService {
             System.out.println("ERRROR AL ENVIAR EMAIL.");
             return false;
         }
+    }
+
+    @Override
+    public Boolean actualizarEmail(String email, String username) {
+        var user = usuarioDao.findByUsername(username);
+        var existeEmail = usuarioDao.findByEmail(email) != null ? true : false;
+        if (!existeEmail) {
+            var verificador = verificationRecords.findByUsernameTypeAndEnabled(username, "email", 1);
+            if (verificador != null) {
+                verificationRecords.delete(verificador);
+            }
+            CurrentDateBean currentDate = new CurrentDateBean("yyyy-MM-dd HH:mm:ss");
+            VerificationRecords verificator = new VerificationRecords();
+            var pre_token = passwordEncoder.encode(preToken);
+            var token = pre_token.replace("/", "");
+            verificator.setToken(token);
+            verificator.setFechaRegistro(currentDate.getCurrentDate());
+            verificator.setEmail(email);
+            verificator.setEnabled(true);
+            verificator.setUsername(username);
+            verificator.setVerificationType("email");
+    
+            user.setEmail(email);
+            user.setEnabled(false);
+    
+            usuarioDao.save(user);
+            verificationRecords.save(verificator);
+    
+             try {
+                String url = "http://localhost:8080/verify-account/".concat(token);
+                Map<String, Object> model = new HashMap<String, Object>();
+                model.put("name", user.getNombre());
+                model.put("token", token);
+                model.put("link", url);
+                emailService.sendMessageUsingThymeleafTemplate(user.getEmail(), "Verificacion de correo", "email-verificator", model);
+                return true;
+            } catch (MessagingException e) {
+                System.out.println("ERRROR AL ENVIAR EMAIL.");
+                return false;
+            }
+        }
+        return false;
     }
 
 }

@@ -25,28 +25,34 @@ public class EnabledUserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
+
+        // Obtenemos el contexto de la sesion, para asi obtener el username:        
         SecurityContext sc = SecurityContextHolder.getContext();
         Authentication authentication = sc.getAuthentication();
+        // Verificamos que alguien este autenticado(SI CARGA "anonymousUser" ES PORQUE NO HAY NADIE LOGUEADO):
         var realUsername = authentication.getName().equals("anonymousUser") ? false : true;
+        // Si un usuario esta autenticado(SI NO LO ESTA, SE RETORNA TRUE), se verificara que este verificado:
         if (realUsername) {
             var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
             var isVerified = usuario.getEnabled() == true ? true : false;
+            // Si esta verificado, se retorna true y se procede al postHandle(ESTE NO REALIZA NINGUN CAMBIO EN EL MODELO)
             if (isVerified) {
                 return true;
             }
+            // Y en caso de que no lo este, se carga un flash con un mensaje, para mostrarlo luego de redireccionar la ruta
             FlashMap outputFlashMap = RequestContextUtils.getOutputFlashMap(request);
             outputFlashMap.put("errorMessage",
-                    "Su cuenta no esta verificada, revise su correo y en caso de que la solicitud haya expirado genere otra desde su perfil.");
+                    "Para acceder a esta funcion su cuenta debe estar verificada, revise su correo. En caso de que la solicitud haya expirado, genere otra desde su perfil.");
             RequestContextUtils.saveOutputFlashMap(request.getContextPath() + "/account", request, response);
             response.sendRedirect(request.getContextPath() + "/account");
             return false;
         }
-        FlashMap outputFlashMap = RequestContextUtils.getOutputFlashMap(request);
+        /* FlashMap outputFlashMap = RequestContextUtils.getOutputFlashMap(request);
         outputFlashMap.put("errorMessage",
                 "Verifique su cuenta para asi poder acceder a las demas herramientas de Photogallery.");
         RequestContextUtils.saveOutputFlashMap(request.getContextPath() + "/account", request, response);
-        response.sendRedirect(request.getContextPath() + "/account");
-        return false;
+        response.sendRedirect(request.getContextPath() + "/account"); */
+        return true;
     }
 
     @Override

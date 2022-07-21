@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.leancoder.photogallery.custom.close_session.CloseManualSession;
+import com.leancoder.photogallery.models.domains.validators.EnterEmailValidator;
 import com.leancoder.photogallery.models.domains.validators.NameAndLastNameOfUserValidator;
 import com.leancoder.photogallery.models.domains.validators.OneDetaiOflUserValidator;
 import com.leancoder.photogallery.models.domains.validators.PasswordUserValidator;
@@ -118,6 +119,13 @@ public class ProfileController {
         pv.setOldpass("");
         pv.setNewpass("");
         return pv;
+    }
+
+    @ModelAttribute("formChangeEmail")
+    public EnterEmailValidator cargarEmailUpdater() {
+        EnterEmailValidator ev = new EnterEmailValidator();
+        ev.setEmail("");
+        return ev;
     }
 
     /*
@@ -377,6 +385,21 @@ public class ProfileController {
             return "redirect:/account";
         }
 
+    }
+
+    @PostMapping("/update/email")
+    public String UpdateEmail(@Valid @ModelAttribute("formChangeEmail") EnterEmailValidator validator, BindingResult result, Authentication authentication, RedirectAttributes flash, Model model) {
+        if (result.hasErrors()) {
+            flash.addFlashAttribute("errorMessage", "Ingrese un email valido");
+            return "redirect:/account";
+        }
+        var res = usuarioService.actualizarEmail(validator.getEmail(), authentication.getName());
+        if (res) {
+            flash.addFlashAttribute("successMessage", "Se realizo el cambio de email, por favor revise su correo para poder verificar su cuenta.");
+            return "redirect:/account";
+        }
+        flash.addFlashAttribute("errorMessage", "Ocurrio algun error, intentelo de nuevo.");
+        return "redirect:/account";
     }
 
 }
