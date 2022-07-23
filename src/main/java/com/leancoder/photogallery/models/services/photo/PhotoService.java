@@ -1,6 +1,7 @@
 package com.leancoder.photogallery.models.services.photo;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.leancoder.photogallery.models.dao.IPhotoDao;
 import com.leancoder.photogallery.models.dao.IRolePhotoDao;
 import com.leancoder.photogallery.models.dao.IUsuarioDao;
 import com.leancoder.photogallery.models.domains.functionalities.current_date.CurrentDateBean;
+import com.leancoder.photogallery.models.domains.responses.FotosConMasLikes;
 import com.leancoder.photogallery.models.domains.responses.RestRequestResponse;
 import com.leancoder.photogallery.models.domains.responses.UpdateOrRegisterDetailsResponse;
 import com.leancoder.photogallery.models.domains.validators.PhotoUpdaterValidator;
@@ -25,6 +27,8 @@ import com.leancoder.photogallery.models.services.photo.interfaces.IPhotoService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +56,9 @@ public class PhotoService implements IPhotoService {
 
     @Autowired
     private ICloudinaryProvider cloudinaryService;
+
+    @Autowired
+    JdbcTemplate jdbc;
 
     private Photo subirFotoAlServidor(PhotoUploaderValidator validator) {
 
@@ -86,6 +93,7 @@ public class PhotoService implements IPhotoService {
             photo.setRoles(Arrays.asList(new RolePhoto("ROLE_NORMAL", photo)));
             photoDao.save(photo);
             response.setName("successful");
+            response.setMessage(photo.getUploadId());
             return response;
         }
         response.setName("unknown_error");
@@ -138,8 +146,10 @@ public class PhotoService implements IPhotoService {
         UpdateOrRegisterDetailsResponse response = new UpdateOrRegisterDetailsResponse();
 
         var res = cloudinaryService.delete(photo.getUploadId());
-        
+
         if ((boolean) res.get("isDelete")) {
+            likesPhotoDao.deleteByPhoto_Id(photo.getId());
+            favoritePhotoDao.deleteByPhoto_Id(photo.getId());
             photoDao.deleteById2(photo.getId());
             response.setName("successful_delete");
             response.setMessage("La foto se elimino con exito.");
@@ -164,7 +174,8 @@ public class PhotoService implements IPhotoService {
         return photoDao.findByUser_id(user_id, pageable);
     }
 
-    // El formulario que procesa el registro esta en la vista del perfil del usuario.
+    // El formulario que procesa el registro esta en la vista del perfil del
+    // usuario.
     @Override
     @Transactional
     public UpdateOrRegisterDetailsResponse registrarFotoPerfil(PhotoUploaderValidator photoValidator, User usuario) {
@@ -200,7 +211,8 @@ public class PhotoService implements IPhotoService {
         return response;
     }
 
-    // Se puede remover desde el perfil del usuario o desde la lista de fotos del usuario
+    // Se puede remover desde el perfil del usuario o desde la lista de fotos del
+    // usuario
     @Override
     @Transactional
     public UpdateOrRegisterDetailsResponse removerFotoDePerfil(String uploadId) {
@@ -401,7 +413,8 @@ public class PhotoService implements IPhotoService {
         return response;
     }
 
-    // Metodo para transaccionar el quite de una foto de favoritos, por parte de un usuario.
+    // Metodo para transaccionar el quite de una foto de favoritos, por parte de un
+    // usuario.
     @Override
     @Transactional
     public RestRequestResponse quitarFavoritos(String photo_id, String user) {
@@ -429,7 +442,8 @@ public class PhotoService implements IPhotoService {
         if (favorite == null) {
             response.setIsSuccesful(false);
             response.setMessage("save_notExists");
-            response.setDescription("No existe un guardado de esa foto por parte del usuario ".concat(usuario.getUsername()));
+            response.setDescription(
+                    "No existe un guardado de esa foto por parte del usuario ".concat(usuario.getUsername()));
             return response;
         }
 
@@ -454,6 +468,19 @@ public class PhotoService implements IPhotoService {
     @Transactional(readOnly = true)
     public Page<Photo> obtenerFotosPorKeyword(String keyword, Pageable pageable) {
         return photoDao.findPhotosByKeywordLike(keyword, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Photo> fotosConMasLikes() {
+        var fotosId = jdbc.query("SELECT photo_id FROM likes_photo GROUP BY photo_id ORDER BY COUNT(*) DESC LIMIT 27;",
+                new BeanPropertyRowMapper<>(FotosConMasLikes.class));
+        List<Photo> photos = new ArrayList<Photo>();
+        fotosId.forEach(id -> {
+            var photo = photoDao.findById(id.getPhoto_id()).get();
+            photos.add(photo);
+        });
+        return photos;
     }
 
 }

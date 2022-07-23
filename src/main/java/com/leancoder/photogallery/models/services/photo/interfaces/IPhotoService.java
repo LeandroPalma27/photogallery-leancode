@@ -49,4 +49,6 @@ public interface IPhotoService {
 
     public Page<Photo> obtenerFotosPorKeyword(String keyword, Pageable pageable);
 
+    public List<Photo> fotosConMasLikes();
+
 }

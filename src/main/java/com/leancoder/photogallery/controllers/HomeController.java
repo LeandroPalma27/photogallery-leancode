@@ -2,6 +2,7 @@ package com.leancoder.photogallery.controllers;
 
 import com.leancoder.photogallery.models.dao.IUsuarioDao;
 import com.leancoder.photogallery.models.entities.user.User;
+import com.leancoder.photogallery.models.services.photo.interfaces.IPhotoService;
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,9 @@ public class HomeController {
 
     @Autowired
     IUsuarioService usuarioService;
+
+    @Autowired
+    IPhotoService photoService;
 
     /*
         <=== Objecto cargado con informacion(url de foto de perfil) globalmente para todas las vistas en este controlador ===>
@@ -91,6 +95,8 @@ public class HomeController {
             model.addAttribute("usuario", usuario);
         }
 
+        var fotosMasLikeadas = photoService.fotosConMasLikes();
+        model.addAttribute("fotosMasLikeadas", fotosMasLikeadas);
 
         return "index";
     }

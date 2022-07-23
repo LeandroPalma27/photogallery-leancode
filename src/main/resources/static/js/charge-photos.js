@@ -5,8 +5,13 @@
     const authorPhotos = document.querySelectorAll('.authorFoto');
 
     urlPhotos.forEach((url) => {
-        console.log(url.nextElementSibling.nextElementSibling)
-        url.nextElementSibling.nextElementSibling.src = url.textContent;
+
+        try {
+            url.nextElementSibling.nextElementSibling.firstElementChild.src = url.textContent;
+        } catch (error) {
+            url.nextElementSibling.nextElementSibling.src = url.textContent;
+        }
+
     });
 
     titlePhotos.forEach((title) => {

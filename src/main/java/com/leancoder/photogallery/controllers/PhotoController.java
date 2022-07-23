@@ -281,7 +281,7 @@ public class PhotoController {
         }
 
         flash.addFlashAttribute("successMessage", "Registro de foto exitoso.");
-        return "redirect:/photos/own";
+        return "redirect:/photos/details/".concat(res.getMessage());
 
     }
 
@@ -431,7 +431,7 @@ public class PhotoController {
             model.addAttribute("photos", fotos);
             model.addAttribute("page", pageRender);
         } else {
-            if (keyword.trim().equals("")) {
+            if (keyword.trim().equals("") || keyword.trim().length() == 1) {
                 Pageable pageRequest = PageRequest.of(page, 12);
                 var fotos = photoService.obtenerFotosPorKeyword(null, pageRequest);
                 PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/search", fotos);
