@@ -194,7 +194,7 @@ public class PhotoController {
 
         PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotos);
 
-        model.addAttribute("title", "All photos");
+        model.addAttribute("title", "Todas las fotos");
         model.addAttribute("photos", fotos);
         model.addAttribute("page", pageRender);
 
@@ -216,7 +216,7 @@ public class PhotoController {
         Page<Photo> fotosUsuario = photoService.obtenerTodasLasFotosDeUnUsuarioPagueadas(usuario.getId(), pageRequest);
         PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/own", fotosUsuario);
 
-        model.addAttribute("title", "My photos");
+        model.addAttribute("title", "Mis fotos");
         model.addAttribute("usuario", usuario);
         model.addAttribute("photosUsuario", fotosUsuario);
         model.addAttribute("page", pageRender);
@@ -230,7 +230,7 @@ public class PhotoController {
     @GetMapping("/upload")
     public String UploadNormalPhoto(Authentication authentication, Model model) {
         PhotoUploaderValidator validator = new PhotoUploaderValidator();
-        model.addAttribute("title", "Upload photo");
+        model.addAttribute("title", "Publicar foto");
         model.addAttribute("photoValidator", validator);
         return "photos/upload";
     }
@@ -245,12 +245,12 @@ public class PhotoController {
             BindingResult result, Authentication authentication, RedirectAttributes flash, SessionStatus status,
             Model model) {
 
-        model.addAttribute("title", "Upload photo");
+        model.addAttribute("title", "Publicar foto");
 
         if (result.hasErrors()) {
 
             if (validator.getFile().isEmpty()) {
-                ObjectError fileError = new ObjectError("fileError", "Select some picture.");
+                ObjectError fileError = new ObjectError("fileError", "Selecciona una archivo.");
                 var errorsUpdated = new ArrayList<ObjectError>();
                 result.getAllErrors().forEach((error) -> {
                     errorsUpdated.add(error);
@@ -265,7 +265,7 @@ public class PhotoController {
         }
 
         if (validator.getFile().isEmpty()) {
-            ObjectError fileError = new ObjectError("fileError", "Select some picture.");
+            ObjectError fileError = new ObjectError("fileError", "Selecciona un archivo.");
             var errorsUpdated = new ArrayList<ObjectError>();
             errorsUpdated.add(fileError);
             model.addAttribute("formErrors", errorsUpdated);
@@ -292,7 +292,7 @@ public class PhotoController {
     @GetMapping("/details/{public_id}")
     public String Details(@PathVariable("public_id") String public_id, Authentication authentication, Model model) {
 
-        model.addAttribute("title", "Details");
+        model.addAttribute("title", "Detalles");
 
         var photo = photoService.buscarFoto(public_id);
 
@@ -313,7 +313,7 @@ public class PhotoController {
                 for (var role : photo.getRoles()) {
                     if (role.getRole().equals("ROLE_PROFILE")
                             && photo.getUser().getUsername().equals(authentication.getName())) {
-                        model.addAttribute("isProfilePhoto", "The current photo is set as the profile picture.");
+                        model.addAttribute("isProfilePhoto", "Actualmente esta foto esta seleccionada como foto de perfil.");
                         break;
                     }
                 }
@@ -334,7 +334,7 @@ public class PhotoController {
             BindingResult result, Authentication authentication, RedirectAttributes flash, SessionStatus status,
             Model model) {
 
-        model.addAttribute("title", "Details");
+        model.addAttribute("title", "Detalles");
 
         if (result.hasErrors()) {
             var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
@@ -408,7 +408,7 @@ public class PhotoController {
         Page<FavoritePhoto> fotos = photoService.obtenerTodosLosFavoritosPagueados(usuario.getId(), pageRequest);
         PageRenderBean<FavoritePhoto> pageRender = new PageRenderBean<FavoritePhoto>("/photos/favorites", fotos);
 
-        model.addAttribute("title", "Favorites");
+        model.addAttribute("title", "Favoritos");
         model.addAttribute("photos", fotos);
         model.addAttribute("page", pageRender);
         return "photos/favorites";
@@ -423,7 +423,7 @@ public class PhotoController {
     public String SearchPhotoByTitle(@RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "keyword", required = false) String keyword, Authentication authentication,
             Model model) {
-        model.addAttribute("title", "Search");
+        model.addAttribute("title", "Buscar");
         if (keyword == null) {
             Pageable pageRequest = PageRequest.of(page, 12);
             var fotos = photoService.obtenerFotosPorKeyword(keyword, pageRequest);

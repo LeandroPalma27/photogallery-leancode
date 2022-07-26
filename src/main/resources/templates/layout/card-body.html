@@ -9,7 +9,7 @@
                 <span th:text="${photo.title}" class="titleFoto"></span>
                 <img >
                 <span class="photo-details">
-                    <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Details" type="button" title="" th:href="@{/photos/details/} + ${photo.uploadId}"><i class="fa-solid fa-circle-info"></i></a>
+                    <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Detalles" type="button" title="" th:href="@{/photos/details/} + ${photo.uploadId}"><i class="fa-solid fa-circle-info"></i></a>
                 </span>
             </div>
         </div>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="info">
                     <div class="info_author">
-                        <span class="desc">Author: </span>
+                        <span class="desc">Autor: </span>
                         <span class="authorFoto" th:text="${photo.user.nombre + ' ' + photo.user.apellidos}"></span>
                     </div>
                 </div>

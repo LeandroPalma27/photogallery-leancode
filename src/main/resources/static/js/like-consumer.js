@@ -11,13 +11,17 @@
 
     const likeButtonsDiv = document.querySelector('.like-button');
 
-    const BTNDISLIKE = '<button type="button" class="liked active"><span><i class="fa-solid fa-heart"></i></span></button>';
+    const BTNDISLIKE = '<button id=btnLiked type="button" class="liked active"><span><i class="fa-solid fa-heart"></i></span></button>';
     const BTNLIKE = '<button id="btnNotLiked" type="button" class="not-liked active"><span><i class="fa-regular fa-heart"></i></span></button>';
+
+    const changeButton = (container, element) => {
+        container.innerHTML = element;
+    }
 
     const chargeButton = (isLiked) => {
         if (isLiked != null) {
             if (isLiked) {
-                likeButtonsDiv.innerHTML = BTNDISLIKE;
+                changeButton(likeButtonsDiv, BTNDISLIKE);
                 const btnDisLike = document.querySelector('.liked');
                 const likeCounter = btnDisLike.parentElement.nextElementSibling.lastElementChild;
                 btnDisLike.addEventListener('click', () => {
@@ -26,7 +30,7 @@
                     likeCounter.textContent = --counter;
                 });
             } else {
-                likeButtonsDiv.innerHTML = BTNLIKE;
+                changeButton(likeButtonsDiv, BTNLIKE);
                 const btnLike = document.querySelector('.not-liked');
                 const likeCounter = btnLike.parentElement.nextElementSibling.lastElementChild;
                 btnLike.addEventListener('click', () => {
@@ -41,6 +45,7 @@
     chargeButton(isLiked);
 
     const darLike = (photoId, username) => {
+        changeButton(likeButtonsDiv, BTNDISLIKE);
         fetch("http://".concat(url + "/like"), {
             method: "POST",
             headers: {
@@ -61,6 +66,7 @@
     }
 
     const darDislike = (photoId, username) => {
+        changeButton(likeButtonsDiv, BTNLIKE);
         fetch("http://".concat(url + "/dislike"), {
             method: "POST",
             headers: {

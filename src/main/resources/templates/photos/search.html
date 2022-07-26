@@ -12,12 +12,12 @@
             <div class="container_photos">
                 <div class="photos">
                     <div class="title_and_desc">
-                        <h1>Search</h1>
-                        <p class="search-description">Search by author username, author name or photo title...</p>
+                        <h1>Buscar</h1>
+                        <p class="search-description">Busca por nombre de autor, usuario o titulo de foto...</p>
                         <div class="container_search-input">
                             <div class="search-input">
                                 <form th:action="@{/photos/search}" method="get">
-                                    <input type="text" placeholder="Search by author username, author name or photo title..." name="keyword">
+                                    <input type="text" placeholder="Busca por nombre de autor, usuario o titulo de foto..." name="keyword">
                                     <div class="button-search">
                                         <button type="submit">
                                             <i class="fa-solid fa-magnifying-glass"></i>
@@ -25,7 +25,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <a th:href="@{/photos/search}" class="btn btn-primary">Clear</a>
+                            <a th:href="@{/photos/search}" class="btn btn-primary">Resetear</a>
                         </div>
                     </div>
                     <div class="main_content">

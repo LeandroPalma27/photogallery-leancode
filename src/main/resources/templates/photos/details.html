@@ -69,13 +69,13 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content modal-content-updater">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Delete account</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Borrar foto</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">Are you sure you want to delete the photo? You won't be able to get it back.</div>
+                                <div class="modal-body">¿Esta seguro de que desea eliminar esta foto? No podra recuperarla mas adelante.</div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Not sure</button>
-                                    <a th:href="@{'/photos/details/delete/' + ${photoDetails.uploadId}}" type="button" class="btn btn-primary">Yes</a>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <a th:href="@{'/photos/details/delete/' + ${photoDetails.uploadId}}" type="button" class="btn btn-primary">Si</a>
                                 </div>
                             </div>
                         </div>
@@ -84,14 +84,14 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content modal-content-updater">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Change role</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Foto de perfil</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to set this photo as your profile picture?</div>
+                                    ¿Deseas seleccionar esta foto como tu foto de perfil?</div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Not sure</button>
-                                    <a th:href="@{'/photos/details/change-role/' + ${photoDetails.uploadId}}" type="button" class="btn btn-primary">Yes</a>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <a th:href="@{'/photos/details/change-role/' + ${photoDetails.uploadId}}" type="button" class="btn btn-primary">Si</a>
                                 </div>
                             </div>
                         </div>
@@ -107,10 +107,10 @@
                     <div class="modal-content">
                         <ul class="crud-photo_options">
                             <li><button id="btnModalUpdatePhoto" data-bs-toggle="modal"
-                                    data-bs-target="#modalForUpdatePhoto" type="button">Update</button></li>
+                                    data-bs-target="#modalForUpdatePhoto" type="button">Actualizar</button></li>
                             <li th:if="${isProfilePhoto == null}"><button id="btnModalSetAsProfilePicture" data-bs-toggle="modal"
-                                    data-bs-target="#modalSetAsProfilePicture" type="button">Set as profile picture</button></li>
-                            <li class="delete-option"><button data-bs-toggle="modal" data-bs-target="#modalDeletePhoto" type="button">Delete photo</button></li>
+                                    data-bs-target="#modalSetAsProfilePicture" type="button">Seleccionar como foto de perfil</button></li>
+                            <li class="delete-option"><button data-bs-toggle="modal" data-bs-target="#modalDeletePhoto" type="button">Eliminar foto</button></li>
                         </ul>
                     </div>
                 </div>
@@ -121,21 +121,21 @@
                     <div class="modal-content modal-content-updater">
                         <form method="post" th:action="@{/photos/details/update}" th:object="${photoUpdater}">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="">Update photo</h5>
+                                <h5 class="modal-title" id="">Actualizar foto</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="inputs">
                                     <div class="input-container input-title">
-                                        <label for="title">Title</label>
+                                        <label for="title">Titulo</label>
                                         <input id="title" type="text" th:field="*{title}">
                                         <div class="name-error" th:if="${#fields.hasErrors('title')}"
                                             th:errors="*{title}">
                                         </div>
                                     </div>
                                     <div class="input-container input-description">
-                                        <label for="description">Description</label>
+                                        <label for="description">Descripcion</label>
                                         <textarea cols="30" rows="10"
                                             id="description" type="text" th:field="*{description}"></textarea>
                                         <div class="name-error" th:if="${#fields.hasErrors('description')}"
@@ -145,8 +145,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
                         </form>
                     </div>

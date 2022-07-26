@@ -159,7 +159,7 @@ public class ProfileController {
             model.addAttribute("profilePictureUploadId", fotoPerfil.getUploadId());
         }
 
-        model.addAttribute("title", "Profile");
+        model.addAttribute("title", "Perfil");
         model.addAttribute("usuario", usuario);
         model.addAttribute("photoValidator", validator);
 
@@ -174,7 +174,7 @@ public class ProfileController {
     public String EditDescription(@Valid @ModelAttribute("formDescripcion") OneDetaiOflUserValidator detail,
             BindingResult result, Authentication authentication, Model model) {
 
-        model.addAttribute("title", "Profile");
+        model.addAttribute("title", "Perfil");
 
         if (result.hasErrors()) {
             model.addAttribute("modalActivator", "descrip");
@@ -198,7 +198,7 @@ public class ProfileController {
             BindingResult result, Authentication authentication, Model model) {
 
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
-        model.addAttribute("title", "Profile");
+        model.addAttribute("title", "Perfil");
 
         if (result.hasErrors()) {
             model.addAttribute("modalActivator", "nameAndLastName");
@@ -219,7 +219,7 @@ public class ProfileController {
             BindingResult result, Authentication authentication, RedirectAttributes flash, Model model) {
 
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
-        model.addAttribute("title", "Profile");
+        model.addAttribute("title", "Perfil");
 
         if (result.hasErrors()) {
             model.addAttribute("modalActivator", "password");
@@ -254,7 +254,7 @@ public class ProfileController {
             BindingResult result, Authentication authentication, RedirectAttributes flash, Model model) {
 
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
-        model.addAttribute("title", "Profile");
+        model.addAttribute("title", "Perfil");
 
         if (detailPassword.getOldpass() == "") {
             flash.addFlashAttribute("errorMessage", "No deje nigun campo vacío.");
@@ -311,7 +311,7 @@ public class ProfileController {
             BindingResult result, Authentication authentication, RedirectAttributes flash, Model model) {
 
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
-        model.addAttribute("title", "Profile");
+        model.addAttribute("title", "Perfil");
 
         var fotosUsuario = usuario.getPhotos();
         principal: for (var foto : fotosUsuario) {

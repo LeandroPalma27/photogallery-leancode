@@ -14,17 +14,17 @@
                 <div class="photos">
                     <div class="title-desc_and_btn-upload">
                         <div class="title_and_desc">
-                            <h1>My photos</h1>
+                            <h1>Mis fotos</h1>
                             <p>
-                                In this option are your personal photos.
+                                Aqui podras encontrar tus fotos.
                             </p>
-                            <p th:if="${usuario.photos.isEmpty()}" class="upload-text-1"> You don't have photos uploaded?
-                                <a th:href="@{/photos/upload}">Start uploading your first photo.</a>
+                            <p th:if="${usuario.photos.isEmpty()}" class="upload-text-1"> ¿No tienes fotos?
+                                <a th:href="@{/photos/upload}">Empieza subiendo tu primera foto.</a>
                             </p>
                         </div>
                         <div th:if="${!(usuario.photos.isEmpty())}" class="btn_go-to-upload-picture">
                             <a class="go-to-upload" th:href="@{/photos/upload}">
-                                <span class="upload-text-2">Upload picture</span>
+                                <span class="upload-text-2">Publicar foto</span>
                                 <span class="upload-icon"><i class="fa-solid fa-arrow-up-from-bracket"></i></span>
                             </a>
                         </div>

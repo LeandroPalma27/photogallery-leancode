@@ -76,7 +76,7 @@ public class UsuarioService implements IUsuarioService {
 
         if (usuarioDao.findByEmail(usuario.getEmail()) == null) {
 
-            if (usuarioDao.findByUsername(usuario.getUsername()) == null) {
+            if (usuarioDao.findByUsername(usuario.getUsername()) == null && !(usuario.getUsername().equals("anonymousUser"))) {
 
                 var generoEscogido = obtenerGeneroPorId(usuario.getGenderId());
 

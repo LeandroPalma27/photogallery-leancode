@@ -78,7 +78,7 @@ public class VerificationController {
 
     @GetMapping("/verify-account/{token}")
     public String VerificarEmail(@PathVariable("token") String token, Authentication authentication, Model model) {
-        model.addAttribute("title", "Verificator account");
+        model.addAttribute("title", "Verificar cuenta");
         if (token == null || token == "") {
             return "redirect:/";
         }
@@ -98,7 +98,7 @@ public class VerificationController {
 
     @GetMapping("/change-password/{token}")
     public String CambiarContraseña(@PathVariable("token") String token, Principal principal, RedirectAttributes flash, Model model) {
-        model.addAttribute("title", "Change password");
+        model.addAttribute("title", "Cambiar contraseña");
         if (token == null || token == "") {
             return "redirect:/";
         }

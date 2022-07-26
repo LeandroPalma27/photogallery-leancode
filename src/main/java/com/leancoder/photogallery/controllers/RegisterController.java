@@ -31,7 +31,7 @@ public class RegisterController {
             flash.addFlashAttribute("info", "Hay una sesion activa, cierre sesion e intentelo de nuevo.");
             return "redirect:/";
         }
-        model.addAttribute("title", "Register");
+        model.addAttribute("title", "Registrarse");
         model.addAttribute("usuarioDomain", usuario);
         model.addAttribute("generos", usuarioService.listarGenerosUsuario());
         return "register";

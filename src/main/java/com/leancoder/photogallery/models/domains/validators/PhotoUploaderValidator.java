@@ -11,11 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public class PhotoUploaderValidator {
     
-    @NotBlank(message = "Place the title.")
+    @NotBlank(message = "Coloca un titulo.")
     @Size(max = 60, message = "Not exceed 60 characters.")
     private String title;
 
-    @NotBlank(message = "Place the description.")
+    @NotBlank(message = "Coloca una descripcion.")
     @Size(max = 200, message = "Not exceed 200 characters.")
     private String description;
 
