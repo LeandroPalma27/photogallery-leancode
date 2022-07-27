@@ -168,9 +168,9 @@ public class PhotoService implements IPhotoService {
             return photoDao.findAll(pageable);
         }
         if (sort1.equals("likesCountASC")) {
-            return null;
+            return photoDao.findAllOrderByLikesCountAsc(pageable);
         } else if (sort1.equals("likesCountDESC")) {
-            return null;
+            return photoDao.findAllOrderByLikesCountDesc(pageable);
         } else if (sort1.equals("dateASC")) {
             return photoDao.findAllOrderByDateAsc(pageable);
         } else if (sort1.equals("dateDESC")) {
@@ -183,7 +183,19 @@ public class PhotoService implements IPhotoService {
     // Se utiliza para paguear la lista de todas las fotos de un solo usuario.
     @Override
     @Transactional(readOnly = true)
-    public Page<Photo> obtenerTodasLasFotosDeUnUsuarioPagueadas(Long user_id, Pageable pageable) {
+    public Page<Photo> obtenerTodasLasFotosDeUnUsuarioPagueadas(Long user_id, Pageable pageable, String sort1) {
+        if (sort1 == null) {
+            return photoDao.findByUser_id(user_id, pageable);
+        }
+        if (sort1.equals("likesCountASC")) {
+            return photoDao.findAllOrderByLikesCountAscAndUser_Id(user_id, pageable);
+        } else if (sort1.equals("likesCountDESC")) {
+            return photoDao.findAllOrderByLikesCountDescAndUser_Id(user_id, pageable);
+        } else if (sort1.equals("dateASC")) {
+            return photoDao.findAllOrderByDateAscAndUser_Id(user_id, pageable);
+        } else if (sort1.equals("dateDESC")) {
+            return photoDao.findAllOrderByDateDescAndUser_Id(user_id, pageable);
+        }
         return photoDao.findByUser_id(user_id, pageable);
     }
 
@@ -339,6 +351,9 @@ public class PhotoService implements IPhotoService {
         like.setPhoto(photo);
         like.setUser(usuario);
         like.setDate(currentDate.getCurrentDate());
+        long nuevaCantidadLikes = photo.getLikes();
+        photo.setLikes(++nuevaCantidadLikes);
+        photoDao.save(photo);
         likesPhotoDao.save(like);
 
         response.setIsSuccesful(true);
@@ -381,6 +396,9 @@ public class PhotoService implements IPhotoService {
         }
 
         likesPhotoDao.delete2(like.getId());
+        long nuevaCantidadLikes = photo.getLikes();
+        photo.setLikes(--nuevaCantidadLikes);
+        photoDao.save(photo);
 
         response.setIsSuccesful(true);
         response.setMessage("dislike_success");

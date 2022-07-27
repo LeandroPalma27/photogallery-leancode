@@ -87,7 +87,7 @@ public class PhotoController {
         }
     }
 
-    /* 
+    /*
      * Metodo para saber si una foto tiene un like por parte del usuario actual
      */
     public Boolean IsLiked(Long userId, Long photoId) {
@@ -96,7 +96,7 @@ public class PhotoController {
         return isLiked;
     }
 
-    /* 
+    /*
      * Metodo para saber si una foto esta guardada por parte del usuario actual
      */
     public Boolean IsSaved(Long userId, Long photoId) {
@@ -105,14 +105,15 @@ public class PhotoController {
         return isSaved;
     }
 
-    /* 
-     * Metodo para fitrar fotos repetidas en una lista de fotos buscada por una keyword
+    /*
+     * Metodo para fitrar fotos repetidas en una lista de fotos buscada por una
+     * keyword
      */
     public List<Photo> filterRepeatPhotos(Page<Photo> photos) {
         Set<Long> collect = photos.stream().map(i -> i.getId()).collect(Collectors.toSet());
         List<Photo> differentList = new ArrayList<Photo>();
-        for(var photo : photos) {
-            if(collect.contains(photo.getId())) {
+        for (var photo : photos) {
+            if (collect.contains(photo.getId())) {
                 differentList.remove(photo);
                 differentList.add(photo);
                 continue;
@@ -185,18 +186,40 @@ public class PhotoController {
      * Se utiliza un pagueado para la lista de fotos.
      */
     @GetMapping("/all")
-    public String All(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name="filter", required = false) String sort2, @RequestParam(name="order", required = false) String sort1, Authentication authentication,
+    public String All(@RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "filter", required = false) String sort2,
+            @RequestParam(name = "order", required = false) String sort1, Authentication authentication,
             Model model) {
+
+        model.addAttribute("title", "Todas las fotos");
 
         Pageable pageRequest = PageRequest.of(page, 12);
 
         Page<Photo> fotos = photoService.obtenerTodasLasFotosPagueadas(pageRequest, sort1);
 
-        PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotos);
+        if (sort1 == null && sort2 == null) {
+            PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotos);
+            model.addAttribute("photos", fotos);
+            model.addAttribute("page", pageRender);
+        }
 
-        model.addAttribute("title", "Todas las fotos");
-        model.addAttribute("photos", fotos);
-        model.addAttribute("page", pageRender);
+        if (sort1 == null && sort2 != null) {
+            PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotos);
+            model.addAttribute("photos", fotos);
+            model.addAttribute("page", pageRender);
+        }
+
+        if (sort1 != null && sort2 == null) {
+            PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all?order=".concat(sort1), fotos);
+            model.addAttribute("photos", fotos);
+            model.addAttribute("page", pageRender);
+        }
+
+        if (sort1 != null && sort2 != null) {
+            PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotos);
+            model.addAttribute("photos", fotos);
+            model.addAttribute("page", pageRender);
+        }
 
         return "photos/all";
 
@@ -208,24 +231,47 @@ public class PhotoController {
      * Se utiliza un pagueado para la lista de fotos.
      */
     @GetMapping("/own")
-    public String Own(@RequestParam(name = "page", defaultValue = "0") int page, Authentication authentication,
+    public String Own(@RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "filter", required = false) String sort2,
+            @RequestParam(name = "order", required = false) String sort1, Authentication authentication,
             Model model) {
 
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
 
         Pageable pageRequest = PageRequest.of(page, 12);
-        Page<Photo> fotosUsuario = photoService.obtenerTodasLasFotosDeUnUsuarioPagueadas(usuario.getId(), pageRequest);
-        PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/own", fotosUsuario);
+        Page<Photo> fotosUsuario = photoService.obtenerTodasLasFotosDeUnUsuarioPagueadas(usuario.getId(), pageRequest, sort1);
+
+        if (sort1 == null && sort2 == null) {
+            PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotosUsuario);
+            model.addAttribute("photosUsuario", fotosUsuario);
+            model.addAttribute("page", pageRender);
+        }
+
+        if (sort1 == null && sort2 != null) {
+            PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotosUsuario);
+            model.addAttribute("photosUsuario", fotosUsuario);
+            model.addAttribute("page", pageRender);
+        }
+
+        if (sort1 != null && sort2 == null) {
+            PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all?order=".concat(sort1), fotosUsuario);
+            model.addAttribute("photosUsuario", fotosUsuario);
+            model.addAttribute("page", pageRender);
+        }
+
+        if (sort1 != null && sort2 != null) {
+            PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotosUsuario);
+            model.addAttribute("photosUsuario", fotosUsuario);
+            model.addAttribute("page", pageRender);
+        }
 
         model.addAttribute("title", "Mis fotos");
         model.addAttribute("usuario", usuario);
-        model.addAttribute("photosUsuario", fotosUsuario);
-        model.addAttribute("page", pageRender);
 
         return "photos/own";
     }
 
-    /*
+    /*Usuario
      * Endpoint que carga la vista del formulario para la subida de fotos.
      */
     @GetMapping("/upload")
@@ -314,7 +360,8 @@ public class PhotoController {
                 for (var role : photo.getRoles()) {
                     if (role.getRole().equals("ROLE_PROFILE")
                             && photo.getUser().getUsername().equals(authentication.getName())) {
-                        model.addAttribute("isProfilePhoto", "Actualmente esta foto esta seleccionada como foto de perfil.");
+                        model.addAttribute("isProfilePhoto",
+                                "Actualmente esta foto esta seleccionada como foto de perfil.");
                         break;
                     }
                 }
@@ -396,8 +443,9 @@ public class PhotoController {
         }
     }
 
-    /* 
-     * Endpoint que carga la vista de favoritos, cargando los registros de la tabla favoritos y paginado tambien
+    /*
+     * Endpoint que carga la vista de favoritos, cargando los registros de la tabla
+     * favoritos y paginado tambien
      */
     @GetMapping("/favorites")
     public String Favorites(@RequestParam(name = "page", defaultValue = "0") int page, Authentication authentication,
@@ -415,9 +463,11 @@ public class PhotoController {
         return "photos/favorites";
     }
 
-    /* 
-     * Endpoint que carga la vista para la busqueda de fotos por keywords, usando paginado.
-     * Se carga con la posibilidad de tener 2 parametros en la url, para asi poder cargas o nada, o un mensaje de "no se encontro nada" o las fotos encontradas
+    /*
+     * Endpoint que carga la vista para la busqueda de fotos por keywords, usando
+     * paginado.
+     * Se carga con la posibilidad de tener 2 parametros en la url, para asi poder
+     * cargas o nada, o un mensaje de "no se encontro nada" o las fotos encontradas
      * por ess keyword.
      */
     @GetMapping("/search")
@@ -442,7 +492,8 @@ public class PhotoController {
             } else {
                 Pageable pageRequest = PageRequest.of(page, 12);
                 var fotos = photoService.obtenerFotosPorKeyword(keyword, pageRequest);
-                PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/search?keyword=".concat(keyword), fotos);
+                PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/search?keyword=".concat(keyword),
+                        fotos);
                 var fotosFiltradas = filterRepeatPhotos(fotos);
                 if (fotosFiltradas.isEmpty()) {
                     model.addAttribute("page", pageRender);

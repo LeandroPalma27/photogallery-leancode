@@ -27,7 +27,7 @@ public interface IPhotoService {
 
     public Page<Photo> obtenerTodasLasFotosPagueadas(Pageable pageable, String sort1);
 
-    public Page<Photo> obtenerTodasLasFotosDeUnUsuarioPagueadas(Long user_id, Pageable pageable);
+    public Page<Photo> obtenerTodasLasFotosDeUnUsuarioPagueadas(Long user_id, Pageable pageable, String sort1);
 
     public UpdateOrRegisterDetailsResponse actualizarDetallesFoto(String uploadId, PhotoUpdaterValidator photoValidator);
 
