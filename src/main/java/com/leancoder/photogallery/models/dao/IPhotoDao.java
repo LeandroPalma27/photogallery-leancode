@@ -15,6 +15,18 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IPhotoDao extends PagingAndSortingRepository<Photo, Long>{
+
+    @Query(value = "SELECT * FROM photos ORDER BY fecha_registro DESC", nativeQuery = true)
+    public Page<Photo> findAllOrderByDateDesc(Pageable pageable);
+
+    @Query(value = "SELECT * FROM photos where user_id = :user_id ORDER BY fecha_registro DESC", nativeQuery = true)
+    public Page<Photo> findAllOrderByDateDescAndUser_Id(@Param("user_id") Long user_id, Pageable pageable);
+
+    @Query(value = "SELECT * FROM photos ORDER BY fecha_registro ASC", nativeQuery = true)
+    public Page<Photo> findAllOrderByDateAsc(Pageable pageable);
+
+    @Query(value = "SELECT * FROM photos where user_id = :user_id ORDER BY fecha_registro ASC", nativeQuery = true)
+    public Page<Photo> findAllOrderByDateAscAndUser_Id(@Param("user_id") Long user_id, Pageable pageable);
     
     @Query(value = "SELECT * FROM photos WHERE upload_id = :upload_id", nativeQuery = true)
     public Photo findByUpload_id(@Param("upload_id") String upload_id);

@@ -25,7 +25,7 @@ public interface IPhotoService {
 
     public Iterable<Photo> obtenerTodasLasFotos();
 
-    public Page<Photo> obtenerTodasLasFotosPagueadas(Pageable pageable);
+    public Page<Photo> obtenerTodasLasFotosPagueadas(Pageable pageable, String sort1);
 
     public Page<Photo> obtenerTodasLasFotosDeUnUsuarioPagueadas(Long user_id, Pageable pageable);
 

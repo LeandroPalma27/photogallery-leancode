@@ -185,12 +185,12 @@ public class PhotoController {
      * Se utiliza un pagueado para la lista de fotos.
      */
     @GetMapping("/all")
-    public String All(@RequestParam(name = "page", defaultValue = "0") int page, Authentication authentication,
+    public String All(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name="filter", required = false) String sort2, @RequestParam(name="order", required = false) String sort1, Authentication authentication,
             Model model) {
 
         Pageable pageRequest = PageRequest.of(page, 12);
 
-        Page<Photo> fotos = photoService.obtenerTodasLasFotosPagueadas(pageRequest);
+        Page<Photo> fotos = photoService.obtenerTodasLasFotosPagueadas(pageRequest, sort1);
 
         PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotos);
 
@@ -199,6 +199,7 @@ public class PhotoController {
         model.addAttribute("page", pageRender);
 
         return "photos/all";
+
     }
 
     /*

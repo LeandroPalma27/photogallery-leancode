@@ -163,8 +163,21 @@ public class PhotoService implements IPhotoService {
     // Se utiliza para paguear la lista de todas las fotos.
     @Override
     @Transactional(readOnly = true)
-    public Page<Photo> obtenerTodasLasFotosPagueadas(Pageable pageable) {
+    public Page<Photo> obtenerTodasLasFotosPagueadas(Pageable pageable, String sort1) {
+        if (sort1 == null) {
+            return photoDao.findAll(pageable);
+        }
+        if (sort1.equals("likesCountASC")) {
+            return null;
+        } else if (sort1.equals("likesCountDESC")) {
+            return null;
+        } else if (sort1.equals("dateASC")) {
+            return photoDao.findAllOrderByDateAsc(pageable);
+        } else if (sort1.equals("dateDESC")) {
+            return photoDao.findAllOrderByDateDesc(pageable);
+        }
         return photoDao.findAll(pageable);
+
     }
 
     // Se utiliza para paguear la lista de todas las fotos de un solo usuario.
@@ -470,11 +483,78 @@ public class PhotoService implements IPhotoService {
         return photoDao.findPhotosByKeywordLike(keyword, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public List<FotosConMasLikes> findAllOrderByLikesCount(int sort, Integer limit, Long user_id) {
+        // 1 para ascendente y 0 para descendente, el limite establece la cantidad de
+        // registros resultantes y el user_id solo es necesario
+        // si necesitamos las fotos de un solo usuario. El limite puede ser nulo y asi
+        // indicaremos que no existira un limite, para que nos muestre todos los
+        // registros.
+        if (limit != null) {
+            if (user_id != null) {
+                if (sort == 0) {
+                    var fotosId = jdbc.query(
+                            "SELECT photo_id FROM likes_photo where user_id = " + user_id.toString()
+                                    + " GROUP BY photo_id ORDER BY COUNT(*) DESC LIMIT "
+                                            .concat(limit.toString()),
+                            new BeanPropertyRowMapper<>(FotosConMasLikes.class));
+                    return fotosId;
+                } else {
+                    var fotosId = jdbc.query(
+                            "SELECT photo_id FROM likes_photo where user_id = " + user_id.toString()
+                                    + " GROUP BY photo_id ORDER BY COUNT(*) ASC LIMIT "
+                                            .concat(limit.toString()),
+                            new BeanPropertyRowMapper<>(FotosConMasLikes.class));
+                    return fotosId;
+                }
+            }
+            if (sort == 0) {
+                var fotosId = jdbc.query(
+                        "SELECT photo_id FROM likes_photo GROUP BY photo_id ORDER BY COUNT(*) DESC LIMIT "
+                                .concat(limit.toString()),
+                        new BeanPropertyRowMapper<>(FotosConMasLikes.class));
+                return fotosId;
+            } else {
+                var fotosId = jdbc.query(
+                        "SELECT photo_id FROM likes_photo GROUP BY photo_id ORDER BY COUNT(*) ASC LIMIT "
+                                .concat(limit.toString()),
+                        new BeanPropertyRowMapper<>(FotosConMasLikes.class));
+                return fotosId;
+            }
+        } else {
+            if (user_id != null) {
+                if (sort == 0) {
+                    var fotosId = jdbc.query(
+                            "SELECT photo_id FROM likes_photo where user_id = " + user_id.toString()
+                                    + " GROUP BY photo_id ORDER BY COUNT(*) DESC",
+                            new BeanPropertyRowMapper<>(FotosConMasLikes.class));
+                    return fotosId;
+                } else {
+                    var fotosId = jdbc.query(
+                            "SELECT photo_id FROM likes_photo where user_id = " + user_id.toString()
+                                    + " GROUP BY photo_id ORDER BY COUNT(*) ASC",
+                            new BeanPropertyRowMapper<>(FotosConMasLikes.class));
+                    return fotosId;
+                }
+            }
+            if (sort == 0) {
+                var fotosId = jdbc.query(
+                        "SELECT photo_id FROM likes_photo GROUP BY photo_id ORDER BY COUNT(*) DESC",
+                        new BeanPropertyRowMapper<>(FotosConMasLikes.class));
+                return fotosId;
+            } else {
+                var fotosId = jdbc.query(
+                        "SELECT photo_id FROM likes_photo GROUP BY photo_id ORDER BY COUNT(*) ASC",
+                        new BeanPropertyRowMapper<>(FotosConMasLikes.class));
+                return fotosId;
+            }
+        }
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<Photo> fotosConMasLikes() {
-        var fotosId = jdbc.query("SELECT photo_id FROM likes_photo GROUP BY photo_id ORDER BY COUNT(*) DESC LIMIT 27;",
-                new BeanPropertyRowMapper<>(FotosConMasLikes.class));
+        var fotosId = findAllOrderByLikesCount(0, 27, null);
         List<Photo> photos = new ArrayList<Photo>();
         fotosId.forEach(id -> {
             var photo = photoDao.findById(id.getPhoto_id()).get();
