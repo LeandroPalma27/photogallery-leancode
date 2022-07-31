@@ -379,6 +379,7 @@ main {
 .main_content {
     padding: 20px 0px;
     padding-bottom: 0;
+    padding-top: 15px;
     width: 100%;
     height: auto;
     display: flex;
@@ -1110,6 +1111,17 @@ main {
 
 .alert>button>i {
     font-size: 12px;
+}
+
+.container-order {
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.059);
+    padding-bottom: 15px;
+}
+
+.container-order > select {
+    width: 200px;
 }
 
 

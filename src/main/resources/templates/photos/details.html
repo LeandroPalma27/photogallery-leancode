@@ -13,11 +13,11 @@
                     <div class="photo_img" id="photoBox">
                         <span class="img-url" hidden th:text="*{urlPhoto}"></span>
                         <span class="img-title" hidden th:text="*{title}"></span>
-                        <div class="update_or_delete-options-2">
+                        <img>
+                        <div th:if="${usuario.username == photoDetails.user.username}" class="update_or_delete-options-2">
                             <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="" type="button"><span><i
                                         class="fa-solid fa-ellipsis"></i></span></button>
                         </div>
-                        <img>
                         <div class="liked-heart">
                             <span><i class="fa-solid fa-heart"></i></span>
                         </div>
