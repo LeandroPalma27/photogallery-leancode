@@ -16,6 +16,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.StringTemplateResolver;
 
 @Configuration
+// Clase de configuracion para el envio de emails por ciertas funcionalidades de la aplicacion
 public class SpringMailConfig {
 
     public static final String EMAIL_TEMPLATE_ENCODING = "UTF-8";

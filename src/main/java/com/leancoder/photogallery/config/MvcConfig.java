@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.leancoder.photogallery.interceptors.EnabledUserInterceptor;
 
 @Configuration
+// Clase de configuracion MVC para la implementacion de interceptores HTTP
 public class MvcConfig implements WebMvcConfigurer{
 
     @Autowired

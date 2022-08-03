@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -28,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class CustomizeErrorController implements ErrorController {
 
+    // Instancia para la el uso del service de la entidad usuario
     @Autowired
     private IUsuarioService usuarioService;
 
@@ -35,14 +35,18 @@ public class CustomizeErrorController implements ErrorController {
         <=== Objecto cargado con informacion(url de foto de perfil) globalmente para todas las vistas en este controlador ===>
      */
     @ModelAttribute("profilePictureUser")
+    // Se usa la interfaz Authentication para verificar si existe un usuario logueado (con un simple authentication != null)
     public String cargarFotoDePerfil(Authentication authentication) {
 
         if (authentication != null) {
             var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
 
+            // Del usuario encontrado, obtenemos todas sus fotos (un List de Photo intancias)
             var fotosUsuario = usuario.getPhotos();
             for (var foto : fotosUsuario) {
+                // Recorremos cada foto y cuando las fotos tengan mas de 1 rol (con lo cual filtramos las fotos que no son de perfil, ya que si esta como foto de perfil deberia tener minimo 2 roles)
                 if (foto.getRoles().size() > 1) {
+                    // se obtendran los roles, para asi recorrerlos y verificar que tengan ROLE_PROFILE, si lo tienen se detiene el bucle ya que solo puede existir una foto de perfil por cada usuario.
                     for (var role : foto.getRoles()) {
                         if (role.getRole().equals("ROLE_PROFILE")) {
                             return foto.getUrlPhoto();
@@ -50,33 +54,9 @@ public class CustomizeErrorController implements ErrorController {
                     }
                 }
             }
+            // Esta funcion se repite en casi todos los controladores ya que es un dato de modelo requerido en cada ruta de la aplicacion.
         }
-        return null;
-
-    }
-
-    /*
-        <=== Objecto cargado con informacion(url de foto de perfil) globalmente para todas las vistas en este controlador ===>
-            * Se hace con el fin de poder tener la url para la carga de la foto de perfil en el layout general para todas
-              las vistas. 
-     */
-    @ModelAttribute("profilePictureUploadId")
-    public String cargarIdDeFotoPerfil(Authentication authentication) {
-
-        if (authentication != null) {
-            var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
-
-            var fotosUsuario = usuario.getPhotos();
-            for (var foto : fotosUsuario) {
-                if (foto.getRoles().size() > 1) {
-                    for (var role : foto.getRoles()) {
-                        if (role.getRole().equals("ROLE_PROFILE")) {
-                            return foto.getUploadId();
-                        }
-                    }
-                }
-            }
-        }
+        // Si no hay nadie logueado, se retorna null.
         return null;
 
     }

@@ -19,23 +19,18 @@ import com.leancoder.photogallery.models.services.photo.interfaces.IPhotoService
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /*
@@ -55,6 +50,7 @@ public class ProfileController {
     @Autowired
     IUsuarioService usuarioService;
 
+    // Esta clase inyectada me permite poder cerrar la sesion de un usuario, pero de manera interna y no por parte del cliente
     @Autowired
     CloseManualSession closeManualSession;
 
@@ -226,12 +222,14 @@ public class ProfileController {
             return "profile";
         }
 
+        // Si existe un error en el proceso de actualizar, habra una redireccion
         var res = usuarioService.actualizarUsername(usuario, detail.getContent().trim());
         if (res.getMessage() != null) {
             flash.addFlashAttribute("errorMessage", res.getMessage());
             return "redirect:/account";
         }
 
+        // Es necesario actualizar el contexto de sesion, ya que el username ha cambiado
         // Para actualizar la informacion del usuario logueado que esta en la sesion
         // activa:
         UsernamePasswordAuthenticationToken authenticationUpdated = new UsernamePasswordAuthenticationToken(
@@ -246,7 +244,7 @@ public class ProfileController {
     }
 
     /*
-        Endpoint que procesa el formulario que actualiza la contraseña.
+        Endpoint que procesa el formulario que actualiza la contraseña (pero no en caso de que se haya olvidado)
      */
     @PostMapping("/update-pass1")
     public String ChangePasswordFromLoggedAccount(
@@ -256,6 +254,7 @@ public class ProfileController {
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
         model.addAttribute("title", "Perfil");
 
+        // Por si el primer campo del formulario falla, ya que este no lleva ninguna anotacion de validacion
         if (detailPassword.getOldpass() == "") {
             flash.addFlashAttribute("errorMessage", "No deje nigun campo vacío.");
             return "redirect:/account";
@@ -267,6 +266,7 @@ public class ProfileController {
             return "redirect:/account";
         }
 
+        // Si no hay nigun error, se cambia la contraseña, se cargan flash y redirecciones respectivas, y se actualiza el contexto de sesion
         var res = usuarioService.actualizarConstraseña(detailPassword, usuario);
 
         if (res.getName() != null) {
@@ -298,6 +298,7 @@ public class ProfileController {
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
         usuarioService.eliminarUsuario(usuario);
 
+        // Si se elimina al usuario, se debe cerrar la sesion de manera interna y automatica
         closeManualSession.logout(request, response, authentication);
 
         return "redirect:/login";
@@ -330,6 +331,7 @@ public class ProfileController {
 
         if (result.hasErrors()) {
 
+            // Necesario para cargar error por falta de archivo
             if (validator.getFile().isEmpty()) {
                 ObjectError fileError = new ObjectError("fileError", "Select some picture.");
                 var errorsUpdated = new ArrayList<ObjectError>();
@@ -347,6 +349,7 @@ public class ProfileController {
             return "profile";
         }
 
+        // Si solo falta archivo
         if (validator.getFile().isEmpty()) {
             ObjectError fileError = new ObjectError("fileError", "Select some picture.");
             var errorsUpdated = new ArrayList<ObjectError>();

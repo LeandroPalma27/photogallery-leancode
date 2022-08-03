@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
 @Component("enabledUserInterceptor")
+// INTERCEPTOR QUE VERIFICA QUE UN USUARIO ESTE VERIFICADO (para asegurarse que de no pueda acceder a ciertas funciones dentro de la aplicacion)
 public class EnabledUserInterceptor implements HandlerInterceptor {
 
     @Autowired

@@ -9,10 +9,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.leancoder.photogallery.custom.annotations.enabled_user.UserIsEnabled;
 import com.leancoder.photogallery.models.dao.IFavoritePhotoDao;
 import com.leancoder.photogallery.models.dao.ILikesPhotoDao;
-import com.leancoder.photogallery.models.dao.IUsuarioDao;
 import com.leancoder.photogallery.models.domains.paginator.PageRenderBean;
 import com.leancoder.photogallery.models.domains.validators.PhotoUpdaterValidator;
 import com.leancoder.photogallery.models.domains.validators.PhotoUploaderValidator;
@@ -23,12 +21,9 @@ import com.leancoder.photogallery.models.services.photo.interfaces.IPhotoService
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,8 +37,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /*
@@ -68,6 +61,7 @@ public class PhotoController {
     @Autowired
     private IPhotoService photoService;
 
+    // Inyecte acceso al dao de las entidades likePhoto y favoritePhoto para ahorrar lineas de codigo en implentaciones innecesarias
     @Autowired
     private ILikesPhotoDao likesPhotoDao;
 
@@ -153,34 +147,6 @@ public class PhotoController {
     }
 
     /*
-     * <=== Objecto cargado con informacion(url de foto de perfil) globalmente para
-     * todas las vistas en este controlador ===>
-     * Se hace con el fin de poder tener la url para la carga de la foto de perfil
-     * en el layout general para todas
-     * las vistas.
-     */
-    @ModelAttribute("profilePictureUploadId")
-    public String cargarIdDeFotoPerfil(Authentication authentication) {
-
-        if (authentication != null) {
-            var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
-
-            var fotosUsuario = usuario.getPhotos();
-            for (var foto : fotosUsuario) {
-                if (foto.getRoles().size() > 1) {
-                    for (var role : foto.getRoles()) {
-                        if (role.getRole().equals("ROLE_PROFILE")) {
-                            return foto.getUploadId();
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-
-    }
-
-    /*
      * Endpoint que carga la vista para el listado de todas las fotos registradas en
      * nuestra aplicacion.
      * Se utiliza un pagueado para la lista de fotos.
@@ -191,30 +157,37 @@ public class PhotoController {
             @RequestParam(name = "order", required = false) String sort1, Authentication authentication,
             Model model) {
 
+        // Este endpoint puede recibir 3 tipos de parametros en la url, aunque los 3 son no requeridos puesto que el de paginado tiene un valor por defecto.
         model.addAttribute("title", "Todas las fotos");
 
         Pageable pageRequest = PageRequest.of(page, 12);
 
+        // Las fotos pueden ser pagueadas en funcion un tipo de orden, por defecto se paguean desde las mas antiguas a las mas recientes
         Page<Photo> fotos = photoService.obtenerTodasLasFotosPagueadas(pageRequest, sort1);
 
+        // En funcion cuales y cuantos sort esten llenos, se cargara una url personalizada para el pageRender
+        // Ningun sort
         if (sort1 == null && sort2 == null) {
             PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotos);
             model.addAttribute("photos", fotos);
             model.addAttribute("page", pageRender);
         }
 
+        // Solo el sort2
         if (sort1 == null && sort2 != null) {
             PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotos);
             model.addAttribute("photos", fotos);
             model.addAttribute("page", pageRender);
         }
 
+        // Solo sort1
         if (sort1 != null && sort2 == null) {
             PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all?order=".concat(sort1), fotos);
             model.addAttribute("photos", fotos);
             model.addAttribute("page", pageRender);
         }
 
+        // Los dos sort
         if (sort1 != null && sort2 != null) {
             PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/all", fotos);
             model.addAttribute("photos", fotos);
@@ -238,6 +211,7 @@ public class PhotoController {
 
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
 
+        // Aca se repite el mismo proceso, con la diferencia de que solo se cargaran las fotos de un usuario
         Pageable pageRequest = PageRequest.of(page, 12);
         Page<Photo> fotosUsuario = photoService.obtenerTodasLasFotosDeUnUsuarioPagueadas(usuario.getId(), pageRequest, sort1);
 
@@ -289,13 +263,14 @@ public class PhotoController {
     // No olvidar que @ModelAttribute tambien puede cargar un objeto que extrae del
     // modelo actual.
     public String uploadPhotoProccess(@Valid @ModelAttribute("photoValidator") PhotoUploaderValidator validator,
-            BindingResult result, Authentication authentication, RedirectAttributes flash, SessionStatus status,
+            BindingResult result, Authentication authentication, RedirectAttributes flash,
             Model model) {
 
         model.addAttribute("title", "Publicar foto");
 
         if (result.hasErrors()) {
 
+            // Si el objeto multipartFile del usuario no se llena, cargo un error ya que no hay manera de validar archivos en formularios a traves de anotaciones
             if (validator.getFile().isEmpty()) {
                 ObjectError fileError = new ObjectError("fileError", "Selecciona una archivo.");
                 var errorsUpdated = new ArrayList<ObjectError>();
@@ -307,10 +282,12 @@ public class PhotoController {
                 return "photos/upload";
             }
 
+            // Caso contrario solo cargan los errores previamente generados
             model.addAttribute("formErrors", result.getAllErrors());
             return "photos/upload";
         }
 
+        // Si solo el archivo esta vacio, necesitamos cargar el error de manera manual
         if (validator.getFile().isEmpty()) {
             ObjectError fileError = new ObjectError("fileError", "Selecciona un archivo.");
             var errorsUpdated = new ArrayList<ObjectError>();
@@ -319,9 +296,11 @@ public class PhotoController {
             return "photos/upload";
         }
 
+        // Si no hay nigun error, se procesa la foto a traves del service
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
         var res = photoService.registrarFoto(validator, usuario);
 
+        // Y en caso de error en el proceso, se cargara el respectivo mensaje y se hara una redireccion a la vista del formulario
         if (res.getName().equals("unknown_error")) {
             flash.addFlashAttribute("errorMessage", res.getMessage());
             return "redirect:/photos/upload";
@@ -337,17 +316,22 @@ public class PhotoController {
      * aplicacion.
      */
     @GetMapping("/details/{public_id}")
+    // La foto se obtiene a traves del public_id, cargado en la ruta del endpoint
     public String Details(@PathVariable("public_id") String public_id, Authentication authentication, Model model) {
 
         model.addAttribute("title", "Detalles");
 
+        // Buscamos la foto
         var photo = photoService.buscarFoto(public_id);
 
+        // Si no se encuentra la foto, cargamos una vista de error 404
         if (photo == null) {
             return "redirect:/errors/not-found";
+        // Caso contrario, cargaremos los datos necesarios al modelo
         } else {
             PhotoUpdaterValidator updater = new PhotoUpdaterValidator();
             var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
+            // Se carga informacion sobre la foto en cuestion, para saber tiene un like por parte del usuario y tambien si esta guardada en favoritos
             var isLiked = IsLiked(usuario.getId(), photo.getId());
             var isSaved = IsSaved(usuario.getId(), photo.getId());
             updater.setTitle(photo.getTitle());
@@ -356,6 +340,7 @@ public class PhotoController {
             model.addAttribute("user", usuario);
             model.addAttribute("isLiked", isLiked);
             model.addAttribute("isSaved", isSaved);
+            // Analizamos si la foto cargada tiene rol de foto de perifl, para asi cargar un dato opcional al modelo
             if (photo.getRoles().size() > 1) {
                 for (var role : photo.getRoles()) {
                     if (role.getRole().equals("ROLE_PROFILE")
@@ -366,6 +351,7 @@ public class PhotoController {
                     }
                 }
             }
+            // Y el objeto requerido para el formulario
             model.addAttribute("photoUpdater", updater);
         }
 
@@ -376,6 +362,7 @@ public class PhotoController {
      * Endpoint que actualiza los detalles de una foto que este subida en nuestra
      * aplicacion.
      */
+    // Esta ruta procesara el formulario a traves de un post request
     @PostMapping("/details/update")
     public String UpdatePhoto(@ModelAttribute("photoDetails") Photo photo,
             @Valid @ModelAttribute("photoUpdater") PhotoUpdaterValidator updater,
@@ -385,6 +372,7 @@ public class PhotoController {
         model.addAttribute("title", "Detalles");
 
         if (result.hasErrors()) {
+            // En caso de error, volvemos a cargar informacion a la vista ya que no se redirecciona, solo se carga la misma peticion post pero con la vista incluida
             var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
             var isLiked = IsLiked(usuario.getId(), photo.getId());
             model.addAttribute("photoDetails", photo);
@@ -394,12 +382,14 @@ public class PhotoController {
             return "photos/details";
         }
 
+        // Caso contrario, se procesa y se carga el mensaje mas la redireccion, respectivamente
         var res = photoService.actualizarDetallesFoto(photo.getUploadId(), updater);
         if (res.getName().equals("successful_update")) {
             flash.addFlashAttribute("successMessage", res.getMessage());
         } else {
             flash.addFlashAttribute("errorMessage", res.getMessage());
         }
+        // ESTE FORMULARIO TRABAJACON OBJETOS GUARDADOS EN SESION, SIENDO EL OBJETO PHOTO Y EL DEL FORMULARIO DE ACTUALIZACION DE FOTO, al completarse con exito es necesario resetear la sesion.
         status.setComplete();
         return "redirect:/photos/details/".concat(photo.getUploadId());
     }
@@ -408,12 +398,15 @@ public class PhotoController {
      * Endpoint que elimina una foto que este subida en nuestra aplicacion.
      */
     @GetMapping("/details/delete/{public_id}")
+    // Requiere el public_id de la foto
     public String DeletePhoto(@PathVariable("public_id") String public_id, RedirectAttributes flash, Model model)
             throws IOException {
 
+        // Se busca la foto para poder eliminarla desde el dao, a traves del service de foto
         var photoFound = photoService.buscarFoto(public_id);
         var res = photoService.eliminarFoto(photoFound);
 
+        // Se procesa y se carga el mensaje mas la redireccion respectiva
         if (res.getName().equals("successful_delete")) {
             flash.addFlashAttribute("successMessage", res.getMessage());
             return "redirect:/photos/own";
@@ -428,12 +421,16 @@ public class PhotoController {
      * Endpoint que cambia el estado de una foto con rol NORMAL a un rol PROFILE.
      */
     @GetMapping("/details/change-role/{public_id}")
+    // Sirve para seleccionar una foto con rol normal, como una foto de perfil
     public String ChangeNormalPhotoToProfilePhoto(@PathVariable("public_id") String public_id,
             Authentication authentication, RedirectAttributes flash, Model model) {
 
+        // Necesitamos el usuario y la foto para poder crear un registro de ROLE_PROFILE para esa foto (no debe tener el rol previo), borrando el role profile existente por parte del usuario en caso de que exista
+        // De todas las fotos de un usuario, solo una tendra rol de perfil
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
         var res = photoService.establecerComoFotoDePerfil(public_id, usuario);
 
+        // Cargamos flash y redireccionamos respectivamente
         if (res.getName().equals("successful_set")) {
             flash.addFlashAttribute("successMessage", res.getMessage());
             return "redirect:/account";
@@ -451,8 +448,10 @@ public class PhotoController {
     public String Favorites(@RequestParam(name = "page", defaultValue = "0") int page, Authentication authentication,
             Model model) {
 
+        // Se requiere el usuario para obtener sus fotos guardadas en favoritos
         var usuario = usuarioService.obtenerUsuarioPorUsername(authentication.getName());
 
+        // Y tambien conlleva un pagueo
         Pageable pageRequest = PageRequest.of(page, 12);
         Page<FavoritePhoto> fotos = photoService.obtenerTodosLosFavoritosPagueados(usuario.getId(), pageRequest);
         PageRenderBean<FavoritePhoto> pageRender = new PageRenderBean<FavoritePhoto>("/photos/favorites", fotos);
@@ -471,17 +470,20 @@ public class PhotoController {
      * por ess keyword.
      */
     @GetMapping("/search")
+    // En la url se puede incluir un parametro que se tomara como keyword para la busqueda de algun registro, pero no es obligatorio llevarlo
     public String SearchPhotoByTitle(@RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "keyword", required = false) String keyword, Authentication authentication,
             Model model) {
         model.addAttribute("title", "Buscar");
         if (keyword == null) {
             Pageable pageRequest = PageRequest.of(page, 12);
-            var fotos = photoService.obtenerFotosPorKeyword(keyword, pageRequest);
+            var fotos = photoService.obtenerFotosPorKeyword(null, pageRequest);
             PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/search", fotos);
+            // Lo que se carga es null
             model.addAttribute("photos", fotos);
             model.addAttribute("page", pageRender);
         } else {
+            // De esta manera filtro que se hagan busquedas con cadenas vacias o con cadenas de solo una letra
             if (keyword.trim().equals("") || keyword.trim().length() == 1) {
                 Pageable pageRequest = PageRequest.of(page, 12);
                 var fotos = photoService.obtenerFotosPorKeyword(null, pageRequest);
@@ -490,15 +492,19 @@ public class PhotoController {
                 model.addAttribute("photos", fotos);
                 model.addAttribute("page", pageRender);
             } else {
+                // Caso contrario, se hara la busqueda
                 Pageable pageRequest = PageRequest.of(page, 12);
                 var fotos = photoService.obtenerFotosPorKeyword(keyword, pageRequest);
                 PageRenderBean<Photo> pageRender = new PageRenderBean<Photo>("/photos/search?keyword=".concat(keyword),
                         fotos);
+                // Filtramos las fotos repetidas (porque puede que existan registros repetidos en la lista de fotos) 
                 var fotosFiltradas = filterRepeatPhotos(fotos);
+                // En caso de no haberse encontrado ninguna foto con la respectiva keyword:
                 if (fotosFiltradas.isEmpty()) {
                     model.addAttribute("page", pageRender);
                     model.addAttribute("photos", fotosFiltradas);
                     model.addAttribute("emptyPhotos", "No se encontro ningun resultado.");
+                // Caso contrario, se cargan las fotos mas el pageRender
                 } else {
                     model.addAttribute("photos", fotosFiltradas);
                     model.addAttribute("page", pageRender);

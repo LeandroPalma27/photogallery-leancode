@@ -5,26 +5,26 @@ import java.security.Principal;
 import javax.validation.Valid;
 
 import com.leancoder.photogallery.models.domains.validators.UserRegisterDomainValidator;
-import com.leancoder.photogallery.models.entities.user.User;
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+// Controlador para el registro de usuarios
 public class RegisterController {
     
     @Autowired
     IUsuarioService usuarioService;
     
     @GetMapping("/signup")
+    // Carga de la vista del formulario de registro de usuarios
     public String register(UserRegisterDomainValidator usuario, Principal principal, RedirectAttributes flash, Model model) {
         // Principal sirve para verificar si ya hay una sesion existente:
         if (principal != null) {
@@ -44,6 +44,7 @@ public class RegisterController {
 
         if (result.hasErrors()) {
             var errores = result.getFieldErrors();
+            // Revisamos los errores para analizar si el error de contraseña es el de una contraseña no valida
             for (var error: errores) {
                 if (error.getField().equals("password")) {
                     // El unico mensaje que supera los 30 caracteres el de error por contraseña no valida
@@ -72,7 +73,7 @@ public class RegisterController {
             return "register";
         }
 
-        flash.addFlashAttribute("post_register", "An email was sent to your email address, please verify your account to log in.");
+        flash.addFlashAttribute("post_register", "Se envió un correo electrónico a su dirección de correo electrónico, verifique su cuenta para iniciar sesión.");
         return "redirect:/login";
     }
 

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
 @Controller
+
+// ESTE CONTROLADOR SE IMNPLEMENTO PARA PROBAR VISTAS SIN NUNGUN TIPO DE FUNCIONALIDAD TRANSACCIONAL (solo diseño)
 @RequestMapping("/test")
 public class TemplatesTestController {
 

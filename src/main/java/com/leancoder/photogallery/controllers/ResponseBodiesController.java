@@ -66,38 +66,4 @@ public class ResponseBodiesController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
-    /*
-    // TODO: Investigar sobre AOP para solucionar esto:
-    @GetMapping("/photos/lista/random/{username}/{password}")
-    public ResponseEntity<Object> ListaRandom2(@PathVariable("username") String username,
-            @PathVariable("password") String password, HttpServletRequest req) {
-
-        var auth = AutenticarParaRealizarOperaciones(username, password, req);
-
-        if (auth.isAuthenticated()) {
-            List<String> listaRandom = Arrays.asList("Hola", "Hola2", "Hola3");
-            return ResponseEntity.status(HttpStatus.OK).body(listaRandom);
-        }
-
-        Map<String, Object> response = new HashMap<String, Object>();
-        response.put("user", username);
-        response.put("status", 403);
-        response.put("description", "403 error - Forbidden request");
-        response.put("message", "Acceso denegado. Necesita loguearse para acceder.");
-        response.put("path", "/photos/lista/random");
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-    }
-
-    public Authentication AutenticarParaRealizarOperaciones(String username, String password, HttpServletRequest req) {
-        UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication auth = authenticationManager.authenticate(authReq);
-
-        SecurityContext sc = SecurityContextHolder.createEmptyContext();
-        sc.setAuthentication(auth);
-
-        HttpSession session = req.getSession(true);
-        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
-        return auth;
-    } */
-
 }
