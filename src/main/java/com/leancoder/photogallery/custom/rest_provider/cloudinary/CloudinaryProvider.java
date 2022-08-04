@@ -30,6 +30,7 @@ public class CloudinaryProvider implements ICloudinaryProvider {
     @Override
     public Map<String, Object> upload(MultipartFile file) {
 
+        // Map para recibir el body de la peticion al servidor y la subida de archivo:
         Map<String, Object> res = new HashMap<String, Object>();
 
         if (CloudinaryProvider.fileExtension(file.getOriginalFilename()).equals("png") || CloudinaryProvider.fileExtension(file.getOriginalFilename()).equals("jpeg") || CloudinaryProvider.fileExtension(file.getOriginalFilename()).equals("jpg")) {
@@ -42,11 +43,13 @@ public class CloudinaryProvider implements ICloudinaryProvider {
                 res.put("isUpload", true);
                 return res;
             } catch (Exception e) {
+                // Si falla, llenamos el map de la siguiente manera:
                 res.put("message", "Unknown error");
                 res.put("isUpload", false);
                 return res; 
             }
         } else {
+            // Si el archivo es invalido:
             res.put("message", "Invalid file");
             res.put("isUpload", false);
             return res;
@@ -60,6 +63,7 @@ public class CloudinaryProvider implements ICloudinaryProvider {
 
         Map<String, Object> res = new HashMap<String, Object>();
         var deleteResponse = cloudinaryProvider.uploader().destroy(public_id, ObjectUtils.asMap("resource_type","image"));
+        // Cargamos el resultado en el map, para evaluar si se elimino con exito:
         var isDelete = deleteResponse.get("result").equals("ok") ? true:false;
         res.put("isDelete", isDelete);
         

@@ -9,8 +9,11 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+// Anotacion para la validacion de una contraseña con un minimo de 8 y maximo de 30 caracteres, una letra mayuscula, un numero y un caracter especial.
 @Documented
+// Logica de anotacion:
 @Constraint(validatedBy = PasswordConstraintValidator.class)
+// A que apunta (en este caso es a atributos de una clase)
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidPassword {

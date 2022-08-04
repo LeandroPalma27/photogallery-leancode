@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
-import javax.mail.SendFailedException;
 
 import com.leancoder.photogallery.custom.mail_sender.IEmailService;
 import com.leancoder.photogallery.models.dao.IFavoritePhotoDao;

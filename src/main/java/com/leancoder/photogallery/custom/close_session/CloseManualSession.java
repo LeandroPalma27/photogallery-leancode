@@ -8,6 +8,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Component;
 
 @Component
+// Clase para el cierre de sesion de manera interna y automatica
 public class CloseManualSession extends SecurityContextLogoutHandler{
 
     @Override
