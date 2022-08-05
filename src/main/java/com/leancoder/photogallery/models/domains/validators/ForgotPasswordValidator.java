@@ -1,7 +1,6 @@
 package com.leancoder.photogallery.models.domains.validators;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import com.leancoder.photogallery.custom.annotations.password.ValidPassword;
 

@@ -6,12 +6,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+// Clase para poder obtener la fecha actual en tipo de dato Date.
 public class CurrentDateBean{
 
     private DateTimeFormatter formatter;
 
     private String timePattern;
 
+    // El constructor recibe como parametro el formato de la fecha ("dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy", etc)
     public CurrentDateBean(String formatter) {
         this.formatter = DateTimeFormatter.ofPattern(formatter);
         this.timePattern = formatter;

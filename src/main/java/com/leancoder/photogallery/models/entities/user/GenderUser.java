@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+// Entidad que almacena los generos diponibles para los usuarios:
 @Entity
 @Table(name = "genders_user")
 public class GenderUser implements Serializable {

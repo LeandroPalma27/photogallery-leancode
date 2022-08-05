@@ -1,7 +1,6 @@
 package com.leancoder.photogallery.models.domains.validators;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 public class OneDetaiOflUserValidator {
 

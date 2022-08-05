@@ -1,6 +1,5 @@
 package com.leancoder.photogallery.config;
 
-import java.util.Collections;
 import java.util.Properties;
 
 import org.springframework.context.annotation.Bean;

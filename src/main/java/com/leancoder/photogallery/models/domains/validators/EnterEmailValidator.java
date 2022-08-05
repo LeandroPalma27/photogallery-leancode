@@ -2,8 +2,8 @@ package com.leancoder.photogallery.models.domains.validators;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
+// Clase para validar formulario de cambio de email
 public class EnterEmailValidator {
     
     @Email

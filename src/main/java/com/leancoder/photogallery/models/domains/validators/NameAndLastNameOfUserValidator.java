@@ -1,9 +1,7 @@
 package com.leancoder.photogallery.models.domains.validators;
 
-import java.util.List;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 public class NameAndLastNameOfUserValidator {
 

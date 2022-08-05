@@ -17,7 +17,6 @@ import javax.persistence.Table;
 
 import com.leancoder.photogallery.models.entities.user.User;
 
-import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /* 

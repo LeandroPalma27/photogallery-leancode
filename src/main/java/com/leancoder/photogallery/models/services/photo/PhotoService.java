@@ -60,11 +60,13 @@ public class PhotoService implements IPhotoService {
     @Autowired
     JdbcTemplate jdbc;
 
+    // Metodo para subir una foto al servidor (si procede con exito, se retorna un objeto Photo con algunos datos):
     private Photo subirFotoAlServidor(PhotoUploaderValidator validator) {
 
         CurrentDateBean currentDate = new CurrentDateBean("yyyy-MM-dd HH:mm:ss");
         var photoUploaded = cloudinaryService.upload(validator.getFile());
 
+        // Si procede:
         if ((boolean) photoUploaded.get("isUpload")) {
 
             Photo photo = new Photo();
@@ -78,36 +80,44 @@ public class PhotoService implements IPhotoService {
             return photo;
 
         }
+        // Caso contrario
         return null;
     }
 
+    // metodo que registra una foto en la base de datos (PRIMERO LA FOTO DEBERIA ESTAR SUBIDA EN CLOUDINARY)
     @Override
     @Transactional
     public UpdateOrRegisterDetailsResponse registrarFoto(PhotoUploaderValidator photoValidator, User usuario) {
 
         UpdateOrRegisterDetailsResponse response = new UpdateOrRegisterDetailsResponse();
+        // Subimos a cloudinary y esperamos a que se retorne el objeto Photo para completar algunos campos:
         var photo = subirFotoAlServidor(photoValidator);
 
+        // Se llenan los campos faltantes:
         if (photo != null) {
             photo.setUser(usuario);
             photo.setRoles(Arrays.asList(new RolePhoto("ROLE_NORMAL", photo)));
             photoDao.save(photo);
             response.setName("successful");
             response.setMessage(photo.getUploadId());
+            // Se retorna el objeto response para redireccionar correspondientemente:
             return response;
         }
+        // Si hubo un fallo y la foto no se subio a cloudinary:
         response.setName("unknown_error");
         response.setMessage("Ocurrio un error inesperado, intentelo de nuevo.");
         return response;
 
     }
 
+    // Busca foto por el cloudinary id:
     @Override
     @Transactional(readOnly = true)
     public Photo buscarFoto(String public_id) {
         return photoDao.findByUpload_id(public_id);
     }
 
+    // Obtiene todas las fotos:
     @Override
     @Transactional(readOnly = true)
     public Iterable<Photo> obtenerTodasLasFotos() {
@@ -121,6 +131,7 @@ public class PhotoService implements IPhotoService {
             PhotoUpdaterValidator photoValidator) {
         UpdateOrRegisterDetailsResponse response = new UpdateOrRegisterDetailsResponse();
 
+        // Busca la foto por el cloudinary id
         var photoFound = buscarFoto(uploadId);
 
         if (photoFound != null) {
@@ -129,11 +140,13 @@ public class PhotoService implements IPhotoService {
 
             photoDao.save(photoFound);
 
+            // Rellena el response correspondiente, si se procesa con exito
             response.setName("successful_update");
             response.setMessage("Se actualizo los detalles.");
             return response;
         }
 
+        // o si se procesa de manera fallida:
         response.setName("error_update");
         response.setMessage("Ocurrio un error, intentelo mas tarde.");
         return response;
@@ -145,28 +158,35 @@ public class PhotoService implements IPhotoService {
 
         UpdateOrRegisterDetailsResponse response = new UpdateOrRegisterDetailsResponse();
 
+        // Eliminamos la foto con el cloudinary id, a traves del service:
         var res = cloudinaryService.delete(photo.getUploadId());
 
+        // Y segun el response:
         if ((boolean) res.get("isDelete")) {
             likesPhotoDao.deleteByPhoto_Id(photo.getId());
             favoritePhotoDao.deleteByPhoto_Id(photo.getId());
             photoDao.deleteById2(photo.getId());
+            // Si se procesa con exito:
             response.setName("successful_delete");
             response.setMessage("La foto se elimino con exito.");
             return response;
         }
+
+        // Si se procesa sin exito:
         response.setName("error_delete");
         response.setMessage("Ocurrio algun error al borrar la foto, intentelo mas tarde.");
         return response;
     }
 
-    // Se utiliza para paguear la lista de todas las fotos.
+    // Se utiliza para paguear la lista de todas las fotos (pero con un sort, en este caso un sort que ordena de manera ascendente o descendente).
     @Override
     @Transactional(readOnly = true)
     public Page<Photo> obtenerTodasLasFotosPagueadas(Pageable pageable, String sort1) {
         if (sort1 == null) {
+            // Si no se incluye sort:
             return photoDao.findAll(pageable);
         }
+        // Si se incluye:
         if (sort1.equals("likesCountASC")) {
             return photoDao.findAllOrderByLikesCountAsc(pageable);
         } else if (sort1.equals("likesCountDESC")) {
@@ -176,6 +196,7 @@ public class PhotoService implements IPhotoService {
         } else if (sort1.equals("dateDESC")) {
             return photoDao.findAllOrderByDateDesc(pageable);
         }
+        // Si el sort es una cadena vacia o no coincide con los ordenamientos disponibles (likesCountASC, likesCountDESC, dateASC, dateDESC):
         return photoDao.findAll(pageable);
 
     }
@@ -211,6 +232,7 @@ public class PhotoService implements IPhotoService {
         if (photo != null) {
 
             var fotosUsuario = photoDao.findByUser_id(usuario.getId());
+            // Verificamos si el usuario tiene una foto de perfil:
             principal: for (var foto : fotosUsuario) {
                 if (foto.getRoles().size() > 1) {
                     for (var role : foto.getRoles()) {
@@ -220,6 +242,7 @@ public class PhotoService implements IPhotoService {
                         }
                     }
                 } else {
+                    // Vamos saltando de foto en foto hasta encontrar, si no existe una foto de perfil actual se procesa todo con normalidad:
                     continue;
                 }
             }
@@ -248,18 +271,22 @@ public class PhotoService implements IPhotoService {
         var rolesDeLaFotoDePerfilActual = rolePhotoDao.findyByPhoto_id(foto.getId());
 
         if (foto != null) {
+            // Recorremos todos los roles disponibles de la foto de perfil a eliminar, para borrar el ROLE_PROFILE:
             for (var rol : rolesDeLaFotoDePerfilActual) {
                 if (rol.getRole().equals("ROLE_PROFILE")) {
                     rolePhotoDao.deleteById2(rol.getId());
+                    // Si se procesa con exito:
                     response.setName("successful_remove");
                     response.setMessage("La foto se quito con exito.");
                     return response;
                 } else {
+                    // Seguimos buscando rol por rol hasta encontrar el ROLE_PROFILE:
                     continue;
                 }
             }
         }
 
+        // Si la foto no existe:
         response.setName("photo_notFound");
         response.setMessage("La foto no existe.");
         return response;
@@ -273,11 +300,14 @@ public class PhotoService implements IPhotoService {
 
         UpdateOrRegisterDetailsResponse response = new UpdateOrRegisterDetailsResponse();
 
+        // Buscamos foto actual para añadirle el rol profile:
         var fotoActual = photoDao.findByUpload_id(uploadId);
+        // Buscamos todas las fotos del usuario para analizar los roles de cada una de sus fotos, y en caso de que tenga ROLE_PROFILE, se elimina ese rol:
         var fotosUsuario = photoDao.findByUser_id(usuario.getId());
 
         if (fotoActual != null) {
 
+            // Recorremos foto por foto, analizando los roles de cada foto para encontrar un posible ROLE_PROFILE:
             principal: for (var foto : fotosUsuario) {
                 if (foto.getRoles().size() > 1) {
                     for (var role : foto.getRoles()) {
@@ -293,14 +323,18 @@ public class PhotoService implements IPhotoService {
                 }
             }
 
+            // Creamos un rol para la foto seleccionada:
             RolePhoto role = new RolePhoto();
             role.setPhoto(fotoActual);
             role.setRole("ROLE_PROFILE");
 
+            // De los roles de la foto seleccionada, los obtenemos en una lista y añadimos el rol creado anteriormente:
             var rolesFotoActual = fotoActual.getRoles();
             rolesFotoActual.add(role);
 
+            // Actualizamos los roles:
             fotoActual.setRoles(rolesFotoActual);
+            // Guardamos la foto:
             photoDao.save(fotoActual);
 
             response.setName("successful_set");
@@ -347,12 +381,15 @@ public class PhotoService implements IPhotoService {
             return response;
         }
 
+        // Si todo se procesa, creamos un registro de like:
         LikesPhoto like = new LikesPhoto();
         like.setPhoto(photo);
         like.setUser(usuario);
         like.setDate(currentDate.getCurrentDate());
         long nuevaCantidadLikes = photo.getLikes();
+        // Añadimos un digito al contador de likes de la foto:
         photo.setLikes(++nuevaCantidadLikes);
+        // Guardamos la foto:
         photoDao.save(photo);
         likesPhotoDao.save(like);
 
@@ -386,6 +423,7 @@ public class PhotoService implements IPhotoService {
             return response;
         }
 
+        // Buscamos el registro de like:
         var like = likesPhotoDao.findByUserIdAndPhotoId(usuario.getId(), photo.getId());
 
         if (like == null) {
@@ -395,9 +433,12 @@ public class PhotoService implements IPhotoService {
             return response;
         }
 
+        // Lo borramos de la tabla:
         likesPhotoDao.delete2(like.getId());
         long nuevaCantidadLikes = photo.getLikes();
+        // Quitamos un digito a la cantidad de likes de la columna numerica que tiene el contador de likes, en un registro de una foto:
         photo.setLikes(--nuevaCantidadLikes);
+        // Guardamos la foto con el like descontado:
         photoDao.save(photo);
 
         response.setIsSuccesful(true);
@@ -431,6 +472,7 @@ public class PhotoService implements IPhotoService {
             return response;
         }
 
+        // Se crea un registro de un favorito, con el id del usuario que añadio esa foto a sus favoritos y con el id de la foto a añadir:
         FavoritePhoto favorite = new FavoritePhoto();
         favorite.setDate(currentDate.getCurrentDate());
         favorite.setPhoto(photo);
@@ -468,6 +510,7 @@ public class PhotoService implements IPhotoService {
             return response;
         }
 
+        // Si todo se cumple hasta aqui, buscamos el registro del favorito con el id de la foto y el id del usuario:
         var favorite = favoritePhotoDao.findByUserIdAndPhotoId(usuario.getId(), photo.getId());
 
         if (favorite == null) {
@@ -478,6 +521,7 @@ public class PhotoService implements IPhotoService {
             return response;
         }
 
+        // Se elimina:
         favoritePhotoDao.delete2(favorite.getId());
 
         response.setIsSuccesful(true);
@@ -502,12 +546,15 @@ public class PhotoService implements IPhotoService {
     }
 
     @Transactional(readOnly = true)
+    // Metodo para encontrar que foto tiene mas likes, desde la tabla de likes_photo, usando una consulta SQL nativa:
     public List<FotosConMasLikes> findAllOrderByLikesCount(int sort, Integer limit, Long user_id) {
-        // 1 para ascendente y 0 para descendente, el limite establece la cantidad de
+        // 1 para ascendente y 0 para descendente (sort), el limite establece la cantidad de
         // registros resultantes y el user_id solo es necesario
         // si necesitamos las fotos de un solo usuario. El limite puede ser nulo y asi
         // indicaremos que no existira un limite, para que nos muestre todos los
         // registros.
+
+        // LA CONSULTA SOLO MUESTRA LA CANTIDAD DE VECES QUE SE REPITEN UNOS REGISTROS DE LIKES PARA UNA FOTO EN ESPECIFICO, PERO CARGANDO EL ID DE ESA FOTO.
         if (limit != null) {
             if (user_id != null) {
                 if (sort == 0) {
@@ -569,11 +616,13 @@ public class PhotoService implements IPhotoService {
         }
     }
 
+    // Este metodo recibe la lista de fotos ordenada de manera descendente o ascendente, en funcion a la cantidad de likes (SOLO EL DB_ID)
     @Override
     @Transactional(readOnly = true)
     public List<Photo> fotosConMasLikes() {
         var fotosId = findAllOrderByLikesCount(0, 27, null);
         List<Photo> photos = new ArrayList<Photo>();
+        // Buscamos cada foto por su db_id, para posteriormente añadirla a una lista:
         fotosId.forEach(id -> {
             var photo = photoDao.findById(id.getPhoto_id()).get();
             photos.add(photo);

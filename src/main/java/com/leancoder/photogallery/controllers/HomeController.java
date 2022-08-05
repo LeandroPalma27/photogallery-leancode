@@ -1,6 +1,5 @@
 package com.leancoder.photogallery.controllers;
 
-import com.leancoder.photogallery.models.dao.IUsuarioDao;
 import com.leancoder.photogallery.models.services.photo.interfaces.IPhotoService;
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
