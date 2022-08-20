@@ -10,7 +10,7 @@
     <header th:replace="layout/layout :: header"></header>
     <div class="container">
         <div class="main_title-presentation">
-            <h3>Lo que mas gusta:</h3>
+            <h3 th:text="#{text.home.title}">Lo que mas gusta:</h3>
         </div>
         <ul class="grid effect-1" id="grid">
             <li th:each="photo: ${fotosMasLikeadas}">

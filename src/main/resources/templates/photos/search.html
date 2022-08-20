@@ -63,8 +63,6 @@
                                             <div class="button_download">
                                                 <span th:text="${photo.urlPhoto}" hidden class="download-link-span"></span>
                                                 <span th:text="${photo.title}" hidden></span>
-                                                <!-- <a title="Download" href="" download="" target="_blank"><i
-                                                        class="fa-solid fa-circle-arrow-down"></i></a> -->
                                             </div>
                                         </div>
                                     </div>
@@ -79,6 +77,7 @@
             </div>
         </main>
     </div>
+    <a th:href="@{/locale(lang=en_EN)}">En</a>
     <footer th:replace="layout/layout :: footer"></footer>
     <script th:src="@{/js/charge-photos.js}"></script>
 </body>

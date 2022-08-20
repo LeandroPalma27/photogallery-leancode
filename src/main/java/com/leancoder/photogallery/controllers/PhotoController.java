@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,7 @@ import com.leancoder.photogallery.models.services.photo.interfaces.IPhotoService
 import com.leancoder.photogallery.models.services.user.interfaces.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -65,8 +67,12 @@ public class PhotoController {
     @Autowired
     private ILikesPhotoDao likesPhotoDao;
 
+    // Inyectamos para cargar desde nuestra fuente de traducciones(messages_en/es/us/pt/ko.properties)
     @Autowired
     private IFavoritePhotoDao favoritePhotoDao;
+
+    @Autowired
+    private MessageSource messageSource;
 
     /*
      * Objecto cargado con informacion general del usuario globalmente para todas
@@ -248,10 +254,13 @@ public class PhotoController {
     /*Usuario
      * Endpoint que carga la vista del formulario para la subida de fotos.
      */
+    // Inyectamos Locale para el uso de traduccion en texto pasado desde un endpoint de un controlador:
     @GetMapping("/upload")
-    public String UploadNormalPhoto(Authentication authentication, Model model) {
+    public String UploadNormalPhoto(Authentication authentication, Model model, Locale locale) {
         PhotoUploaderValidator validator = new PhotoUploaderValidator();
-        model.addAttribute("title", "Publicar foto");
+        // Y en lugar de pasar el texto de manera literal, pasamos el objecto messsageSource(CARGA LA FUENTE DE NUESTRO ARCHIVO DE TRADUCCIONES), y como parametros colocamos la llave del texto que queremos cargar
+        // , un null y tambien el objeto locale.
+        model.addAttribute("title", messageSource.getMessage("text.photos.upload.title", null, locale));
         model.addAttribute("photoValidator", validator);
         return "photos/upload";
     }
