@@ -71,6 +71,7 @@ public class PhotoController {
     @Autowired
     private IFavoritePhotoDao favoritePhotoDao;
 
+    // Cargamos la fuente de nuestros textos en varios idiomas:
     @Autowired
     private MessageSource messageSource;
 
@@ -259,7 +260,7 @@ public class PhotoController {
     public String UploadNormalPhoto(Authentication authentication, Model model, Locale locale) {
         PhotoUploaderValidator validator = new PhotoUploaderValidator();
         // Y en lugar de pasar el texto de manera literal, pasamos el objecto messsageSource(CARGA LA FUENTE DE NUESTRO ARCHIVO DE TRADUCCIONES), y como parametros colocamos la llave del texto que queremos cargar
-        // , un null y tambien el objeto locale.
+        // , un null y tambien el objeto locale(este ultimo SIEMPRE TENDRA LA INFORMACION REGIONAL DE NUESTRA APP).
         model.addAttribute("title", messageSource.getMessage("text.photos.upload.title", null, locale));
         model.addAttribute("photoValidator", validator);
         return "photos/upload";

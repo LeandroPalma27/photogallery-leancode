@@ -44,7 +44,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Bean
     // Interfaz que implementa la configuracion regional en una sesion de nuestra
-    // aplicacion web:
+    // aplicacion web (CARGAMOS POR DEFECTO es_ES):
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
         // Por default cargara la pagina en español:
@@ -54,8 +54,9 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
-        // Interceptor HTTP que revisa si la url es afecta a traves una peticion GET, en
+        // Interceptor HTTP que revisa si la url es afectada a traves una peticion GET, en
         // este caso el parametro a evaluar es "lang".
+        // Ejm: ?lang=en_EN, ?lang=pt_PT, etc.
         LocaleChangeInterceptor localeInterceptor = new LocaleChangeInterceptor();
         localeInterceptor.setParamName("lang");
         return localeInterceptor;
@@ -63,6 +64,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // Añadimos el interceptor que evalua los cambios de region en funcion al parametro lang:
         registry.addInterceptor(localeChangeInterceptor());
         registry.addInterceptor(enabledUserInterceptor)
                 .addPathPatterns("/photos/own", "/photos/upload", "/photos/details/**", "/photos/favorites",
