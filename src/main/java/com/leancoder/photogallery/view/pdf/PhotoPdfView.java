@@ -49,7 +49,9 @@ public class PhotoPdfView extends AbstractPdfView{
         Photo foto = (Photo) model.get("photoDetails");
 
         // Obtenemos la configuracion local desde el request(POR DEFECTO SIEMPRE ES "es", y en cualquier momento de la ejecucion de nuestra app cargara una region):
-        // Se puede ver afectado por un cambio desde el cliente:
+        // Se puede ver afectado por un cambio desde el cliente.
+
+        // Se obtiene del request, ya que se ejecuta una solicitud(CARGA DE VISTA):
         Locale locale = localeResolver.resolveLocale(request);
         
         PdfPTable tabla1 = new PdfPTable(1);
