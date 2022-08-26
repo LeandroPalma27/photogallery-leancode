@@ -10,7 +10,6 @@
         <main>
             <div class="container_details-general">
                 <div class="container_details-photo" th:object="${photoDetails}">
-                    <a th:href="@{'/photos/details/' + ${photoDetails.uploadId}(format=pdf)}">PDF</a>
                     <div class="photo_img" id="photoBox">
                         <span class="img-url" hidden th:text="*{urlPhoto}"></span>
                         <span class="img-title" hidden th:text="*{title}"></span>
@@ -48,6 +47,8 @@
                                         <div class="like-button">
                                         </div>
                                         <div class="like-count">
+                                            <a th:href="@{'/photos/details/' + ${photoDetails.uploadId}(format=pdf)}" target="_blank">PDF</a>
+                                            <a th:href="@{'/photos/details/' + ${photoDetails.uploadId}(format=xlsx)}">XLSX</a>
                                             <span><i class="fa-solid fa-thumbs-up"></i></span>
                                             <span th:text="*{likesPhoto.size()}"></span>
                                         </div>

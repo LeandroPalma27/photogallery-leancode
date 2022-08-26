@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.leancoder.photogallery.models.entities.user.User;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -52,13 +55,16 @@ public class Photo {
     private List<RolePhoto> roles;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "photo", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<LikesPhoto> likesPhoto;
 
+    @JsonIgnore // Ingora el campo para la serializacion de JSON
     @OneToMany(mappedBy = "photo", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<FavoritePhoto> favorite;
 
     @Column(name = "fecha_registro")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
     public List<FavoritePhoto> getFavorite() {

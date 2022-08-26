@@ -8,9 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /* 
     * Entidad para el registro de los roles de cada photo.
@@ -30,6 +33,7 @@ public class RolePhoto {
     @ManyToOne(targetEntity = Photo.class)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(nullable = false, name = "photo_id", referencedColumnName = "db_id", updatable = false)
+    @JsonIgnore
     private Photo photo;
 
     public RolePhoto() {}
@@ -55,6 +59,7 @@ public class RolePhoto {
         this.role = role;
     }
 
+    @XmlTransient
     public Photo getPhoto() {
         return photo;
     }

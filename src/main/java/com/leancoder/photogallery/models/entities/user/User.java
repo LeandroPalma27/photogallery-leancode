@@ -14,7 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.leancoder.photogallery.models.entities.photo.FavoritePhoto;
 import com.leancoder.photogallery.models.entities.photo.LikesPhoto;
 import com.leancoder.photogallery.models.entities.photo.Photo;
@@ -45,6 +48,7 @@ public class User {
     private String email;
 
     @Size(max=60)
+    @JsonIgnore
     private String password;
 
     @Size(max=60)
@@ -54,10 +58,12 @@ public class User {
     private Boolean enabled;
 
     @Size(max = 200)
+    @JsonIgnore
     private String description;
 
     @Column(name = "fecha_registro")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaRegistro;
 
     @ManyToOne(targetEntity = RoleUser.class)
@@ -69,12 +75,15 @@ public class User {
     private GenderUser gender;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Photo> photos;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<LikesPhoto> likesPhoto;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<FavoritePhoto> favorites;
 
     private static final long serialVersionUID = 1L;
@@ -83,6 +92,7 @@ public class User {
         return id;
     }
 
+    @XmlTransient
     public List<FavoritePhoto> getFavorites() {
         return favorites;
     }
@@ -91,6 +101,7 @@ public class User {
         this.favorites = favorites;
     }
 
+    @XmlTransient
     public List<LikesPhoto> getLikesPhoto() {
         return likesPhoto;
     }
@@ -99,6 +110,7 @@ public class User {
         this.likesPhoto = likesPhoto;
     }
 
+    @XmlTransient
     public GenderUser getGender() {
         return gender;
     }
@@ -107,6 +119,7 @@ public class User {
         this.gender = gender;
     }
 
+    @XmlTransient
     public List<Photo> getPhotos() {
         return photos;
     }
@@ -123,6 +136,7 @@ public class User {
         this.id = id;
     }
 
+    @XmlTransient
     public String getNombre() {
         return nombre;
     }
@@ -131,10 +145,12 @@ public class User {
         this.nombre = nombre;
     }
 
+    @XmlTransient
     public String getApellidos() {
         return apellidos;
     }
 
+    @XmlTransient
     public RoleUser getRole() {
         return role;
     }
@@ -147,6 +163,7 @@ public class User {
         this.apellidos = apellidos;
     }
 
+    @XmlTransient
     public String getEmail() {
         return email;
     }
@@ -155,6 +172,7 @@ public class User {
         this.email = email;
     }
 
+    @XmlTransient
     public String getPassword() {
         return password;
     }
@@ -179,6 +197,7 @@ public class User {
         this.enabled = enabled;
     }
 
+    @XmlTransient
     public String getDescription() {
         return description;
     }
@@ -187,6 +206,7 @@ public class User {
         this.description = description;
     }
 
+    @XmlTransient
     public Date getFechaRegistro() {
         return fechaRegistro;
     }

@@ -10,11 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.leancoder.photogallery.models.entities.user.User;
 
 /* 
@@ -32,11 +35,13 @@ public class LikesPhoto {
 
     @Column(name = "fecha_registro")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
     @ManyToOne(targetEntity = Photo.class)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(nullable = false, name = "photo_id", referencedColumnName = "db_id", updatable = false)
+    @JsonBackReference
     private Photo photo;
 
     @ManyToOne(targetEntity = User.class)
@@ -69,6 +74,8 @@ public class LikesPhoto {
         this.date = date;
     }
 
+    // Sirve para evitar bucles al cargar la data en XML:
+    @XmlTransient
     public Photo getPhoto() {
         return photo;
     }

@@ -23,9 +23,13 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
-// Un endpoint carga una ruta de alguna vista, dentro del classpath de vistas. Al cargarse, este component anotado con la misma direccion de ruta, se ejecutara.
-@Component("photos/details")
-// En lugar de cargarse la vista, se carga este builder de PDF, mostrando el render del pdf en cuestion.
+// Un controller endpoint, a traves del dispatcherServlet, indica al contexto que busque algun componente que cargue la vista indicada, si la vista se carga con una solicitud de contenido en otro formato,
+// se buscara dentro del contexto, algun bean que tenga el nombre de la ruta + la extension que se indico.
+// Un endpoint carga una ruta de alguna vista, seleccionada dentro del classpath de vistas. Si ese path se carga con el parametro "format", activara la solicitud del contenido en otro tipo de formato,
+// y si ese formato coincide con el nombre de algun componente que tenga la extension del formato que se solicita, se respondera con la carga de la informacion en el formato indicado, colocandose en el Content-Type
+// que tipo de formato tiene la informacion (ESTO SE CONFIGURA DESDE MvcConfig, desde el application.properties o desde la misma clase que extiende AbstractView)
+// Si se carga eso, en lugar de cargarse la vista por default, cargara esta clase, ejecutando sus metodos correspondientes, para que finalmente cargue la data con su Content-Type respectivo.
+@Component("photos/details.pdf")
 public class PhotoPdfView extends AbstractPdfView{
 
     // Inyectamos la fuenta de nuestros textos en diferentes idiomas:
@@ -42,7 +46,7 @@ public class PhotoPdfView extends AbstractPdfView{
     * los metodos que esta tiene (SOLO EN CASO DE HEREDAR CLASES).
     **/
     @Override
-    // Se carga "application/pdf":
+    // Luego de cargar el media type en el parametro, se carga "application/pdf" en el header, indicando que la peticion solicita una vista PDF y no la thymeleaf convencional:
     protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         
