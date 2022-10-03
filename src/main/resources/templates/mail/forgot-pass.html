@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <style>
+
+      .body {
+        box-sizing: border-box;
+      }
+
+      .main {
+        background-color: rgb(244, 244, 244);
+        padding: 30px 40px;
+      }
+      
+      .title {
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 30px;
+      }
+      
+      .title h1 {
+        font-weight: 700;
+        padding: 0;
+        margin: 0;
+        color: rgb(9, 201, 102);
+      }
+
+      .body {
+        width: 100%;
+        height: auto;
+        background-color: white;
+        box-shadow: 5px 6px 18px -12px rgba(0, 0, 0, 0.69);
+        -webkit-box-shadow: 5px 6px 18px -12px rgba(0, 0, 0, 0.69);
+        -moz-box-shadow: 5px 6px 18px -12px rgba(0, 0, 0, 0.69);
+        padding: 30px 50px;
+      }
+
+      .body > h2 {
+        font-weight: 700;
+        font-size: 24px;
+        margin-bottom: 20px;
+        margin-top: 0;
+      }
+
+      .despedida {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .despedida > span {
+        display: block;
+      }
+
+      .footer {
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 11px;
+      }
+      
+      .btn-verificar {
+        display: inline-block;
+        background-color: rgb(9, 201, 102);
+        color: rgb(243, 243, 243);
+        text-decoration: none;
+        font-weight: 700;
+        width: auto;
+        height: auto;
+        padding: 10px 18px;
+        border-radius: 3px;
+      }
+
+      .btn-verificar:hover {
+        color: rgb(243, 243, 243);
+        opacity: 0.9;
+      }
+
+      #token {
+        display: none;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="title">
+        <h1>Photogallery</h1>
+      </div>
+      <div class="body">
+        <h2>Solicitud para cambio de contraseña</h2>
+        <p>Hola, <span><b th:text="${name}"></b></span></p>
+        <p>Se realizo una solicutd para el cambio de tu contraseña actual, por lo cual suponemos que la olvidaste.</p>
+        <p>Recuerda que la solicitud es valida hasta las proximas 48 horas. Pasado el tiempo la solicitud sera invalida y tendras que volver a solicitar el cambio.</p>
+        <p>No intercambies con nadie tu token de verificacion, porque podrias poder en riesgo tu cuenta y datos personales.</p>
+        <p>Para cambiar tu contraseña, entra al enlace que se encuentra abajo.</p>
+        <p class="despedida">
+          <span><b>Photogallery Support Team</b></span>
+        </p>
+        <span id="token" th:text="${token}"></span>
+        <div class="footer" th:text="${link}">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

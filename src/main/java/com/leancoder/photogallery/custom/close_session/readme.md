@@ -1,0 +1,3 @@
+# Cierre de sesion manual dentro del sistema
+
+En esta carpeta hay una clase que a traves de un metodo se cierra la sesion de manera manual dentro de nuestro codigo. Puede ser usada en los controladores para que en caso de necesitar que se cierre la sesion sin usar el logout o que simplemente al realizar una peticion que como respuesta necesite que se cierre la sesion, pues se usaria este metodo y se redireccionaria a la vista del login.

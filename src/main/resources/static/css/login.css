@@ -43,7 +43,7 @@ body {
 }
 
 .triangle .form > div > form .login_input .control-password {
-  padding-right: 19px;
+  padding-right: 22px;
 }
 
 .eye {
@@ -51,7 +51,7 @@ body {
   cursor: pointer;
   position: absolute;
   font-size: 14px;
-  padding-right: 1px;
+  padding-right: 3px;
 }
 
 .eye.disabled {
@@ -63,6 +63,7 @@ body {
   cursor: pointer;
   position: absolute;
   font-size: 14px;
+  padding-right: 2px;
 }
 
 .eye-slash.disabled {
@@ -116,7 +117,7 @@ body {
 
 .triangle .form > div > form .login_title {
   margin-bottom: 10px;
-  font-family: 'Fredoka'';
+  font-family: 'Fredoka';
 }
 
 .triangle .form > div > form .login_title h4{
@@ -136,6 +137,7 @@ body {
   width: 100%;
   border-radius: 0;
   background-color: rgba(255, 255, 255, 0);
+  padding-right: 22px;
 }
 
 .triangle .form > div > form .login_input label{
@@ -180,6 +182,11 @@ body {
   font-size: 37px;
 }
 
+.logo > div h3 a {
+  text-decoration: none;
+  color: rgb(32, 32, 32);
+}
+
 .container-error {
   color: rgb(190, 49, 49);
   font-family: 'Fredoka';
@@ -188,6 +195,26 @@ body {
 
 .container-error > div {
   text-align: center;
+}
+
+.modal-content {
+  padding: 10px 10px;
+  padding-bottom: 2px;
+  border: none;
+}
+
+.modal-header{
+  padding: 5px 1rem;
+}
+
+.modal-title {
+  color: rgb(171, 43, 43);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.modal-body > p {
+  font-weight: 600;
 }
 
 @media (max-width: 599px) {

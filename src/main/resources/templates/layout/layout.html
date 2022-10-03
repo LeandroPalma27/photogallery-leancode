@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script src="https://kit.fontawesome.com/0699e3b721.js" crossorigin="anonymous"></script>
     <script th:src="@{/js/popper.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -16,14 +18,14 @@
 
 <body>
     
-    <header th:fragment="header">
+    <header class="header" th:fragment="header">
         <nav class="header_navbar">
             <div class="accordion">
                 <ul class="list-accordion">
-                    <li><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></a></li>
-                    <li><a href="#">All photos</a></li>
-                    <li><a href="#">My photos</a></li>
-                    <li><a href="#">Favorites</a></li>
+                    <li><a th:href="@{/photos/search}"><i class="fa-solid fa-magnifying-glass"></i><span>Buscar</span></a></li>
+                    <li><a th:href="@{/photos/all}">Todas las fotos</a></li>
+                    <li><a th:href="@{/photos/own}">Mis fotos</a></li>
+                    <li><a th:href="@{/photos/favorites}">Favoritos</a></li>
                 </ul>
             </div>
             <div class="navbar_container-responsive">
@@ -39,20 +41,42 @@
                     <a class="logo" th:href="@{/}">Photogallery</a>
                 </div>
                 <div class="responsive_account">
+                    <div class="dropdown dropdown-1">
+                        <a class="btn dropdown-toggle dropdown-toggle-1" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-language"></i></a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <li><a class="dropdown-item" th:href="@{/locale(lang=es_ES)}">Español</a></li>
+                          <li><a class="dropdown-item" th:href="@{/locale(lang=en_EN)}">English</a></li>
+                        </ul>
+                      </div>
                     <div class="account" title="My profile">
                         <a th:href="@{/login}" class="account_sign-log" title="Sign-in" sec:authorize="isAnonymous()">
                             <i class="fa-solid fa-right-to-bracket"></i>
                         </a>
+<<<<<<< HEAD
                         <a th:href="@{/account/} + ${user}" class="userprofile-photo dropdown-toggle" sec:authorize="isAuthenticated()" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                             <img th:src="@{/img/foto-leandro-facebook.jpg}" alt="">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <li><a class="dropdown-item" th:href="@{/account/} + ${user}">My profile</a></li>
+=======
+                        <a th:href="@{/account}" class="userprofile-photo dropdown-toggle" sec:authorize="isAuthenticated()" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img th:if="${profilePictureUser == null}" th:src="@{/img/default_profile.jpg}" alt="">
+                            <span th:if="${profilePictureUser != null}" th:text="${profilePictureUser}" hidden id="urlPictureForLayout"></span>
+                            <img th:if="${profilePictureUser != null}" src="" alt="">
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" th:href="@{/account}">Mi perfil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/photos/upload}">Subir una foto</a></li>
+>>>>>>> session-endpoints_authentication
                             <li>
                                 <a class="dropdown-item" href="">
                                     <form id="logoutForm" class="form-logout" th:action="@{/logout}" method="post">
                                         <input name="_csrf" type="hidden" value="63155ace-bc25-48a4-b881-1ad730b9268b" />
+<<<<<<< HEAD
                                         <button onclick="document.getElementById('logoutForm').submit()" class="btn btn-outline">Signout</button>
+=======
+                                        <button onclick="document.getElementById('logoutForm').submit()" class="btn btn-outline">Cerrar sesion</button>
+>>>>>>> session-endpoints_authentication
                                     </form>
                                 </a>
                             </li>
@@ -63,37 +87,54 @@
             <div class="navbar_container-list">
                 <ul class="list">
                     <li class="list_logo"><a th:href="@{/}">Photogallery</a></li>
-                    <li class="list_option list_index"><a href="#">All photos</a></li>
-                    <li class="list_option list_my-photos"><a href="#">My photos</a></li>
-                    <li class="list_option list_search"><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-                    <li class="list_option list_favorites"><a href="#">Favorites</a></li>
+                    <li class="list_option list_index"><a th:href="@{/photos/all}">Todas las fotos</a></li>
+                    <li class="list_option list_my-photos"><a th:href="@{/photos/own}">Mis fotos</a></li>
+                    <li class="list_option list_search"><a th:href="@{/photos/search}"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+                    <li class="list_option list_favorites"><a th:href="@{/photos/favorites}">Favoritos</a></li>
                 </ul>
             </div>
             <div class="navbar_container-sign" sec:authorize="isAnonymous()">
+                <div class="dropdown dropdown-1">
+                    <a class="btn dropdown-toggle dropdown-toggle-1" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-language"></i></a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" th:href="@{/locale(lang=es_ES)}">Español</a></li>
+                        <li><a class="dropdown-item" th:href="@{/locale(lang=en_EN)}">English</a></li>
+                    </ul>
+                  </div>
                 <div class="sign_in">
-                    <a th:href="@{/login}" class="">Log in</a>
+                    <a th:href="@{/login}" class="">Iniciar sesion</a>
                 </div>
                 <div class="log_in">
-                    <a th:href="@{/signup}" class="">Register</a>
+                    <a th:href="@{/signup}" class="">Registrarse</a>
                 </div>
             </div>
             <div class="navbar_container-userprofile" sec:authorize="isAuthenticated()">
+                <div class="dropdown dropdown-1">
+                    <a class="btn dropdown-toggle dropdown-toggle-1" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-language"></i></a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" th:href="@{/locale(lang=es_ES)}">Español</a></li>
+                        <li><a class="dropdown-item" th:href="@{/locale(lang=en_EN)}">English</a></li>
+                    </ul>
+                  </div>
                 <div class="dropdown userprofile">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="userprofile-photo">
-                            <img th:src="@{/img/foto-leandro-facebook.jpg}" alt="">
+                            <img th:if="${profilePictureUser == null}" th:src="@{/img/default_profile.jpg}" alt="">
+                            <span th:if="${profilePictureUser != null}" th:text="${profilePictureUser}" hidden id="urlPictureForLayout2"></span>
+                            <img th:if="${profilePictureUser != null}" src="" alt="">
                         </div>
                         <div class="userprofile-name">
-                            <span th:text="${nombre}"></span>
+                            <span id="nombreCortado" th:text="${usuario.nombre + ' ' + usuario.apellidos}"></span>
                         </div>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" th:href="@{/account/} + ${user}">My profile</a></li>
+                        <li><a class="dropdown-item" th:href="@{/account}">Mi perfil</a></li>
+                        <li><a class="dropdown-item" th:href="@{/photos/upload}">Subir una foto</a></li>
                         <li>
                             <a class="dropdown-item" href="">
                                 <form class="form-logout" th:action="@{/logout}" method="post">
                                     <input name="_csrf" type="hidden" value="63155ace-bc25-48a4-b881-1ad730b9268b" />
-                                    <button type="submit" class="btn btn-outline">Signout</button>
+                                    <button type="submit" class="btn btn-outline">Cerrar sesion</button>
                                 </form>
                             </a>
                         </li>
@@ -101,6 +142,24 @@
                 </div>
             </div>
         </nav>
+        <div class="alert alert-info" th:if="${info != null}">
+            <span class="controller-messages info-message" th:text="${info}"></span>
+            <button type="button" class="close-button_controller-message"><i class="fa-solid fa-x"></i></button>
+        </div>
+        <div class="alert alert-success" th:if="${successMessage != null}">
+            <span class="controller-messages success-message" th:text="${successMessage}"></span>
+            <button type="button" class="close-button_controller-message"><i class="fa-solid fa-x"></i></button>
+        </div>
+        <div class="alert alert-danger" th:if="${errorMessage != null}">
+            <span class="controller-messages error-message" th:text="${errorMessage}"></span>
+            <button type="button" class="close-button_controller-message"><i class="fa-solid fa-x"></i></button>
+        </div>
+        <!-- <div class="alert alert-success" th:if="${successfulUpdateUsername != null}" th:text="${successfulUpdateUsername}"></div>
+        <div class="alert alert-success" th:if="${successfulPhoto != null}" th:text="${successfulPhoto}"></div>
+        <div class="alert alert-success" th:if="${successfulUpdatePassword != null}" th:text="${successfulUpdatePassword}"></div>
+		<div class="alert alert-danger" th:if="${errorUpdateUsername != null}" th:text="${errorUpdateUsername}"></div>
+		<div class="alert alert-danger" th:if="${errorPhoto != null}" th:text="${errorPhoto}"></div>
+		<div class="alert alert-danger" th:if="${errorUpdatePassword != null}" th:text="${errorUpdatePassword}"></div> -->
     </header>
 
     <footer th:fragment="footer" class="gallery-footer">
@@ -171,7 +230,12 @@
             <div class="copyright"><span>Copyright ©2022 All rights reserved.</span></div>
             <div class="author"><span>This page is created by <a href="#">LeanCoder.</a></span></div>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script th:src="@{/js/accordion.js}"></script>
+        <script th:src="@{/js/popover.bundle.js}"></script>
+        <script th:src="@{/js/profile-details.js}"></script>
+        <script th:src="@{/js/controller-messages.js}"></script>
+        <script th:src="@{/js/charge-profile-photo.js}"></script>
     </footer>
 
 </body>

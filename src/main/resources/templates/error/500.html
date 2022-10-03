@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+    <div class="main">
+        <header th:replace="layout/layout :: header"></header>
+        <main>
+            <div class="container_error">
+                <div class="alert alert-danger not-found">
+                    <h4 class="alert-heading">Error 500</h4>
+                    <div class="alert-body">
+                        <span><i class="fa-solid fa-circle-exclamation"></i></span>
+                        <span class="error-message">Ocurrio algun problema al procesar la peticion.</span>
+                        <p>Puede que se deba a algun error en el servidor, asi que intente hacer lo que desee mas tarde.</p>
+                    </div>
+                    <div class="alert-footer">
+                        <a class="btn btn-primary" th:href="@{/}">Regresar</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</body>
+
+</html>

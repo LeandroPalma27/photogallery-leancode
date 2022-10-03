@@ -1,0 +1,422 @@
+
+.container_details-general {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.container_details-photo {
+    width: 90%;
+    height: auto;
+    margin: 30px 0;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 10px 10px 38px -12px rgba(0, 0, 0, 0.290);
+    -webkit-box-shadow: 10px 10px 38px -12px rgba(0, 0, 0, 0.290);
+    -moz-box-shadow: 10px 10px 38px -12px rgba(0, 0, 0, 0.290);
+    background-color: rgb(241, 241, 241);
+    font-family: 'Fredoka';
+    position: relative;
+}
+
+.photo_img {
+    width: 45%;
+    height: 520px;
+    display: flex;
+    background-color: rgb(27, 27, 27);
+    justify-content: center;
+    align-items: center;
+}
+
+.photo_img img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.photo_details {
+    width: 55%;
+    height: 520px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.details_level-1 {
+    width: 100%;
+    height: auto;
+}
+
+.details_level-2 {
+    width: 100%;
+    height: auto;
+}
+
+.details-actions_likes-and-date {
+    border-top: 1px solid rgb(224, 224, 224);
+    width: 100%;
+    height: auto;
+    padding: 15px;
+    padding-top: 10px;
+}
+
+.details-actions {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+}
+
+.details-actions button {
+    width: auto;
+    height: 22px;
+    border: none;
+    outline: none;
+}
+
+.details-actions button:hover {
+    opacity: 0.7;
+}
+
+.details-actions > div {
+    width: auto;
+    height: auto;
+}
+
+.like-count {
+    padding-left: 8px;
+}
+
+.like-button_and_like-count {
+    display: flex;
+}
+
+.likes-and-date {
+    width: 100%;
+    height: auto;
+}
+
+.date {
+    padding-top: 5px;
+    font-size: 13px;
+    color: rgb(116, 116, 116);
+}
+
+.like-button {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.like-button *{
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.save-button {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.save-button *{
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.details-autor {
+    width: 100%;
+    height: auto;
+    padding: 15px 15px;
+    border-bottom: 1px solid rgb(224, 224, 224);
+    display: flex;
+    justify-content: space-between;
+}
+
+.details-autor > div {
+    width: auto;
+    height: auto;
+}
+
+.update_or_delete-options {
+
+}
+
+.update_or_delete-options-2 {
+    display: none;
+}
+
+.update_or_delete-options button {
+    border: none;
+    outline: none;
+    width: auto;
+    height: 20px;
+}
+
+.details-autor span {
+    font-size: 16px;
+    font-family: 'Fredoka';
+}
+
+.autor_info {
+    font-weight: bold;
+}
+
+.details-title_and_desc {
+    padding: 15px;
+    width: 100%;
+    height: auto;
+}
+
+.details-title_and_desc h4 {
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.details-title_and_desc p {
+    cursor: default;
+}
+
+.not-liked {
+    display: none;
+}
+
+.liked {
+    display: none;
+}
+
+.not-liked.active {
+    display: inline-flex;
+}
+
+.liked.active {
+    display: inline-flex;
+    color: rgb(227, 47, 59);
+}
+
+.not-saved {
+    display: none;
+}
+
+.saved {
+    display: none;
+}
+
+.not-saved.active {
+    display: inline-flex;
+}
+
+.saved.active {
+    display: inline-flex;
+}
+
+.modal-dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    border: none;
+    width: 300px;
+    border-radius: 6px;
+}
+
+.modal-content-updater {
+    border: none;
+    width: 450px;
+    border-radius: 6px;
+}
+
+.inputs {
+    width: 100%;
+    height: auto;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-container > * {
+    width: 100%;
+}
+
+.input-container input {
+    width: 100%;
+    height: auto;
+    text-align: start;
+    vertical-align: top;
+    outline: none;
+    border: 2px solid rgb(226, 226, 226);
+    border-radius: 10px;
+    padding: 5px 11px;
+    margin-bottom: 5px;
+}
+
+.input-container .name-error {
+    color: rgb(227, 38, 38);
+}
+
+.input-container textarea {
+    margin-bottom: 5px;
+    resize: none;
+    height: 200px;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 10px;
+    padding-bottom: 0;
+    border: 2px solid rgb(226, 226, 226);
+    border-radius: 10px;
+}
+
+.crud-photo_options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+}
+
+.crud-photo_options li {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+}
+
+.crud-photo_options li:hover {
+    opacity: 0.7;
+}
+
+.crud-photo_options li button {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+.delete-option button {
+    font-weight: bold;
+    color: rgb(234, 39, 75);
+}
+
+.container_back-button {
+    width: 90%;
+    height: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    padding-right: 0;
+    padding-bottom: 15px;
+}
+
+.photo_img {
+    position: relative;
+    cursor: pointer;
+}
+
+.liked-heart {
+    position: absolute;
+    transform: scale(0);
+    transition: all 0.4s;
+}
+
+.liked-heart.active {
+    position: absolute;
+    color: rgb(227, 47, 59);
+    font-size: 70px;
+    transform: scale(1);
+    transition: all 0.4s;
+}
+
+@media (max-width: 900px) {
+    .photo_img {
+        width: 45%;
+        height: 500px;
+    }
+
+    .photo_details {
+        width: 55%;
+        height: 500px;
+    }
+}
+
+@media (min-width: 1920px) {
+
+    .container_details-photo {
+        width: 63%;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .container_details-photo {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .container_back-button {
+        width: 100%;
+    }
+
+    .photo_img {
+        width: 100%;
+        height: 400px;
+    }
+
+    .photo_details {
+        width: 100%;
+        height: auto;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+
+}
+
+@media (max-width: 470px) {
+
+    .update_or_delete-options {
+        display: none;
+    }
+
+    .photo_img {
+        position: relative;
+    }
+    
+    .update_or_delete-options-2 {
+        display: flex;
+        position: absolute;
+        bottom: calc(100% - 35px);
+        left: calc(100% - 25px);
+        opacity: 0.25;
+        height: 24px;
+        transition: all 0.4s;
+    }
+    
+    .update_or_delete-options-2 button {
+        border: none;
+        outline: none;
+        background-color: rgba(255, 255, 255, 0);
+        font-weight: bold;
+    }
+    
+    .update_or_delete-options-2 button span {
+        font-weight: bold;
+        font-size: 20px;
+        color: rgb(21, 186, 87);
+    }
+    
+    .photo_img:hover .update_or_delete-options-2 {
+        opacity: 1;
+    }
+
+}

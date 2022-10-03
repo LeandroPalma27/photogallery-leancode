@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body class="body-page">
+    <link rel="stylesheet" th:href="@{/css/photos/photos.css}">
+    <div class="main">
+        <header th:replace="layout/layout :: header"></header>
+        <main>
+            <div class="container_photos">
+                <div class="photos">
+                    <div class="title-desc_and_btn-upload">
+                        <div class="title_and_desc">
+                            <h1>Todas las fotos</h1>
+                            <p>Descubre las fotos publicadas por usuarios de Photogallery.</p>
+                        </div>
+                        <div class="btn_go-to-upload-picture">
+                            <a class="go-to-upload" th:href="@{/photos/upload}">
+                                <span class="upload-text-2">Publicar foto</span>
+                                <span class="upload-icon"><i class="fa-solid fa-arrow-up-from-bracket"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="container-order">
+                    </div>
+                    <div class="main_content">
+                        <div class="content-cards">
+                            <div class="card_photo" th:each="photo: ${photos}">
+                                <div class="photo-image">
+                                    <div class="for-scale">
+                                        <span th:text="${photo.urlPhoto}" class="urlFoto"></span>
+                                        <span th:text="${photo.title}" class="titleFoto"></span>
+                                        <img >
+                                        <span class="photo-details">
+                                            <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Detalles" type="button" title="" th:href="@{/photos/details/} + ${photo.uploadId}"><i class="fa-solid fa-circle-info"></i></a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="photo">
+                                    <div class="container-description">
+                                        <div class="title">
+                                            <span th:text="${photo.title}"></span>
+                                        </div>
+                                        <div class="info">
+                                            <div class="info_author">
+                                                <span class="desc">Autor: </span>
+                                                <span class="authorFoto" th:text="${photo.user.nombre + ' ' + photo.user.apellidos}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container-buttons">
+                                        <div class="info_likes">
+                                            <i class="fa-solid fa-thumbs-up"></i>
+                                            <span th:text="${photo.likesPhoto.size()}"></span>
+                                        </div>
+                                        <div class="buttons">
+                                            <div class="button_download">
+                                                <span th:text="${photo.urlPhoto}" hidden class="download-link-span"></span>
+                                                <span th:text="${photo.title}" hidden></span>
+                                                <!-- <a title="Download" href="" download="" target="_blank"><i
+                                                        class="fa-solid fa-circle-arrow-down"></i></a> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${!photos.isEmpty}" class="paginator">
+                        <nav th:replace="paginator-nav :: paginator"></nav>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <a th:href="@{/locale(lang=en_EN)}">En</a>
+    <footer th:replace="layout/layout :: footer"></footer>
+    <script th:src="@{/js/for-download-photo.js}"></script>
+    <script th:src="@{/js/charge-photos.js}"></script>
+    <script th:src="@{/js/orderSelect.js}"></script>
+</body>
+
+</html>
