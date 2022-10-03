@@ -52,13 +52,11 @@
                         <a th:href="@{/login}" class="account_sign-log" title="Sign-in" sec:authorize="isAnonymous()">
                             <i class="fa-solid fa-right-to-bracket"></i>
                         </a>
-<<<<<<< HEAD
-                        <a th:href="@{/account/} + ${user}" class="userprofile-photo dropdown-toggle" sec:authorize="isAuthenticated()" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <!-- <a th:href="@{/account/} + ${user}" class="userprofile-photo dropdown-toggle" sec:authorize="isAuthenticated()" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                             <img th:src="@{/img/foto-leandro-facebook.jpg}" alt="">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <li><a class="dropdown-item" th:href="@{/account/} + ${user}">My profile</a></li>
-=======
+                            <li><a class="dropdown-item" th:href="@{/account/} + ${user}">My profile</a></li> -->
                         <a th:href="@{/account}" class="userprofile-photo dropdown-toggle" sec:authorize="isAuthenticated()" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                             <img th:if="${profilePictureUser == null}" th:src="@{/img/default_profile.jpg}" alt="">
                             <span th:if="${profilePictureUser != null}" th:text="${profilePictureUser}" hidden id="urlPictureForLayout"></span>
@@ -67,16 +65,11 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <li><a class="dropdown-item" th:href="@{/account}">Mi perfil</a></li>
                             <li><a class="dropdown-item" th:href="@{/photos/upload}">Subir una foto</a></li>
->>>>>>> session-endpoints_authentication
                             <li>
                                 <a class="dropdown-item" href="">
                                     <form id="logoutForm" class="form-logout" th:action="@{/logout}" method="post">
                                         <input name="_csrf" type="hidden" value="63155ace-bc25-48a4-b881-1ad730b9268b" />
-<<<<<<< HEAD
-                                        <button onclick="document.getElementById('logoutForm').submit()" class="btn btn-outline">Signout</button>
-=======
                                         <button onclick="document.getElementById('logoutForm').submit()" class="btn btn-outline">Cerrar sesion</button>
->>>>>>> session-endpoints_authentication
                                     </form>
                                 </a>
                             </li>
