@@ -111,7 +111,6 @@ public class MvcConfig implements WebMvcConfigurer {
     // Optando por otra manera y no desde el application properties
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        // TODO Auto-generated method stub
         WebMvcConfigurer.super.configureContentNegotiation(configurer);
     }
 
